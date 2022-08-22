@@ -18,6 +18,13 @@ public class TableNameConstant {
 	public static String PROCEDURE_CREATE_ROUTE_CHANNEL_MESSAGE_MT_INFO ="create_route_channel_message_mt_info";
 	//存储过程名称：创建通道码号级下发信息表
 	public static String PROCEDURE_CREATE_ROUTE_CHANNEL_SRCID_MESSAGE_MT_INFO ="create_route_channel_srcid_message_mt_info";
+	
+	//存储过程名称：创建天表代理业务下发及回执信息表
+	public static String PROCEDURE_CREATE_PROXY_MESSAGE_INFO ="create_proxy_message_info";
+	
+	//存储过程名称：删除天表代理业务下发及回执信息表
+	public static String PROCEDURE_DROP_PROXY_MESSAGE_INFO ="drop_route_table";
+	
 }
 
 

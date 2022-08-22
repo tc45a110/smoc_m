@@ -7,6 +7,7 @@ package com.protocol.proxy.worker;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.DynamicConstant;
@@ -22,15 +23,15 @@ public class ResponseWorker extends SuperMapWorker<Integer, TimerTask>{
 	
 	private String channelID;
 	private Timer timer;
-	
+	//响应信息队列
 	private BlockingQueue<SGIPMessage> responseQueue;
 	
 	
 
 	ResponseWorker(String channelID,String index,BlockingQueue<SGIPMessage> responseQueue) {
 		this.responseQueue = responseQueue;
-		timer = new Timer();
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		timer = new Timer(new StringBuilder("ResponseWorker-Timer-").append(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("ResponseWorker-").append(channelID).append("-").append(index).toString());
 		this.start();
 	}
 	
@@ -54,10 +55,17 @@ public class ResponseWorker extends SuperMapWorker<Integer, TimerTask>{
 	boolean overGlideWindow(){
 		return size() >= ChannelInfoManager.getInstance().getGlideWindowSize(channelID);
 	}
+	
+	public int getSize(){
+		return size();
+	}
 
 	@Override
 	protected void doRun() throws Exception {
-		SGIPMessage message = responseQueue.take();
+		SGIPMessage message = responseQueue.poll(FixedConstant.COMMON_POLL_INTERVAL_TIME,TimeUnit.SECONDS);
+		if(message == null){
+			return;
+		}
 		int sequenceID = message.getSequenceId();
 		ResponseTimeoutTask responseTimeoutTask = (ResponseTimeoutTask)remove(sequenceID);
 		
@@ -70,6 +78,8 @@ public class ResponseWorker extends SuperMapWorker<Integer, TimerTask>{
 					);
 			return;
 		}
+		long submitTime = responseTimeoutTask.getTime();
+		long responseCostTime = (System.currentTimeMillis() - submitTime);
 		responseTimeoutTask.cancel();
 		BusinessRouteValue businessRouteValue = responseTimeoutTask.getBusinessRouteValue();
 
@@ -107,6 +117,7 @@ public class ResponseWorker extends SuperMapWorker<Integer, TimerTask>{
 				.append("{}sequenceID={}")
 				.append("{}channelMessageID={}")
 				.append("{}responseCode={}")
+				.append("{}响应耗时={}")
 				.toString(),
 				FixedConstant.SPLICER,businessRouteValue.getAccountID(),
 				FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
@@ -116,13 +127,15 @@ public class ResponseWorker extends SuperMapWorker<Integer, TimerTask>{
 				FixedConstant.SPLICER,businessRouteValue.getChannelIndex(),
 				FixedConstant.SPLICER,sequenceID,
 				FixedConstant.SPLICER,businessRouteValue.getChannelMessageID(),
-				FixedConstant.SPLICER,businessRouteValue.getNextNodeErrorCode()
+				FixedConstant.SPLICER,businessRouteValue.getNextNodeErrorCode(),
+				FixedConstant.SPLICER,responseCostTime
 				);
 		CacheBaseService.saveResponseToMiddlewareCache(businessRouteValue);
 	}
 	
 	public void exit(){
 		super.exit();
+		timer.cancel();
 	}
 	
 	/**
@@ -132,12 +145,21 @@ public class ResponseWorker extends SuperMapWorker<Integer, TimerTask>{
 
 		private int sequenceID;
 		private BusinessRouteValue businessRouteValue;
+		//设置任务时间即提交时间
+		private long time;
 
 		public ResponseTimeoutTask(int sequenceID,BusinessRouteValue businessRouteValue) {
 			super();
 			this.sequenceID = sequenceID;
 			this.businessRouteValue = businessRouteValue;
+			this.time = System.currentTimeMillis();
 		}
+
+		public long getTime() {
+			return time;
+		}
+
+
 
 		@Override
 		public void run() {

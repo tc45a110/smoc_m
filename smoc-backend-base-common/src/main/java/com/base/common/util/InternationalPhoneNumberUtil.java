@@ -54,6 +54,6 @@ public class InternationalPhoneNumberUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(getCountryCode("8617671693401"));
+		System.out.println(getInternationalAreaName("55913853424"));
 	}
 }

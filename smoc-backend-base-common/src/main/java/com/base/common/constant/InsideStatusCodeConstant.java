@@ -36,6 +36,7 @@ public class InsideStatusCodeConstant {
 		NOPRICE,//价格为空
 		NOMONEY,//余额不足
 		NOLIMIT,//未设置频次限制
+		OVERLEN,//内容超长
 		PRKWORD,//省份内容拦截
 		PNLIMIT,//手机号拦截
 		REPEATD,//一分钟内重复号码、重复内容提交

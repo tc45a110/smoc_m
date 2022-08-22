@@ -2,6 +2,8 @@ package com.base.common.util;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class MessageContentUtil {
 
 	
@@ -52,6 +54,53 @@ public class MessageContentUtil {
 		}
 		return content
 				.substring(content.lastIndexOf("【"), content.lastIndexOf("】") + 1);
+	}
+	
+	/**
+	 * 去除头部签名
+	 * @param content
+	 * @param flag：是否递归
+	 * @return
+	 */
+	public static String clearContentSignature(String content,boolean flag){
+		//获取前置签名
+		String signature = MessageContentUtil.getSignature(content);
+		if(StringUtils.isNotEmpty(signature)){
+			content = content.substring(signature.length(), content.length());
+			if(flag){
+				return clearContentSignature(content,flag);
+			}
+		}
+		return content;
+	}
+	
+	/**
+	 * 去除尾部签名
+	 * @param content
+	 * @param flag：是否递归
+	 * @return
+	 */
+	public static String clearContentEndSignature(String content,boolean flag){
+		//获取前置签名
+		String signature = MessageContentUtil.getEndSignature(content);
+		if(StringUtils.isNotEmpty(signature)){
+			content = content.substring(0, content.length() - signature.length());
+			if(flag){
+				return clearContentEndSignature(content,flag);
+			}
+		}
+		return content;
+	}
+	
+	/**
+	 * 头部、尾部签名都需去除
+	 * @param content
+	 * @param flag：是否递归
+	 * @return
+	 */
+	public static String clearContentSignatures(String content,boolean flag){
+		content = clearContentSignature(content,flag);
+		return clearContentEndSignature(content,flag);
 	}
 	
 	/**

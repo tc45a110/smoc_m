@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.base.common.log.CategoryLog;
 
 
@@ -52,6 +55,22 @@ public class AccountInfoDAO {
 	}
 	
 	/**
+	 * 兼容4.0.0和4.0.1两个版本的账号扩展码
+	 * @param extendCode
+	 * @param extendNumber
+	 * @return
+	 */
+	private static String getExtendCode(String extendCode,String extendNumber){
+		if(StringUtils.isNotEmpty(extendNumber)){
+			return extendNumber;
+		}
+		if(StringUtils.isNotEmpty(extendCode)){
+			return extendCode;
+		}
+		return "";
+	}
+	
+	/**
 	 * 加载账号基本信息,获取account_base_info、account_finance_info、account_interface_info
 	 * 数据库异常时返回null
 	 * @return
@@ -63,7 +82,7 @@ public class AccountInfoDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		sql.append(
-				"SELECT abi.ACCOUNT_ID,abi.ACCOUNT_NAME,abi.ACCOUNT_STATUS,abi.ACCOUNT_PRIORITY,abi.TRANSFER_TYPE,abi.BUSINESS_TYPE,abi.RANDOM_EXTEND_CODE_LENGTH,abi.INFO_TYPE,abi.EXTEND_CODE,aii.PROTOCOL,aii.SRC_ID");
+				"SELECT abi.ACCOUNT_ID,abi.ACCOUNT_NAME,abi.ACCOUNT_STATUS,abi.ACCOUNT_PRIORITY,abi.TRANSFER_TYPE,abi.BUSINESS_TYPE,abi.RANDOM_EXTEND_CODE_LENGTH,abi.INFO_TYPE,abi.EXTEND_CODE,abi.EXTEND_NUMBER,aii.PROTOCOL,aii.SRC_ID");
 		sql.append(
 				",aii.EXECUTE_CHECK,afi.PAY_TYPE,afi.CHARGE_TYPE,e.ENTERPRISE_FLAG,aii.MATCHING_CHECK,abi.INDUSTRY_TYPE,abi.CARRIER,abi.ENTERPRISE_ID FROM smoc.account_base_info abi ");
 		sql.append("LEFT JOIN smoc.account_interface_info aii ON aii.ACCOUNT_ID = abi.ACCOUNT_ID ");
@@ -84,6 +103,7 @@ public class AccountInfoDAO {
 				String businessType = rs.getString("BUSINESS_TYPE");
 				String infoType = rs.getString("INFO_TYPE");
 				String extendCode = rs.getString("EXTEND_CODE");
+				String extendNumber = rs.getString("EXTEND_NUMBER");
 				String protocol = rs.getString("PROTOCOL");
 				String srcId = rs.getString("SRC_ID");
 
@@ -106,12 +126,12 @@ public class AccountInfoDAO {
 				accountFinanceMap.put("TRANSFER_TYPE", transferType);
 				accountFinanceMap.put("BUSINESS_TYPE", businessType);
 				accountFinanceMap.put("INFO_TYPE", infoType);
-				accountFinanceMap.put("EXTEND_CODE", extendCode);
-				accountFinanceMap.put("PROTOCOL", protocol);
+				accountFinanceMap.put("EXTEND_CODE", getExtendCode(extendCode,extendNumber));
+				accountFinanceMap.put("PROTOCOL", StringUtils.defaultString(protocol));
 
-				accountFinanceMap.put("SRC_ID", srcId);
+				accountFinanceMap.put("SRC_ID", StringUtils.defaultString(srcId));
 				accountFinanceMap.put("RANDOM_EXTEND_CODE_LENGTH", randomExtentCodeLength);
-				accountFinanceMap.put("EXECUTE_CHECK", executeCheck);
+				accountFinanceMap.put("EXECUTE_CHECK", StringUtils.defaultString(executeCheck,"0"));
 				accountFinanceMap.put("PAY_TYPE", payType);
 				accountFinanceMap.put("CHARGE_TYPE", consumeType);
 				accountFinanceMap.put("MATCHING_CHECK", matchingCheck);

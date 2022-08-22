@@ -5,6 +5,7 @@
 package com.base.common.manager;
 
 import java.net.InetAddress;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.base.common.constant.FixedConstant;
@@ -295,6 +296,35 @@ public class BusinessDataManager {
 	}
 	
 	/**
+	 * 获取账号状态报告队列的阈值
+	 * @param accountID
+	 * @return
+	 */
+	public int getAccountReportQueueThreshold(String accountID){
+		String result = getBusinessParamValue(BusinessDataCategory.SYSTEM_PARAM,BusinessDataItem.ACCOUNT_REPORT_QUEUE_THRESHOLD,null);
+		try {
+			return Integer.parseInt(result);
+		} catch (Exception e) {
+		}
+		return 10000;
+	}
+	
+	/**
+	 * 获取账号状态报告失败重复推送次数
+	 * @param accountID
+	 * @return
+	 */
+	public int getAccountReportRepeatPushTimes(String accountID){
+		String result = getBusinessParamValue(BusinessDataCategory.SYSTEM_PARAM,BusinessDataItem.ACCOUNT_REPORT_REPEAT_PUSH_TIMES,null);
+		try {
+			return Integer.parseInt(result);
+		} catch (Exception e) {
+		}
+		return 3;
+	}
+	
+	
+	/**
 	 * 黑词过滤
 	 */
 	public boolean isBlackWordFiltering(String accountID){
@@ -402,6 +432,26 @@ public class BusinessDataManager {
 	}
 	
 	/**
+	 * 获取是否需要在内容前直接追加签名
+	 * @param accountID
+	 * @return
+	 */
+	public String getDirectAppendSignature(String accountID){
+		String result = getBusinessParamValue(BusinessDataCategory.BUSINESS_ACCOUNT,BusinessDataItem.ACCOUNT_DIRECT_APPEND_SIGNATURE,accountID);
+		return result;
+	}
+	
+	/**
+	 * 获取是否需要先去除内容前后签名再在内容前面追加签名
+	 * @param accountID
+	 * @return
+	 */
+	public String getClearedAppendSignature(String accountID){
+		String result = getBusinessParamValue(BusinessDataCategory.BUSINESS_ACCOUNT,BusinessDataItem.ACCOUNT_CLEARED_APPEND_SIGNATURE,accountID);
+		return result;
+	}
+	
+	/**
 	 * 获取通道扩展参数
 	 * @param channelID
 	 * @return
@@ -476,10 +526,36 @@ public class BusinessDataManager {
 	}
 	
 	/**
-	 * 根据账号获取状态码转换信息
+	 * 	是否支持7bit接收提交信息
 	 * @param accountID
 	 * @return
 	 */
+	public boolean isAccountSupport7bitCode(String accountID) {
+		String supportCode = getBusinessParamValue(BusinessDataCategory.BUSINESS_ACCOUNT,BusinessDataItem.ACCOUNT_SMPP_SUPPORT_7BIT_CODE,accountID);
+		return FixedConstant.COMMON_SIMPLE_LOGIC_JUDGE_STRING_FLAG.equals(supportCode);
+	}
+	
+	/**
+	 * 	账号支持未报备和正在报备的签名下发
+	 * @param accountID
+	 * @return
+	 */
+	public String getAccountSignRegisterOperationType(String accountID) {
+		String signRegisterOperationType = getBusinessParamValue(BusinessDataCategory.BUSINESS_ACCOUNT,BusinessDataItem.ACCOUNT_SIGN_REGISTER_OPERATION_TYPE,accountID);
+		if (StringUtils.isEmpty(signRegisterOperationType)) {
+			return "0";
+		}
+		return signRegisterOperationType;
+	}
+	
+	
+	/**
+	 * 根据账号获取状态码转换信息
+	 * 使用AccountStatusCodeConversionManager.getAccountStatusCodeConversion(String accountID,String statusCode);
+	 * @param accountID
+	 * @return
+	 */
+	@Deprecated 
 	public String getAccountStatusCodeConversion(String accountID,String statusCode) {
 		String statusCodeConversions = getBusinessParamValue(BusinessDataCategory.BUSINESS_ACCOUNT,BusinessDataItem.STATUS_CODE_CONVERSION,accountID);
 		if(StringUtils.isNotEmpty(statusCodeConversions) && statusCodeConversions.contains(statusCode)){
@@ -552,6 +628,8 @@ public class BusinessDataManager {
 		public static BusinessDataItem CHANNEL_MO_MATCH_EXPIRATION_TIME = new BusinessDataItem(FixedConstant.SystemItem.CHANNEL_MO_MATCH_EXPIRATION_TIME.toString());
 		public static BusinessDataItem REDIS_LOCK_EXPIRATION_TIME = new BusinessDataItem(FixedConstant.SystemItem.REDIS_LOCK_EXPIRATION_TIME.toString());
 		
+		public static BusinessDataItem ACCOUNT_REPORT_QUEUE_THRESHOLD = new BusinessDataItem(FixedConstant.SystemItem.ACCOUNT_REPORT_QUEUE_THRESHOLD.toString());
+		public static BusinessDataItem ACCOUNT_REPORT_REPEAT_PUSH_TIMES = new BusinessDataItem(FixedConstant.SystemItem.ACCOUNT_REPORT_REPEAT_PUSH_TIMES.toString());
 		
 		//账号过滤数据项
 		public static BusinessDataItem BLACK_WORD_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_BLACK_WORD_FILTERING.toString());
@@ -571,7 +649,11 @@ public class BusinessDataManager {
 		public static BusinessDataItem ACCOUNT_REPORT_PUSH_INTERVAL_TIME = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_REPORT_PUSH_INTERVAL_TIME.toString());
 		public static BusinessDataItem ACCOUNT_CONSUME_TYPE = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_CONSUME_TYPE.toString());
 		public static BusinessDataItem STATUS_CODE_CONVERSION = new BusinessDataItem(FixedConstant.AccountExtendItem.STATUS_CODE_CONVERSION.toString());
-
+		public static BusinessDataItem ACCOUNT_SMPP_SUPPORT_7BIT_CODE = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_SMPP_SUPPORT_7BIT_CODE.toString());
+		
+		public static BusinessDataItem ACCOUNT_DIRECT_APPEND_SIGNATURE = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_DIRECT_APPEND_SIGNATURE.toString());
+		public static BusinessDataItem ACCOUNT_CLEARED_APPEND_SIGNATURE = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_CLEARED_APPEND_SIGNATURE.toString());
+		public static BusinessDataItem ACCOUNT_SIGN_REGISTER_OPERATION_TYPE = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_SIGN_REGISTER_OPERATION_TYPE.toString());
 		
 		//通道扩展参数
 		public static BusinessDataItem DAY_SUCCESS_NUMBER = new BusinessDataItem(FixedConstant.ChannelExtendItem.DAY_SUCCESS_NUMBER.toString());

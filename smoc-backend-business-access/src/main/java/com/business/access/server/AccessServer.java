@@ -52,6 +52,8 @@ public class AccessServer {
 		AccessBusinessLogManager.getInstance();
 		//维护临时表
 		EnterpriseFlagManager.getInstance();
+		//外部黑名单持久化服务
+		ExternalBlacklistFilterPersistenceWorkerManager.getInstance();
 		//外部黑名单的过滤服务
 		ExternalBlacklistFilterWorkerManager.getInstance();
 		//内部过滤服务

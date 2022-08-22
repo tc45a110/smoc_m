@@ -52,7 +52,7 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 		String key = new StringBuffer().append(accountID).append(FixedConstant.SPLICER).append(RepairBusinessType.ACCOUNT.name())
 														 .append(FixedConstant.SPLICER).append(businessCarrier).toString();
 		
-		String accountRepairStatus = getAccountRepairStatus(accountID,businessCarrier);
+		String accountRepairStatus = getAccountRepairStatus(accountID, channelID, businessCarrier);
 		ArrayList<String> list;
 		if(FixedConstant.RepairStatus.ACCOUNT_REPAIR.name().equals(accountRepairStatus)) {
 			//账号补发
@@ -62,7 +62,6 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 				if(StringUtils.isNotEmpty(repairCodeRegex) && match(repairCodeRegex, statusCode)) {
 					return list;
 				}
-				return null;
 			}
 		}else if(FixedConstant.RepairStatus.CHANNEL_REPAIR.name().equals(accountRepairStatus)) {
 			//通道补发
@@ -74,10 +73,10 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 				if(StringUtils.isNotEmpty(repairCodeRegex) && match(repairCodeRegex, statusCode)) {
 					return list;
 				}
-				return null;
 			}
 		}
-		return null;
+		//不进行补发
+		return new ArrayList<String>();
 	}
 	
 	/**
@@ -87,7 +86,7 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 	 * @return
 	 */
 	public int getRepairTime(String accountID,String businessCarrier,String channelID) {
-		String accountRepairStatus = getAccountRepairStatus(accountID,businessCarrier);
+		String accountRepairStatus = getAccountRepairStatus(accountID,channelID,businessCarrier);
 		
 		if(FixedConstant.RepairStatus.ACCOUNT_REPAIR.name().equals(accountRepairStatus)) {
 			//账号补发
@@ -105,17 +104,24 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 	 * @param businessCarrier
 	 * @return
 	 */
-	public String getAccountRepairStatus(String accountID, String businessCarrier) {
+	public String getAccountRepairStatus(String accountID,String channelID,String businessCarrier) {
 		String key = new StringBuilder().append(accountID).append(FixedConstant.SPLICER).append(RepairBusinessType.ACCOUNT.name())
 														  .append(FixedConstant.SPLICER).append(businessCarrier).toString();
 		
 		if(accountRepairStatusMap.containsKey(accountID)) {
-			//账号配置了失败补发
+			//判断账号是否进行补发
 			ArrayList<String> list = get(key);
 			if(list != null && list.size() > 0) {
 				return FixedConstant.RepairStatus.ACCOUNT_REPAIR.name();
 			}
-			return FixedConstant.RepairStatus.CHANNEL_REPAIR.name();
+			
+			//判断通道是否进行补发
+			key = new StringBuffer().append(channelID).append(FixedConstant.SPLICER).append(RepairBusinessType.CHANNEL.name())
+					  .append(FixedConstant.SPLICER).append(businessCarrier).toString();
+			list = get(key);
+			if(list != null && list.size() > 0) {
+				return FixedConstant.RepairStatus.CHANNEL_REPAIR.name();
+			}
 		}
 		return FixedConstant.RepairStatus.NO_REPAIR.name();
 	}

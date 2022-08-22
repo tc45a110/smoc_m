@@ -43,9 +43,24 @@ public class FixedConstant {
 	public final static long COMMON_INTERVAL_TIME = 1000;
 	
 	/**
+	 * 通用队列拉取等待时间,注意单位为秒
+	 */
+	public final static long COMMON_POLL_INTERVAL_TIME = 5;
+	
+	/**
 	 * 通用监控间隔时间:特指监控打印数据的间隔时间
 	 */
 	public final static long COMMON_MONITOR_INTERVAL_TIME = 60 * 1000;
+	
+	/**
+	 * 通用简单逻辑判断标识
+	 */
+	public final static int COMMON_SIMPLE_LOGIC_JUDGE_FLAG = 1;
+	
+	/**
+	 * 通用简单逻辑判断字符串标识
+	 */
+	public final static String COMMON_SIMPLE_LOGIC_JUDGE_STRING_FLAG = "1";
 	
 	/**
 	 * 失败补发错误码-不是成功就行补发
@@ -56,6 +71,11 @@ public class FixedConstant {
 	 * 失败补发错误码-不是成功就行补发-正则表达式
 	 */
 	public final static String REPAIR_ALL_FAILED_CODE_REGEXP = "^((?!DELIVRD).)*$";
+	
+	/**
+	 * 国际短信跳过过滤服务和黑名单服务状态码
+	 */
+	public final static String INTL_SKIP_FILTER_SERVICE_CODE = "1";
 	
 	/**
 	 * 服务器cpu数量
@@ -216,6 +236,8 @@ public class FixedConstant {
 		CHANNEL_MO_LOAD_INTERVAL_TIME,//通道上行数据加载间隔时间
 		REDIS_LOCK_EXPIRATION_TIME,//redis分布锁的过期时间
 		ACCOUNT_FINANCE_LOAD_INTERVAL_TIME,//账号财务信息加载间隔时间
+		ACCOUNT_REPORT_QUEUE_THRESHOLD,//账号状态报告队列阈值
+		ACCOUNT_REPORT_REPEAT_PUSH_TIMES,//账号状态报告重复推送次数
 	}
 	
 	//业务账号的过滤项
@@ -240,6 +262,10 @@ public class FixedConstant {
 		ACCOUNT_REPORT_PUSH_INTERVAL_TIME,//状态报告推送间隔时间
 		ACCOUNT_CONSUME_TYPE,//扣费方式
 		STATUS_CODE_CONVERSION,//状态码转换
+		ACCOUNT_SMPP_SUPPORT_7BIT_CODE,//支持7bit编码(仅限SMPP)
+		ACCOUNT_DIRECT_APPEND_SIGNATURE,//在内容前面追加签名
+		ACCOUNT_CLEARED_APPEND_SIGNATURE,//先去除内容前后签名再在内容前面追加签名
+		ACCOUNT_SIGN_REGISTER_OPERATION_TYPE,//账号支持未报备和正在报备的签名是否下发
 	}
 	
 	//业务数据的生效时间
@@ -283,6 +309,13 @@ public class FixedConstant {
 	public static enum RepairBusinessType {
 		CHANNEL,//通道
 		ACCOUNT,//账号
+	}
+	
+	public static enum SignRegisterStatus{
+		NO,//无
+		NO_REGISTER,//未报备
+		BEING_REGISTER,//报备中
+		ALREADY_REGISTER//已报备
 	}
 }
 

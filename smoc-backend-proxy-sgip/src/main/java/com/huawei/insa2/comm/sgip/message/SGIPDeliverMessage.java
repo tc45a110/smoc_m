@@ -5,6 +5,7 @@
 
 package com.huawei.insa2.comm.sgip.message;
 
+import com.alibaba.druid.util.Base64;
 import com.huawei.insa2.comm.sgip.SGIPConstant;
 import com.huawei.insa2.util.TypeConvert;
 
@@ -105,7 +106,7 @@ public class SGIPDeliverMessage extends SGIPMessage
         tmpStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(tmpStr)))).append(",TpUdhi=").append(getTpUdhi())));
         tmpStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(tmpStr)))).append(",MsgFmt=").append(getMsgFmt())));
         tmpStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(tmpStr)))).append(",MsgLength=").append(getMsgLength())));
-        tmpStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(tmpStr)))).append(",MsgContent=").append(new String(getMsgContent()))));
+        tmpStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(tmpStr)))).append(",MsgContentBase64=").append(Base64.byteArrayToBase64(getMsgContent()))));
         tmpStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(tmpStr)))).append(",Reserve=").append(getReserve())));
         return tmpStr;
     }

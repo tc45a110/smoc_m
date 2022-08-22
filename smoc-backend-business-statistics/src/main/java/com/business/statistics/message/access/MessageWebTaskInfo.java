@@ -13,16 +13,15 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.LogPathConstant;
+import com.base.common.log.CategoryLog;
 import com.base.common.manager.ResourceManager;
 import com.base.common.util.DateUtil;
 import com.business.statistics.util.FileFilterUtil;
 
 public class MessageWebTaskInfo {
-	private static final Logger logger = LoggerFactory.getLogger(MessageWebTaskInfo.class);
+	
 	// 接入业务层一条mr日志字符串个数
 	private static final int ACCESS_BUSINESS_MR_MESSAGE_LOG_LENGTH = ResourceManager.getInstance()
 			.getIntValue("access.business.mr.message.log.length");
@@ -31,14 +30,14 @@ public class MessageWebTaskInfo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		logger.info(Arrays.toString(args));
+		CategoryLog.taskLogger.info(Arrays.toString(args));
 
 		long startTime = System.currentTimeMillis();
 		String lineTime = null;
 
 		int afterMinute = -1;
 		if (!(args.length == 1 || args.length == 0)) {
-			logger.error("参数不符合规范");
+			CategoryLog.taskLogger.error("参数不符合规范");
 			System.exit(0);
 		}
 
@@ -59,7 +58,7 @@ public class MessageWebTaskInfo {
 			String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MR.name()))
 					.append(DateUtil.getAfterMinuteDateTime(afterMinute, DateUtil.DATE_FORMAT_COMPACT_HOUR)).toString();
 
-			logger.info("读取当前文件路径={},文件名={},生成时间={}", filePath, fileName, lineTime);
+			CategoryLog.taskLogger.info("读取当前文件路径={},文件名={},生成时间={}", filePath, fileName, lineTime);
 
 			// 创建一个线程池
 			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER * 8,
@@ -85,15 +84,15 @@ public class MessageWebTaskInfo {
 				try {
 					rowNumber += call.get();
 				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
+					CategoryLog.taskLogger.error(e.getMessage(), e);
 				}
 			}
-			logger.info("{},处理文件数量:{},处理数据行数:{},耗时:{}", lineTime, fileNumber, rowNumber,
+			CategoryLog.taskLogger.info("{},处理文件数量:{},处理数据行数:{},耗时:{}", lineTime, fileNumber, rowNumber,
 					(System.currentTimeMillis() - startTime));
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			CategoryLog.taskLogger.error(e.getMessage(), e);
 		}
-		logger.info("程序正常退出");
+		CategoryLog.taskLogger.info("程序正常退出");
 		System.exit(0);
 
 	}
@@ -117,15 +116,18 @@ public class MessageWebTaskInfo {
 				List<MessageTask> messageTasklist = getAccessBusinessMrData(file, lineTime);
 
 				rowNumber += messageTasklist.size();
+				//根据消息id更新message_web_task_info
 				AccessBusinessDao.updateMessageWebTaskInfo(messageTasklist);
+				//根据消息id更新message_https_task_info
+				AccessBusinessDao.updateMessageHttpsTaskInfo(messageTasklist);
 
 			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
+				CategoryLog.taskLogger.error(e.getMessage(), e);
 			}
 
-			logger.info("文件:{},时间段:{},处理数据{}条,耗时:{}", file.getName(), lineTime, rowNumber,
+			CategoryLog.taskLogger.info("文件:{},时间段:{},处理数据{}条,耗时:{}", file.getName(), lineTime, rowNumber,
 					(System.currentTimeMillis() - startTime));
-			logger.info("线程退出循环");
+			CategoryLog.taskLogger.info("线程退出循环");
 
 			return rowNumber;
 		}
@@ -179,11 +181,11 @@ public class MessageWebTaskInfo {
 			}
 
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			CategoryLog.taskLogger.error(e.getMessage(), e);
 			throw e;
 		}
 		if (error) {
-			logger.warn("错误文件={},错误行数={}", error_file, error_line);
+			CategoryLog.taskLogger.warn("错误文件={},错误行数={}", error_file, error_line);
 		}
 		return messageTasklist;
 	}

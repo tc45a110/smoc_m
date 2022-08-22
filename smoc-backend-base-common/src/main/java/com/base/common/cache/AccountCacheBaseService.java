@@ -5,26 +5,24 @@ import org.slf4j.LoggerFactory;
 
 import com.base.common.cache.jedis.JedisService;
 import com.base.common.util.CacheNameGeneratorUtil;
-import com.base.common.vo.BusinessRouteValue;
-
-
-
+import com.base.common.vo.ProtocolRouteValue;
 
 /**
  * 对外部提供带有业务含义的服务
  */
-public class AccountCacheBaseService {
+class AccountCacheBaseService {
 	private static final Logger logger = LoggerFactory.getLogger(AccountCacheBaseService.class);
-	private static CacheServiceInter cacheBaseService = new JedisService("jedisClientPool_account");
+	private static String REDIS_NAME = "jedisClientPool_account";
+	private static CacheServiceInter cacheBaseService = new JedisService(REDIS_NAME);
 	
 	/**
 	 * 保存状态报告到中间件缓存  (account)
 	 * @param accountID
 	 * @param businessRouteValue
 	 */
-	public static void saveReportToMiddlewareCache(String accountID,BusinessRouteValue businessRouteValue){
+	public static void saveReportToMiddlewareCache(String accountID,ProtocolRouteValue protocolRouteValue){
 		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), businessRouteValue);
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), protocolRouteValue,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -35,14 +33,29 @@ public class AccountCacheBaseService {
 	 * @param accountID
 	 * @return
 	 */
-	public static BusinessRouteValue getReportFromMiddlewareCache(String accountID){
+	public static ProtocolRouteValue getReportFromMiddlewareCache(String accountID){
 		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), BusinessRouteValue.class);
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), ProtocolRouteValue.class,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
 		return null;
 	}
+	
+	/**
+	 * 从缓存中获取一个账号队列中元素数量
+	 * @param channelID
+	 * @return
+	 */
+	public static int getAccountReportQueueSizeFromMiddlewareCache(String accountID){
+		try {
+			return (int)cacheBaseService.getQueueSize(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID),REDIS_NAME);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return 0;
+	}
+	
 }
 
 

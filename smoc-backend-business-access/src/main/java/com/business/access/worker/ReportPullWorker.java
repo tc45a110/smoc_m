@@ -9,10 +9,14 @@ import org.apache.commons.lang3.StringUtils;
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.AccessBusinessLogManager;
+import com.base.common.manager.AccountStatusCodeConversionManager;
+import com.base.common.manager.AlarmManager;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MessageContentUtil;
+import com.base.common.vo.AlarmMessage;
 import com.base.common.vo.BusinessRouteValue;
+import com.base.common.vo.ProtocolRouteValue;
 import com.base.common.worker.SuperCacheWorker;
 import com.business.access.manager.FinanceWorkerManager;
 
@@ -29,8 +33,17 @@ public class ReportPullWorker extends SuperCacheWorker{
 	protected void doRun() throws Exception {
 		BusinessRouteValue businessRouteValue = CacheBaseService.getBusinessReportFromMiddlewareCache();
 		if(businessRouteValue != null){
+			logger.info(
+					new StringBuilder().append("拉取回执").append("{}accountID={}").append("{}phoneNumber={}")
+							.append("{}businessMessageID={}").append("{}statusCode={}").append("{}statusCodeSource={}")
+							.toString(),
+					FixedConstant.SPLICER, businessRouteValue.getAccountID(), 
+					FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
+					FixedConstant.SPLICER, businessRouteValue.getBusinessMessageID(),
+					FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
+					FixedConstant.SPLICER, businessRouteValue.getStatusCodeSource());
 			
-			String statusCode = BusinessDataManager.getInstance().getAccountStatusCodeConversion(businessRouteValue.getAccountID(), businessRouteValue.getStatusCode());
+			String statusCode = AccountStatusCodeConversionManager.getInstance().getAccountStatusCodeConversion(businessRouteValue.getAccountID(), businessRouteValue.getStatusCode());
 			//当账号存在状态码转换时，需设置转换后的值
 			if(StringUtils.isNotEmpty(statusCode)){
 				businessRouteValue.setStatusCode(statusCode);
@@ -38,13 +51,39 @@ public class ReportPullWorker extends SuperCacheWorker{
 			FinanceWorkerManager.getInstance().process(businessRouteValue);
 			doLog(businessRouteValue);
 			if(BusinessDataManager.getInstance().getReportStoreToRedisProtocol().contains(businessRouteValue.getProtocol())){
-				CacheBaseService.saveReportToMiddlewareCache(businessRouteValue.getAccountID(), businessRouteValue);
-				logger.info("保存回执{}{}",FixedConstant.SPLICER,businessRouteValue.toString());
+				int size = CacheBaseService.getAccountReportQueueSizeFromMiddlewareCache(businessRouteValue.getAccountID());
+				if( size > BusinessDataManager.getInstance().getAccountReportQueueThreshold(businessRouteValue.getAccountID())){
+					logger.info(
+							new StringBuilder().append("状态报告队列超出阈值存数据库").append("{}accountID={}").append("{}phoneNumber={}")
+									.append("{}businessMessageID={}").append("{}statusCode={}").append("{}statusCodeSource={}")
+									.append("{}size={}")
+									.toString(),
+							FixedConstant.SPLICER, businessRouteValue.getAccountID(), 
+							FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
+							FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID(),
+							FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
+							FixedConstant.SPLICER, businessRouteValue.getStatusCodeSource(),
+							FixedConstant.SPLICER, size
+							);
+					reportStoreWorker.put(businessRouteValue.getAccountMessageIDs(), businessRouteValue);
+					AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.AccountReportQueue, 
+							new StringBuilder().append(businessRouteValue.getAccountID()).append(",").append(size).toString()));
+				}else{
+					CacheBaseService.saveReportToMiddlewareCache(businessRouteValue.getAccountID(), new ProtocolRouteValue(businessRouteValue));
+				}
+				
+			}else if(BusinessDataManager.getInstance().getReportStoreToDatabaseProtocol().contains(businessRouteValue.getProtocol())){
+				reportStoreWorker.put(businessRouteValue.getAccountMessageIDs(), businessRouteValue);
 			}
-			if(BusinessDataManager.getInstance().getReportStoreToDatabaseProtocol().contains(businessRouteValue.getProtocol())){
-				reportStoreWorker.put(businessRouteValue.getBusinessMessageID(), businessRouteValue);
-			}
-			businessRouteValue = null;
+			logger.info(
+					new StringBuilder().append("保存回执").append("{}accountID={}").append("{}phoneNumber={}")
+							.append("{}businessMessageID={}").append("{}statusCode={}").append("{}statusCodeSource={}")
+							.toString(),
+					FixedConstant.SPLICER, businessRouteValue.getAccountID(), 
+					FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
+					FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID(),
+					FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
+					FixedConstant.SPLICER, businessRouteValue.getStatusCodeSource());
 		}else{
 			Thread.sleep(BusinessDataManager.getInstance().getReportRedisPopIntervalTime());
 		}

@@ -27,6 +27,7 @@ public class UnknowStatisticsService {
 	
 	public static void main(String[] args) {
 		try {
+			long start = System.currentTimeMillis();
 			logger.info(Arrays.toString(args));
 			String afterDay = null;
 
@@ -40,7 +41,7 @@ public class UnknowStatisticsService {
 			}else{
 				afterDay = DateUtil.getAfterDayDateTime(-4, DateUtil.DATE_FORMAT_COMPACT_DAY);
 			}
-			
+			logger.info("*********************开始未知返回统计*********************");
 			Map<String,HashMap<String,Object>> accountConsumeSumMap = loadAccountConsumeSum(afterDay);
 			Map<String,HashMap<String,Object>> accountUnfreezeSumMap = loadAccountUnfreezeSum(afterDay);
 			logger.info(accountConsumeSumMap.toString());
@@ -74,6 +75,7 @@ public class UnknowStatisticsService {
 			updateFinanceAccount(voList);
 			//保存返回未知的金额和数量记录-返还统计表
 			saveFinanceAccountReturnStatistics(voList);
+			logger.info("*********************未知返回统计结束,统计时间:{},耗时:{}毫秒*********************",afterDay,(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -92,7 +94,7 @@ public class UnknowStatisticsService {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ACCOUNT_ID,CONSUME_ACCOUNT_ID,SUM(CONSUME_NUM) CONSUME_NUM,SUM(CONSUME_SUM) CONSUME_SUM ");
 		sql.append("FROM smoc.finance_account_consume_flow WHERE SEND_TIME = ? AND CONSUME_TYPE = 1 ");
@@ -114,7 +116,7 @@ public class UnknowStatisticsService {
 				map.put("CONSUME_SUM", rs.getDouble("CONSUME_SUM"));
 				accountConsumeSumMap.put(key, map);
 			}
-			
+			logger.info("根据消费流水表,获取发送时间:{},当天的消费金额和消费数量,耗时:{}毫秒",sendTime,(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {
@@ -137,7 +139,7 @@ public class UnknowStatisticsService {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ACCOUNT_ID,CONSUME_ACCOUNT_ID,SUM(UNFREEZE_NUM) UNFREEZE_NUM,SUM(UNFREEZE_SUM) UNFREEZE_SUM FROM smoc.finance_account_return_statistics ");
 		sql.append("WHERE SEND_TIME = ? AND (REPORT_TIME IS NOT NULL OR REPORT_TIME != \"\") ");
@@ -160,6 +162,7 @@ public class UnknowStatisticsService {
 				accountConsumeSumMap.put(key, map);
 			}
 			
+			logger.info("根据返还统计表,获取发送时间:{},获取已解冻的总金额,耗时:{}毫秒",sendTime,(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {
@@ -180,13 +183,13 @@ public class UnknowStatisticsService {
 	private static void saveFinanceAccountReturnStatistics(List<FinanceAccountReturnStatisticsVo> voList) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO smoc.finance_account_return_statistics (ID,ACCOUNT_ID,CONSUME_ACCOUNT_ID,SEND_TIME,");
 		sql.append("RETURN_NUM,RETURN_SUM,NO_REPORT_NUM,NO_REPORT_SUM,");
 		sql.append("CREATED_TIME) VALUES(?,?,?,?,?,?,?,?,NOW())");
 		
-		logger.info("saveFinanceAccountReturnStatistics sql={}",sql.toString());
+		logger.debug("saveFinanceAccountReturnStatistics sql={}",sql.toString());
 		// 在一个事务中更新数据
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
@@ -202,12 +205,14 @@ public class UnknowStatisticsService {
 				pstmt.setDouble(6, vo.getReturnSum());
 				pstmt.setInt(7, vo.getNoReportNum());
 				pstmt.setDouble(8, vo.getNoReportSum());
+				logger.info("账号:{},消费账号:{},发送时间:{},未知返还数量:{},未知返还金额:{}",vo.getAccountID(),vo.getConsumeAccountID(),vo.getSendTime(),vo.getReturnNum(),vo.getReturnSum());
 				
 				pstmt.addBatch();
 			}
 			
 			pstmt.executeBatch();
 			conn.commit();
+			logger.info("返还统计表增加返回冻结的金额的记录,总耗时:{}毫秒",(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {
@@ -227,13 +232,13 @@ public class UnknowStatisticsService {
 	private static void updateFinanceAccount(List<FinanceAccountReturnStatisticsVo> voList) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("UPDATE smoc.finance_account SET ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM + ?,");
 		sql.append("ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM - ? ");
 		sql.append("WHERE ACCOUNT_ID = ?");
 		
-		logger.info("updateFinanceAccount sql={}",sql.toString());
+		logger.debug("updateFinanceAccount sql={}",sql.toString());
 		// 在一个事务中更新数据
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
@@ -250,6 +255,7 @@ public class UnknowStatisticsService {
 			
 			pstmt.executeBatch();
 			conn.commit();
+			logger.info("返还账号未知的金额,,总耗时:{}毫秒",(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {

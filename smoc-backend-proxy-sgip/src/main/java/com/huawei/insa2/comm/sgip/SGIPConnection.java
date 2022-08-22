@@ -10,10 +10,8 @@ import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 
 import com.huawei.insa2.comm.PReader;
-import com.huawei.insa2.comm.PSocketConnection;
 import com.huawei.insa2.comm.PWriter;
 import com.huawei.insa2.comm.sgip.message.SGIPMessage;
-import com.huawei.smproxy.Proxy;
 
 public class SGIPConnection extends PSocketConnection
 {

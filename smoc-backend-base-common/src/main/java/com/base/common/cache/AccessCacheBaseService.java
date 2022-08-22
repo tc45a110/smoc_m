@@ -2,6 +2,7 @@ package com.base.common.cache;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.base.common.cache.jedis.JedisService;
 import com.base.common.util.CacheNameGeneratorUtil;
 import com.base.common.vo.BusinessRouteValue;
@@ -12,8 +13,9 @@ import com.base.common.vo.BusinessRouteValue;
 /**
  * 对外部提供带有业务含义的服务
  */
-public class AccessCacheBaseService {
+class AccessCacheBaseService {
 	private static final Logger logger = LoggerFactory.getLogger(AccessCacheBaseService.class);
+	private static String REDIS_NAME = "jedisClientPool_access";
 	private static CacheServiceInter cacheBaseService = new JedisService("jedisClientPool_access");
 	
 	/**
@@ -23,7 +25,7 @@ public class AccessCacheBaseService {
 	 */
 	public static void saveBusinessReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
 		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), businessRouteValue);
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), businessRouteValue,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -37,7 +39,7 @@ public class AccessCacheBaseService {
 	 */
 	public static BusinessRouteValue getBusinessReportFromMiddlewareCache(){
 		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), BusinessRouteValue.class);
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), BusinessRouteValue.class,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}

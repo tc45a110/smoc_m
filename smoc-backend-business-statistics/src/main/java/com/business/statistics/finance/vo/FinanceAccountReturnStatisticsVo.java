@@ -1,6 +1,6 @@
 package com.business.statistics.finance.vo;
 
-import com.business.statistics.finance.pojo.FinanceAccountReturnStatistics;
+import com.business.statistics.finance.entity.FinanceAccountReturnStatistics;
 
 public class FinanceAccountReturnStatisticsVo extends FinanceAccountReturnStatistics{
 

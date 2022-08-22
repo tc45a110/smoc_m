@@ -7,12 +7,16 @@ package com.base.common.manager;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.base.common.constant.DictionariesTypeConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.util.InternationalPhoneNumberUtil;
 
 public class BusinessDictionaryManager {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BusinessDictionaryManager.class);
 	
 	private static BusinessDictionaryManager manager = new BusinessDictionaryManager();
 	
@@ -54,7 +58,25 @@ public class BusinessDictionaryManager {
 			//TODO 
 			return "";
 		}
-		return getInternationalAreaCode(internationalAreaName);
+		String areaCode = getInternationalAreaCode(internationalAreaName);
+		if(StringUtils.isEmpty(areaCode)) {
+			logger.warn(new StringBuilder().append("获取区域编码失败")
+					.append("{}phoneNumber={}")
+					.append("{}internationalAreaName={}")
+					.toString(),
+					FixedConstant.SPLICER,phoneNumber,
+					FixedConstant.SPLICER,internationalAreaName);
+		}
+		return areaCode;
+	}
+	
+	/**
+	 * 转换状态码
+	 * @param filterResponseCode 过滤服务返回状态码
+	 * @return
+	 */
+	public String getFilterStatusCode(String filterResponseCode){
+		return DictionaryDataManager.getInstance().getDictionariesCode(DictionariesTypeConstant.HTTP_FILTER_STATUS_CODE, filterResponseCode);
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package com.business.statistics.message.pojo;
+package com.business.statistics.message.entity;
 
 public class MessageDailyStatistics {
 	/**

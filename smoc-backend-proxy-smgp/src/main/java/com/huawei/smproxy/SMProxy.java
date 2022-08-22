@@ -8,6 +8,8 @@ package com.huawei.smproxy;
 import java.util.concurrent.BlockingQueue;
 
 import com.huawei.insa2.comm.smgp.SMGPConnection;
+import com.huawei.insa2.comm.smgp.message.SMGPActiveTestMessage;
+import com.huawei.insa2.comm.smgp.message.SMGPActiveTestRespMessage;
 import com.huawei.insa2.comm.smgp.message.SMGPDeliverMessage;
 import com.huawei.insa2.comm.smgp.message.SMGPDeliverRespMessage;
 import com.huawei.insa2.comm.smgp.message.SMGPMessage;
@@ -41,6 +43,10 @@ public class SMProxy extends Proxy{
 		conn = new SMGPConnection(channelID,index,this,sendSubmitRespQueue);
 	}
 	
+	public SMGPMessage onActive(SMGPMessage msg) {
+		return new SMGPActiveTestRespMessage(0, ((SMGPActiveTestMessage)msg).getSequenceId());
+	}
+	
 	public int send(SMGPMessage message) throws Exception {
 		message.setSequenceId(getSequence());
 		conn.send(message);
@@ -50,8 +56,8 @@ public class SMProxy extends Proxy{
 	/**
 	 * 连接终止的处理，由API使用者实现 SMC连接终止后，需要执行动作的接口
 	 */
-	public void onTerminate() {
-		conn.close(true);
+	public void onTerminate(String trigger) {
+		conn.close(true,trigger);
 	}
 
 	/**
@@ -73,4 +79,5 @@ public class SMProxy extends Proxy{
 	public SMGPConnection getConn() {
 		return conn;
 	}
+
 }

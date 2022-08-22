@@ -28,6 +28,7 @@ public class FinanceConsumeStatisticsService {
 	public static void main(String[] args) {
 		logger.info(Arrays.toString(args));
 		try {
+			long start = System.currentTimeMillis();
 			int afterDay = -1;
 			if (!(args.length == 1 || args.length == 0)) {
 				logger.error("参数不符合规范");
@@ -37,6 +38,7 @@ public class FinanceConsumeStatisticsService {
 			if (args.length >= 1) {
 				afterDay = Integer.valueOf(args[0]);
 			}
+			logger.info("*********************开始消费记录统计*********************");
 			String consumeTime = DateUtil.getAfterDayDateTime(afterDay, DateUtil.DATE_FORMAT_COMPACT_DAY);
 			//1.先统计消费数量和消费金额
 			loadAccountConsumeType(consumeTime);
@@ -44,6 +46,7 @@ public class FinanceConsumeStatisticsService {
 			loadFinanceAccountReturnStatistics();
 			//3.保存今天的数据
 			saveFinanceAccountConsumeStatistics();
+			logger.info("*********************消费记录统计结束,统计时间:{},耗时:{}毫秒*********************",consumeTime,(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -60,7 +63,7 @@ public class FinanceConsumeStatisticsService {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ACCOUNT_ID,CONSUME_ACCOUNT_ID,SEND_TIME,CONSUME_TIME,CONSUME_TYPE,SUM(CONSUME_NUM) CONSUME_NUM,SUM(CONSUME_SUM) CONSUME_SUM ");
 		sql.append("FROM smoc.finance_account_consume_flow WHERE CONSUME_TIME = ? ");
@@ -84,6 +87,7 @@ public class FinanceConsumeStatisticsService {
 				
 				saveConsumeStatisticsList.add(vo);
 			}
+			logger.info("根据消费流水统计消费时间:{},总消费金额和消费数量,耗时:{}毫秒",consumeTime,start);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {
@@ -99,14 +103,14 @@ public class FinanceConsumeStatisticsService {
 	private static void saveFinanceAccountConsumeStatistics() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO smoc.finance_account_consume_statistics (ID,ACCOUNT_ID,CONSUME_ACCOUNT_ID,");
 		sql.append("SEND_TIME,CONSUME_NUM,CONSUME_SUM,SUCESS_NUM,SUCESS_SUM,UNFREEZE_NUM,UNFREEZE_SUM,");
 		sql.append("FAILURE_NUM,FAILURE_SUM,CONSUME_TYPE,NO_REPORT_NUM,NO_REPORT_SUM,CREATED_TIME) ");
 		sql.append("VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())");
 		
-		logger.info("saveFinanceAccountConsumeStatistics sql={}",sql.toString());
+		logger.debug("saveFinanceAccountConsumeStatistics sql={}",sql.toString());
 		// 在一个事务中更新数据
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
@@ -135,6 +139,7 @@ public class FinanceConsumeStatisticsService {
 			
 			pstmt.executeBatch();
 			conn.commit();
+			logger.info("保存当前需要出入消费统计的数据,条数:{},耗时:{}毫秒",saveConsumeStatisticsList.size(),(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {
@@ -151,7 +156,7 @@ public class FinanceConsumeStatisticsService {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
+		long start = System.currentTimeMillis();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ACCOUNT_ID,CONSUME_ACCOUNT_ID,SEND_TIME,SUM(RETURN_NUM) RETURN_NUM,SUM(RETURN_SUM) RETURN_SUM,SUM(SUCESS_NUM) SUCESS_NUM,");
 		sql.append("SUM(SUCESS_SUM) SUCESS_SUM,SUM(UNFREEZE_NUM) UNFREEZE_NUM,SUM(UNFREEZE_SUM) UNFREEZE_SUM,SUM(FAILURE_NUM) FAILURE_NUM,");
@@ -161,7 +166,8 @@ public class FinanceConsumeStatisticsService {
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_DAY));
+			String nowTime = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_DAY);
+			pstmt.setString(1, nowTime);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				vo = new FinanceAccountReturnStatisticsVo();
@@ -182,7 +188,7 @@ public class FinanceConsumeStatisticsService {
 				
 				saveConsumeStatisticsList.add(vo);
 			}
-			
+			logger.info("加载当前处理的返回统计数据(次日返的数据),当前时间:{},耗时:{}毫秒",nowTime,start);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			try {

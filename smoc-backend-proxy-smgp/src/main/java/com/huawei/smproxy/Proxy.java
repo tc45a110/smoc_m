@@ -4,8 +4,6 @@
  */
 package com.huawei.smproxy;
 
-import com.huawei.insa2.comm.smgp.message.SMGPActiveTestMessage;
-import com.huawei.insa2.comm.smgp.message.SMGPActiveTestRespMessage;
 import com.huawei.insa2.comm.smgp.message.SMGPMessage;
 import com.protocol.proxy.worker.ReportWorker;
 
@@ -22,10 +20,7 @@ public abstract class Proxy {
 		return sequence++;
 	}
 	
-	public SMGPMessage onActive(SMGPMessage msg) {
-		return new SMGPActiveTestRespMessage(0, ((SMGPActiveTestMessage)msg).getSequenceId());
-		//return new CMPPActiveRepMessage(0,((CMPPActiveMessage)msg).getSequenceId());
-	}
+	public abstract SMGPMessage onActive(SMGPMessage msg);
 	
 	public abstract SMGPMessage onDeliver(SMGPMessage msg);
 	
@@ -34,7 +29,7 @@ public abstract class Proxy {
 	/**
 	 * 连接终止的处理，由API使用者实现 SMC连接终止后，需要执行动作的接口
 	 */
-	public abstract void onTerminate();
+	public abstract void onTerminate(String trigger);
 	
 	public abstract boolean isHealth();
 }

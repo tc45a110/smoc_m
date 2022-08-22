@@ -28,6 +28,7 @@ public class AdminClient {
             while ((msg=br.readLine())!=null){
                 System.out.println(msg);
             }
+            System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

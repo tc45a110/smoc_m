@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>smoc-protocol-access-cmpp</artifactId>
+    <artifactId>com.smoc.backend.smoc-backend-access-cmpp</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>smoc-base-common</artifactId>
+            <artifactId>com.smoc.backend.smoc-backend-base-common</artifactId>
             <version>4.0.0</version>
         </dependency>
         <!--  mina  -->

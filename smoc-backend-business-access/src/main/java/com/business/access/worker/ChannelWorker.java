@@ -138,6 +138,14 @@ public class ChannelWorker extends SuperConcurrentMapWorker<String,BusinessRoute
 		}
 	}
 	
+	public int getSize(){
+		return size();
+	}
+
+	public String getChannelID() {
+		return channelID;
+	}
+
 }
 
 

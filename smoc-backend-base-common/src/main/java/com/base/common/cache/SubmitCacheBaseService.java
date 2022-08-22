@@ -10,8 +10,9 @@ import com.base.common.vo.BusinessRouteValue;
 /**
  * 对外部提供带有业务含义的服务
  */
-public class SubmitCacheBaseService {
+class SubmitCacheBaseService {
 	private static final Logger logger = LoggerFactory.getLogger(SubmitCacheBaseService.class);
+	private static String REDIS_NAME = "jedisClientPool_submit";
 	private static CacheServiceInter cacheBaseService = new JedisService("jedisClientPool_submit");
 	
 	
@@ -24,7 +25,7 @@ public class SubmitCacheBaseService {
 	public static void saveSubmitToMiddlewareCache(String channelID,BusinessRouteValue businessRouteValue){
 		try {
 			
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), businessRouteValue);
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), businessRouteValue,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -37,7 +38,7 @@ public class SubmitCacheBaseService {
 	 */
 	public static BusinessRouteValue getSubmitFromMiddlewareCache(String channelID){
 		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), BusinessRouteValue.class);
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), BusinessRouteValue.class,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -51,7 +52,7 @@ public class SubmitCacheBaseService {
 	 */
 	public static int getChannelQueueSizeFromMiddlewareCache(String channelID){
 		try {
-			return (int)cacheBaseService.getQueueSize(CacheNameGeneratorUtil.generateSubmitCacheName(channelID));
+			return (int)cacheBaseService.getQueueSize(CacheNameGeneratorUtil.generateSubmitCacheName(channelID),REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}

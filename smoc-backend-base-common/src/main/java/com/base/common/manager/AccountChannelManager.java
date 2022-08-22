@@ -262,6 +262,10 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 				String accountID = rs.getString("ACCOUNT_ID");
 				String carrier = rs.getString("CARRIER");
 				String channelID = rs.getString("CHANNEL_ID");
+				if(!ChannelInfoManager.getInstance().isSupportCarrier(channelID, carrier)){
+					CategoryLog.commonLogger.error("通道{}不支持账号{}的发送范围{}",channelID,accountID,carrier);
+					continue;
+				}
 				int channelWeight = rs.getInt("CHANNEL_WEIGHT");
 				String channelGroupID = rs.getString("CHANNEL_GROUP_ID");
 				if(StringUtils.isEmpty(channelGroupID)){

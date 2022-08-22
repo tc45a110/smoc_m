@@ -45,7 +45,9 @@ public class ChannelSRCIDWorker implements Callable<BusinessRouteValue>{
 	private BusinessRouteValue searchChannelMTByChannelMO(ChannelMO channelMO){
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT MESSAGE_JSON,MESSAGE_CONTENT,CHANNEL_ID FROM ");
+		sql.append("SELECT PHONE_NUMBER,MESSAGE_CONTENT,CHANNEL_ID,CHANNEL_MO_SRCID,ACCOUNT_ID,BUSINESS_CARRIER,CHANNEL_SUBMIT_TIME,AREA_NAME,  ");
+		sql.append("ACCOUNT_BUSINESS_CODE,ACCOUNT_SUBMIT_SRCID,INFO_TYPE,ACCOUNT_TASK_ID,CHANNEL_SRCID,");
+		sql.append("BUSINESS_TYPE,ACCOUNT_TEMPLATE_ID,OPTION_PARAM FROM ");
 		sql.append("smoc_route.").append(tableName);
 		sql.append(" where PHONE_NUMBER = ? and CHANNEL_MO_SRCID = ?");
 		sql.append(" ORDER BY ID DESC");
@@ -67,8 +69,25 @@ public class ChannelSRCIDWorker implements Callable<BusinessRouteValue>{
 				if(businessRouteValue != null && !channelID.equals(channelMO.getChannelID())){
 					continue;
 				}
-				businessRouteValue = BusinessRouteValue.toObject(rs.getString("MESSAGE_JSON"));
+				businessRouteValue = new BusinessRouteValue();
+				businessRouteValue.setPhoneNumber(rs.getString("PHONE_NUMBER"));
 				businessRouteValue.setMessageContent(rs.getString("MESSAGE_CONTENT"));
+				businessRouteValue.setChannelID(rs.getString("CHANNEL_ID"));
+				businessRouteValue.setChannelSubmitSRCID(rs.getString("CHANNEL_MO_SRCID"));
+				businessRouteValue.setAccountID(rs.getString("ACCOUNT_ID"));
+				businessRouteValue.setBusinessCarrier(rs.getString("BUSINESS_CARRIER"));
+				businessRouteValue.setChannelSubmitTime(rs.getString("CHANNEL_SUBMIT_TIME"));
+				businessRouteValue.setAreaName(rs.getString("AREA_NAME"));
+				businessRouteValue.setAccountBusinessCode(rs.getString("ACCOUNT_BUSINESS_CODE"));
+				                   
+				businessRouteValue.setAccountSubmitSRCID(rs.getString("ACCOUNT_SUBMIT_SRCID"));
+				businessRouteValue.setInfoType(rs.getString("INFO_TYPE"));
+				businessRouteValue.setAccountTaskID(rs.getString("ACCOUNT_TASK_ID"));
+				businessRouteValue.setChannelSRCID(rs.getString("CHANNEL_SRCID"));
+				businessRouteValue.setBusinessType(rs.getString("BUSINESS_TYPE"));
+				businessRouteValue.setAccountTemplateID(rs.getString("ACCOUNT_TEMPLATE_ID"));
+				businessRouteValue.setOptionParam(rs.getString("OPTION_PARAM"));
+				
 				businessRouteValue.setChannelReportTime(channelMO.getMOTime());
 				businessRouteValue.setMOContent(channelMO.getMessageContent());
 				businessRouteValue.setChannelMOSRCID(channelMO.getChannelMOSRCID());

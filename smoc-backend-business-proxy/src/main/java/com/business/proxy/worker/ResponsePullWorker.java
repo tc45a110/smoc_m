@@ -4,6 +4,9 @@
  */
 package com.business.proxy.worker;
 
+import java.util.UUID;
+import java.util.concurrent.ThreadPoolExecutor;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.base.common.cache.CacheBaseService;
@@ -11,7 +14,6 @@ import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.log.PorxyBusinessLogManager;
 import com.base.common.manager.BusinessDataManager;
-import com.base.common.manager.MessageSubmitFailManager;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MessageContentUtil;
 import com.base.common.vo.BusinessRouteValue;
@@ -19,60 +21,156 @@ import com.base.common.worker.SuperCacheWorker;
 import com.business.proxy.manager.ChannelSRCIDManager;
 
 public class ResponsePullWorker extends SuperCacheWorker{
+	
+	private ThreadPoolExecutor threadPoolExecutor;
+
+	public ResponsePullWorker(ThreadPoolExecutor threadPoolExecutor) {
+		super();
+		this.threadPoolExecutor = threadPoolExecutor;
+	}
 
 	@Override
 	protected void doRun() throws Exception {
-		BusinessRouteValue businessRouteValue = CacheBaseService.getResponseToMiddlewareCache();
+		final BusinessRouteValue businessRouteValue = CacheBaseService.getResponseToMiddlewareCache();
 		if(businessRouteValue != null){
 			
 			ChannelSRCIDManager.getInstance().add(businessRouteValue.getChannelSRCID());
-			doLog(businessRouteValue);
-			
+		
 			if(InsideStatusCodeConstant.UNKNOWN_CODE.equals(businessRouteValue.getNextNodeCode())) {
-				logger.warn("提交未响应{}{}",FixedConstant.SPLICER,businessRouteValue.toString());
+				
+				logger.info(
+						new StringBuilder().append("提交无响应")
+						.append("{}accountID={}")
+						.append("{}phoneNumber={}")
+						.append("{}businessMessageID={}")
+						.append("{}channelID={}")
+						.append("{}channelTotal={}")
+						.append("{}channelIndex={}")
+						.toString(),
+						FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+						FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+						FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelID(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelTotal(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelIndex()
+						);
+
 				//TODO 未知部分暂不返回状态报告，后续通过 未匹配提交信息的状态报告 和 这部分记录进行匹配，尽量减少未知部分
 			}else{
-				logger.info("提交响应{}{}",FixedConstant.SPLICER,businessRouteValue.toString());
+				logger.info(
+						new StringBuilder().append("提交响应")
+						.append("{}accountID={}")
+						.append("{}phoneNumber={}")
+						.append("{}businessMessageID={}")
+						.append("{}channelID={}")
+						.append("{}channelTotal={}")
+						.append("{}channelIndex={}")
+						.append("{}channelMessageID={}")
+						.append("{}successCode={}")
+						.append("{}responseCode={}")
+						.toString(),
+						FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+						FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+						FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelID(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelTotal(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelIndex(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelMessageID(),
+						FixedConstant.SPLICER,businessRouteValue.getNextNodeCode(),
+						FixedConstant.SPLICER,businessRouteValue.getNextNodeErrorCode()
+						);
 				
-				//判断是否提交成功
+				//提交成功
 				if(InsideStatusCodeConstant.SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
 					//存入缓存  用于匹配状态报告
 					CacheBaseService.saveBusinessRouteValueToMiddlewareCache(businessRouteValue);
-					//获取日限量方式
-					int sendLimitStyleDaily = BusinessDataManager.getInstance().getSendLimitStyleDaily(businessRouteValue.getAccountID());
-					//重复发送次数
-					int repeatSendTimes = businessRouteValue.getRepeatSendTimes();
-					//不考虑失败补发的情况
-					if(repeatSendTimes == 0){
-						if(FixedConstant.SendLimitStyleDaily.MT_MESSAGE_CONTENT.ordinal() == sendLimitStyleDaily){
-							CacheBaseService.saveAccountCarrierDailyToMiddlewareCache(
-									businessRouteValue.getAccountID(), 
-									businessRouteValue.getBusinessCarrier(), 
-									businessRouteValue.getAccountMessageIDs().length());
-							
-						}else if (FixedConstant.SendLimitStyleDaily.MT_PHONE_NUMBER.ordinal() == sendLimitStyleDaily){
-							String [] messageIDsArray = businessRouteValue.getAccountMessageIDs().split(FixedConstant.SPLICER);	
-							if(messageIDsArray.length > 1 || businessRouteValue.getMessageIndex() == 1){
-								CacheBaseService.saveAccountCarrierDailyToMiddlewareCache(
-										businessRouteValue.getAccountID(), 
-										businessRouteValue.getBusinessCarrier(), 
-										1);
-							}
-							
+					
+					threadPoolExecutor.execute(new Runnable() {
+						
+						@Override
+						public void run() {
+							doReponseSuccess(businessRouteValue);	
 						}
-					}
+					});
+					
 		
-				}else if(InsideStatusCodeConstant.FAIL_CODE.equals(businessRouteValue.getNextNodeCode())) {
-					businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.RESPONSE.name());
-					businessRouteValue.setStatusCode(businessRouteValue.getNextNodeErrorCode());
-					businessRouteValue.setSubStatusCode("");
-					MessageSubmitFailManager.getInstance().process(businessRouteValue);
+				}//提交失败
+				else if(InsideStatusCodeConstant.FAIL_CODE.equals(businessRouteValue.getNextNodeCode())) {
+				
+					threadPoolExecutor.execute(new Runnable() {
+						
+						@Override
+						public void run() {
+							doReponseFail(businessRouteValue);	
+						}
+					});
+					
 				}			
 			}
-			
+			doLog(businessRouteValue);
 		}else{
 			sleep(BusinessDataManager.getInstance().getReportRedisPopIntervalTime());
 		}
+	}
+	
+	/**
+	 * 处理响应成功
+	 * @param businessRouteValue
+	 */
+	private void doReponseSuccess(BusinessRouteValue businessRouteValue){
+		//获取日限量方式
+		int sendLimitStyleDaily = BusinessDataManager.getInstance().getSendLimitStyleDaily(businessRouteValue.getAccountID());
+		//重复发送次数
+		int repeatSendTimes = businessRouteValue.getRepeatSendTimes();
+		//不考虑失败补发的情况
+		if(repeatSendTimes == 0){
+			if(FixedConstant.SendLimitStyleDaily.MT_MESSAGE_CONTENT.ordinal() == sendLimitStyleDaily){
+				CacheBaseService.saveAccountCarrierDailyToMiddlewareCache(
+						businessRouteValue.getAccountID(), 
+						businessRouteValue.getBusinessCarrier(), 
+						businessRouteValue.getAccountMessageIDs().split(FixedConstant.SPLICER).length);
+				
+			}else if (FixedConstant.SendLimitStyleDaily.MT_PHONE_NUMBER.ordinal() == sendLimitStyleDaily){
+				String [] messageIDsArray = businessRouteValue.getAccountMessageIDs().split(FixedConstant.SPLICER);	
+				if(messageIDsArray.length > 1 || businessRouteValue.getMessageIndex() == 1){
+					CacheBaseService.saveAccountCarrierDailyToMiddlewareCache(
+							businessRouteValue.getAccountID(), 
+							businessRouteValue.getBusinessCarrier(), 
+							1);
+				}
+				
+			}
+		}
+	}
+	
+	/**
+	 * 处理响应失败
+	 * @param businessRouteValue
+	 */
+	private void doReponseFail(BusinessRouteValue businessRouteValue){
+		//当提交失败时,也保存key和value，channelMessageID为空时，通过uuid赋值
+		String channelMessageID = businessRouteValue.getChannelMessageID();
+		if(StringUtils.isEmpty(channelMessageID)){
+			channelMessageID = UUID.randomUUID().toString();
+		}
+		//存入缓存  用于匹配状态报告
+		CacheBaseService.saveBusinessRouteValueToMiddlewareCache(businessRouteValue);
+		
+		//模拟通道返回状态报告
+			
+		BusinessRouteValue businessRouteValueReport = new BusinessRouteValue();
+		
+		businessRouteValueReport.setChannelID(businessRouteValue.getChannelID());
+		businessRouteValueReport.setStatusCode(businessRouteValue.getNextNodeErrorCode());
+		businessRouteValueReport.setSubStatusCode("");
+		businessRouteValueReport.setStatusCodeSource(FixedConstant.StatusReportSource.RESPONSE.name());
+		businessRouteValueReport.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
+		businessRouteValueReport.setChannelReportSRCID(businessRouteValue.getChannelSubmitSRCID());
+		businessRouteValueReport.setChannelMessageID(channelMessageID);
+		businessRouteValueReport.setPhoneNumber(businessRouteValue.getPhoneNumber());
+		businessRouteValueReport.setChannelReportTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
+		
+		CacheBaseService.saveReportToMiddlewareCache(businessRouteValueReport);
 	}
 	
 	private void doLog(BusinessRouteValue businessRouteValue) {

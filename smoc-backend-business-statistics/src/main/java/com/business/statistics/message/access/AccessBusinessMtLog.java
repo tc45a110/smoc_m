@@ -15,10 +15,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.LogPathConstant;
+import com.base.common.log.CategoryLog;
 import com.base.common.manager.ResourceManager;
 import com.base.common.util.DateUtil;
 import com.base.common.util.TableNameGeneratorUtil;
@@ -27,13 +26,13 @@ import com.business.statistics.message.access.AccessBusinessDao;
 import com.business.statistics.util.FileFilterUtil;
 
 public class AccessBusinessMtLog {
-	private static final Logger logger = LoggerFactory.getLogger(AccessBusinessMtLog.class);
+	
 	// 接入业务层一条mt日志字符串个数
 	private static final int ACCESS_BUSINESS_MT_MESSAGE_LOG_LENGTH = ResourceManager.getInstance()
 			.getIntValue("access.business.mt.message.log.length");
 
 	public static void main(String[] args) {
-		logger.info(Arrays.toString(args));
+		CategoryLog.accessLogger.info(Arrays.toString(args));
 
 		long startTime = System.currentTimeMillis();
 
@@ -41,7 +40,7 @@ public class AccessBusinessMtLog {
 
 		int afterMinute = -1;
 		if (!(args.length == 1 || args.length == 0)) {
-			logger.error("参数不符合规范");
+			CategoryLog.accessLogger.error("参数不符合规范");
 			System.exit(0);
 		}
 		// 通过传参 确定读取时间
@@ -62,7 +61,7 @@ public class AccessBusinessMtLog {
 			String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MT.name()))
 					.append(DateUtil.getAfterMinuteDateTime(afterMinute, DateUtil.DATE_FORMAT_COMPACT_HOUR)).toString();
 
-			logger.info("读取当前文件路径={},文件名={},生成时间={}", filePath, fileName, lineTime);
+			CategoryLog.accessLogger.info("读取当前文件路径={},文件名={},生成时间={}", filePath, fileName, lineTime);
 
 			// 创建一个线程池
 			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER * 8,
@@ -89,16 +88,16 @@ public class AccessBusinessMtLog {
 				try {
 					rowNumber += call.get();
 				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
+					CategoryLog.accessLogger.error(e.getMessage(), e);
 				}
 			}
 
-			logger.info("{},处理文件数量:{},处理数据行数:{},耗时:{}", lineTime, fileNumber, rowNumber,
+			CategoryLog.accessLogger.info("{},处理文件数量:{},处理数据行数:{},耗时:{}", lineTime, fileNumber, rowNumber,
 					(System.currentTimeMillis() - startTime));
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			CategoryLog.accessLogger.error(e.getMessage(), e);
 		}
-		logger.info("程序正常退出");
+		CategoryLog.accessLogger.info("程序正常退出");
 		System.exit(0);
 
 	}
@@ -128,14 +127,14 @@ public class AccessBusinessMtLog {
 					rowNumber += enterpriseMap.get(EnterpriseFlag).size();
 					AccessBusinessDao.insertMtLog(enterpriseMap.get(EnterpriseFlag), tableName);
 				}
-				logger.info("表{} 保存数据{}条", tableName, rowNumber);
+				CategoryLog.accessLogger.info("表{} 保存数据{}条", tableName, rowNumber);
 			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
+				CategoryLog.accessLogger.error(e.getMessage(), e);
 			}
-			logger.info("文件:{},时间段:{},处理数据{}条,耗时:{}", file.getName(), lineTime, rowNumber,
+			CategoryLog.accessLogger.info("文件:{},时间段:{},处理数据{}条,耗时:{}", file.getName(), lineTime, rowNumber,
 					(System.currentTimeMillis() - startTime));
 			
-			logger.info("线程退出循环");
+			CategoryLog.accessLogger.info("线程退出循环");
 			return rowNumber;
 		}
 	}
@@ -224,11 +223,11 @@ public class AccessBusinessMtLog {
 			
 
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			CategoryLog.accessLogger.error(e.getMessage(), e);
 			throw e;
 		}
 		if (error) {
-			logger.warn("错误文件={},错误行数={}", error_file, error_line);
+			CategoryLog.accessLogger.warn("错误文件={},错误行数={}", error_file, error_line);
 		}
 		return enterpriseMap;
 	}

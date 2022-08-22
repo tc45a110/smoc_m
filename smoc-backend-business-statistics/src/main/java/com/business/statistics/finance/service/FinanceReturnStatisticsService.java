@@ -39,6 +39,7 @@ public class FinanceReturnStatisticsService {
 	public static void main(String[] args) {
 		logger.info(Arrays.toString(args));
 		try {
+			long start = System.currentTimeMillis();
 			int afterDay = -1;
 			if (!(args.length == 1 || args.length == 0)) {
 				logger.error("参数不符合规范");
@@ -48,6 +49,7 @@ public class FinanceReturnStatisticsService {
 			if (args.length >= 1) {
 				afterDay = Integer.valueOf(args[0]);
 			}
+			logger.info("*********************开始次日返还统计*********************");
 			String loadTime = DateUtil.getAfterDayDateTime(afterDay, DateUtil.DATE_FORMAT_COMPACT_DAY);
 			statisticsSubmitMT(loadTime);
 			statisticsReportMR(loadTime);
@@ -55,6 +57,7 @@ public class FinanceReturnStatisticsService {
 			saveFinanceAccountReturnStatistics();
 			//返还失败的金额  解冻冻结金额
 			updateFinanceAccount();
+			logger.info("*********************次日返还统计结束,统计时间:{},耗时:{}毫秒*********************",loadTime,(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -75,6 +78,7 @@ public class FinanceReturnStatisticsService {
 		//读取的文件名
 		String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MT.name()))
 				.append(loadTime).toString();
+		long start = System.currentTimeMillis();
 		//过滤文件
 		File[] fileList = FileFilterUtil.findFile(filePath, fileName);
 		
@@ -93,11 +97,16 @@ public class FinanceReturnStatisticsService {
 		String accountChargeType = null;
 		String sendTime = null;
 		int count = 0;
+		int row = 0;
 		for (File file : fileList) {
+			long startTime = System.currentTimeMillis();
 			try {
+				logger.info("开始处理文件:{}",file.getName());
+				row = 0;
 				LineIterator lines = FileUtils.lineIterator(file);
 				while (lines.hasNext()) {
 					count++;
+					row++;
 					line = lines.next();
 					array = line.split(FixedConstant.LOG_SEPARATOR);
 					if(array.length < BUSINESS_RROXY_MT_MESSAGE_LOG_LENGTH){
@@ -156,8 +165,9 @@ public class FinanceReturnStatisticsService {
 				logger.error("{},读取短信状态报告日志错误:file={}",DateUtil.getCurDateTime(),file.getAbsolutePath());
 				logger.error(e.getMessage(),e);
 			}
+			logger.info("文件已处理完毕:{},处理数据:{},耗时:{}毫秒",file.getName(),row,(System.currentTimeMillis() - startTime));
 		}
-		logger.info("{},总loadProxyBusinessMT记录数:{}",DateUtil.getCurDateTime(),count);
+		logger.info("{},总loadProxyBusinessMT记录数:{},总耗时:{}毫秒", DateUtil.getCurDateTime(), count, (System.currentTimeMillis() - start));
 	}
 	
 	/**
@@ -171,6 +181,7 @@ public class FinanceReturnStatisticsService {
 		// 读取的文件名
 		String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MR.name()))
 				.append(loadTime).toString();
+		long start = System.currentTimeMillis();
 		// 过滤文件
 		File[] fileList = FileFilterUtil.findFile(filePath, fileName);
 
@@ -191,10 +202,15 @@ public class FinanceReturnStatisticsService {
 		String statusCodeSource = null;
 		String reportTime = null;
 		int count = 0;
+		int row = 0;
 		for (File file : fileList) {
+			long startTime = System.currentTimeMillis();
 			try {
+				logger.info("开始处理文件:{}",file.getName());
+				row = 0;
 				LineIterator lines = FileUtils.lineIterator(file);
 				while (lines.hasNext()) {
+					row++;
 					count++;
 					line = lines.next();
 					array = line.split(FixedConstant.LOG_SEPARATOR);
@@ -260,8 +276,9 @@ public class FinanceReturnStatisticsService {
 				logger.error("{},读取短信状态报告日志错误:file={}", DateUtil.getCurDateTime(), file.getAbsolutePath());
 				logger.error(e.getMessage(), e);
 			}
+			logger.info("文件已处理完毕:{},处理数据:{},耗时:{}毫秒",file.getName(),row,(System.currentTimeMillis() - startTime));
 		}
-		logger.info("{},总loadProxyBusinessMR记录数:{}", DateUtil.getCurDateTime(), count);
+		logger.info("{},总loadAccessBusinessMR记录数:{},总耗时:{}毫秒", DateUtil.getCurDateTime(), count, (System.currentTimeMillis() - start));
 	}
 	
 	private static void saveFinanceAccountReturnStatistics() {
@@ -273,7 +290,7 @@ public class FinanceReturnStatisticsService {
 		sql.append("RETURN_NUM,RETURN_SUM,SUCESS_NUM,SUCESS_SUM,UNFREEZE_NUM,UNFREEZE_SUM,FAILURE_NUM,FAILURE_SUM,");
 		sql.append("CREATED_TIME) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())");
 		
-		logger.info("saveFinanceAccountReturnStatistics sql={}",sql.toString());
+		logger.debug("saveFinanceAccountReturnStatistics sql={}",sql.toString());
 		// 在一个事务中更新数据
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
@@ -325,7 +342,7 @@ public class FinanceReturnStatisticsService {
 		sql.append("ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM - ?,ACCOUNT_CONSUME_SUM = ACCOUNT_CONSUME_SUM + ? ");
 		sql.append("WHERE ACCOUNT_ID = ?");
 		
-		logger.info("updateFinanceAccount sql={}",sql.toString());
+		logger.debug("updateFinanceAccount sql={}",sql.toString());
 		// 在一个事务中更新数据
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();

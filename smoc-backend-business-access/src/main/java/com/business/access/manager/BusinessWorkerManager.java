@@ -5,18 +5,25 @@
 package com.business.access.manager;
 
 import com.base.common.constant.FixedConstant;
+import com.base.common.manager.ResourceManager;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
 import com.business.access.worker.BusinessWorker;
 
 public class BusinessWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
+	//启动线程数
+	private static int businessWorkerThreadSize = ResourceManager.getInstance().getIntValue("business.worker.thread.size");
 	
 	private static BusinessWorkerManager manager = new BusinessWorkerManager();
 	
 	
 	private BusinessWorkerManager(){
-		//启动cpu的数量*8的系数
-		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
+		//当未配置时按住cpu的核数
+		if(businessWorkerThreadSize == 0){
+			businessWorkerThreadSize = FixedConstant.CPU_NUMBER;
+		}
+		System.out.println("业务信息封装线程数:"+businessWorkerThreadSize);
+		for(int i=0;i<businessWorkerThreadSize;i++){
 			BusinessWorker businessWorker = new BusinessWorker(superQueue);
 			businessWorker.setName(new StringBuilder("BusinessWorker-").append(i).toString());
 			businessWorker.start();

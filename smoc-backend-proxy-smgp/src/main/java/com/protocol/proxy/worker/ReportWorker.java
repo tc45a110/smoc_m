@@ -30,7 +30,7 @@ public class ReportWorker extends SuperQueueWorker<SMGPMessage>{
 		this.channelID = channelID;
 		init();
 		//先判断表是否存在，初始化时会建表
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("ReportWorker-").append(channelID).append("-").append(index).toString());
 		this.start();
 	}
 	
@@ -48,39 +48,45 @@ public class ReportWorker extends SuperQueueWorker<SMGPMessage>{
 
 	@Override
 	protected void doRun() throws Exception {
-		SMGPMessage message = take();
-		CategoryLog.messageLogger.info(message.toString());
-		int registeredDeliver = 0;
-		//短信是否包含长短信头的标识
-		int tpUdhi=0;
-		int messageFormat=0;
-		String channelReportSRCID=null;
-		String phoneNumber=null;
-		String subStatusCode = null;
-		byte[] messageContent=null;
-		byte[] channelMessageID=null;
-		String statusCode=null;
-		String sequenceID=null;
-		
-		sequenceID = String.valueOf(message.getSequenceId());
-		
-		SMGPDeliverMessage deliverMessage = (SMGPDeliverMessage)message;
-		registeredDeliver = deliverMessage.getIsReport();
-		messageFormat = deliverMessage.getMsgFormat();
-		phoneNumber = deliverMessage.getSrcTermID();
-		channelReportSRCID = deliverMessage.getDestTermID();
-		channelMessageID = deliverMessage.getMsgId();
-		messageContent = deliverMessage.getMsgContent();
-		statusCode = deliverMessage.getStat();
-		subStatusCode = deliverMessage.getErr();
-		
-		//状态报告
-		if(registeredDeliver == 1){
-			processChannelReport(statusCode, subStatusCode, channelReportSRCID, channelMessageID, phoneNumber,sequenceID);
-		}else if(registeredDeliver == 0){
-			processChannelMO(tpUdhi, messageFormat, phoneNumber, channelReportSRCID, messageContent,sequenceID);
+		SMGPMessage message =  poll();
+		if(message != null){
+			CategoryLog.messageLogger.info(message.toString());
+			int registeredDeliver = 0;
+			//短信是否包含长短信头的标识
+			int tpUdhi=0;
+			int messageFormat=0;
+			String channelReportSRCID=null;
+			String phoneNumber=null;
+			String subStatusCode = null;
+			byte[] messageContent=null;
+			byte[] channelMessageID=null;
+			String statusCode=null;
+			String sequenceID=null;
+			
+			sequenceID = String.valueOf(message.getSequenceId());
+			
+			SMGPDeliverMessage deliverMessage = (SMGPDeliverMessage)message;
+			registeredDeliver = deliverMessage.getIsReport();
+			messageFormat = deliverMessage.getMsgFormat();
+			phoneNumber = deliverMessage.getSrcTermID();
+			channelReportSRCID = deliverMessage.getDestTermID();
+			channelMessageID = deliverMessage.getMsgId();
+			messageContent = deliverMessage.getMsgContent();
+			statusCode = deliverMessage.getStat();
+			subStatusCode = deliverMessage.getErr();
+			
+			if (phoneNumber.length() > 11) {
+				phoneNumber = phoneNumber.substring(phoneNumber
+						.length() - 11);
+			}
+			
+			//状态报告
+			if(registeredDeliver == 1){
+				processChannelReport(statusCode, subStatusCode, channelReportSRCID, channelMessageID, phoneNumber,sequenceID);
+			}else if(registeredDeliver == 0){
+				processChannelMO(tpUdhi, messageFormat, phoneNumber, channelReportSRCID, messageContent,sequenceID);
+			}
 		}
-		
 	}
 	
 	/**

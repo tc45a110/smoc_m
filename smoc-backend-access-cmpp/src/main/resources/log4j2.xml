@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO" monitorInterval="180">
     <properties>
-        <property name="Log_Home">/alidata/protocol-access-cmpp/logs</property>
+        <property name="Log_Home">/smoc/logs/protocol-access-cmpp</property>
     </properties>
 
     <Appenders>

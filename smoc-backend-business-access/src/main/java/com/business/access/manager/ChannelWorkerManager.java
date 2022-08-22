@@ -5,6 +5,10 @@
 package com.business.access.manager;
 
 import com.base.common.constant.FixedConstant;
+import com.base.common.manager.AlarmManager;
+import com.base.common.manager.BusinessDataManager;
+import com.base.common.manager.ResourceManager;
+import com.base.common.vo.AlarmMessage;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperMapWorker;
 import com.business.access.worker.ChannelWorker;
@@ -45,7 +49,7 @@ public class ChannelWorkerManager extends SuperMapWorker<String,ChannelWorker>{
 
 		}
 		channelWorker.process(businessRouteValue.getBusinessMessageID(), businessRouteValue);
-		logger.info(
+		logger.debug(
 				new StringBuilder().append("添加到通道队列")
 				.append("{}accountID={}")
 				.append("{}phoneNumber={}")
@@ -69,8 +73,48 @@ public class ChannelWorkerManager extends SuperMapWorker<String,ChannelWorker>{
 
 	@Override
 	public void doRun() throws Exception {
-		logger.info("通道线程数{}",size());
+		isOverCacheThreshold();
 		Thread.sleep(FixedConstant.COMMON_MONITOR_INTERVAL_TIME);
+	}
+	
+	/**
+	 * 超过阈值
+	 * @return
+	 */
+	private void isOverCacheThreshold(){
+		//单个通道缓存数与单次加载条数的倍数
+		int channelWorkerCacheSizeMultiple = ResourceManager.getInstance().getIntValue("channel.worker.cache.size.multiple");
+		if(channelWorkerCacheSizeMultiple == 0){
+			channelWorkerCacheSizeMultiple = 5;
+		}
+		//所有通道缓总数与单次加载条数的倍数
+		int channelCacheSizeMultiple = ResourceManager.getInstance().getIntValue("channel.cache.size.multiple");
+		if(channelCacheSizeMultiple == 0){
+			channelCacheSizeMultiple = 100;
+		}
+		//单个channel worker的缓存阈值
+		int channelWorkerThreshold = BusinessDataManager.getInstance().getMessageLoadMaxNumber()*channelWorkerCacheSizeMultiple;
+		//总的channel worker的缓存阈值
+		int channelThreshold = BusinessDataManager.getInstance().getMessageLoadMaxNumber()*channelCacheSizeMultiple;
+		
+		int total = 0;
+		//判断单个channel worker的缓存数量是否超过阈值
+		for(ChannelWorker  channelWorker  : superMap.values()){
+			int size = channelWorker.getSize();
+			if(size > channelWorkerThreshold  ){
+				logger.warn("通道{}缓存队列数量{},超过缓存阈值{}",channelWorker.getChannelID(),size,channelWorkerThreshold);			
+				AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.ChannelWorker, 
+						new StringBuilder().append(channelWorker.getChannelID()).append(",").append(size).toString())
+				);
+			}
+			total+=size;
+		}
+		logger.info("通道总的缓存队列数量{}",total);
+		//判断所有channel worker的缓存数量是否超过阈值
+		if(total > channelThreshold ){
+			logger.warn("通道总的缓存队列数量{},超过缓存阈值{}",total,channelThreshold);
+			AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.ChannelWorker,new StringBuilder().append("ALL").append(",").append(total).toString()));
+		}
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.business.statistics.finance.pojo;
+package com.business.statistics.finance.entity;
 
 import java.util.Date;
 

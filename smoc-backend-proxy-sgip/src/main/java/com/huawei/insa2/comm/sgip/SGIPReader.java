@@ -8,7 +8,9 @@ package com.huawei.insa2.comm.sgip;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
+import com.base.common.log.CategoryLog;
 import com.huawei.insa2.comm.PReader;
 import com.huawei.insa2.comm.sgip.message.SGIPBindMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPBindRepMessage;
@@ -31,6 +33,9 @@ public class SGIPReader extends PReader
     public SGIPMessage read()
         throws IOException
     {
+//    	if(in.available() == 0){
+//    		return null;
+//    	}
         int total_Length = in.readInt();
         if(total_Length > 1024*4){
         	throw new IOException("too large");
@@ -38,6 +43,7 @@ public class SGIPReader extends PReader
         int command_Id = in.readInt();
         byte buf[] = new byte[total_Length - 8];
         in.readFully(buf);
+        CategoryLog.connectionLogger.debug("total_Length={},buf.length={},buf={}",total_Length,buf.length,Arrays.toString(buf));
         if(command_Id == 0x80000001)
             return new SGIPBindRepMessage(buf);
         if(command_Id == 1)

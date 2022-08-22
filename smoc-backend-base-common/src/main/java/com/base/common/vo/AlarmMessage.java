@@ -10,6 +10,20 @@ public class AlarmMessage {
 	public static enum AlarmKey{
 		ChannelWorker,//通道缓存队列
 		ExternalBlacklistFilterWorker,//外部黑名单过滤缓存队列
+		AccountReportQueue,//账号状态报告队列
+		BusinessStatistics,//日志统计服务异常
+		ProtocolAccess,//接入协议层异常
+		ProtocolProxy,//代理协议层异常
+		Redis,//redis异常
+		Database,//数据库异常
+		InsideFilter,//内部过滤异常
+		ExternalBlacklistFilter,//外部过滤异常
+		AccountSuccessRate,//账号成功率
+		AccountDelayRate,//账号延迟率
+		AccountUnknownRate,//账号未知率
+		ChannelSuccessRate,//通道成功率
+		ChannelDelayRate,//通道延迟率
+		ChannelUnknownRate,//通道未知率
 	}
 	
 	/**

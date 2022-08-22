@@ -163,7 +163,7 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 	public String getChannelRunStatus(String channelID) {
 		ChannelInfo channelInfo = get(channelID);
 		if (channelInfo != null) {
-			switch (channelInfo.getChannelStatus()) {
+			switch (channelInfo.getChannelRunStatus()) {
 			case "1":
 				return FixedConstant.ChannelRunStatus.NORMAL.name();
 			case "2":
@@ -204,6 +204,19 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 			return 0;
 		}
 		return channelInfo.getMaxSendSecond();
+	}
+	
+	/**
+	 * 是否需要报备:0 不需要报备 1 需要报备
+	 * @param channelID
+	 * @return
+	 */
+	public String getIsRegister(String channelID) {
+		ChannelInfo channelInfo = get(channelID);
+		if (channelInfo == null) {
+			return "0";
+		}
+		return channelInfo.getIsRegister();
 	}
 
 	/**
@@ -341,6 +354,23 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 		}
 		return "";
 	}
+	
+	/**
+	 * 判断通道是否支持账号的发送范围
+	 * @param channelID
+	 * @param carrier
+	 * @return
+	 */
+	public boolean isSupportCarrier(String channelID,String carrier){
+		ChannelInfo channelInfo = get(channelID);
+		if (channelInfo != null) {
+			String carriers = channelInfo.getCarriers();
+			if(StringUtils.isNotEmpty(carriers) && carriers.contains(carrier)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	private Map<String, ChannelInfo> loadChannelInfo() {
 		StringBuffer sql = new StringBuffer();
@@ -349,7 +379,7 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 		ResultSet rs = null;
 		sql.append("SELECT a.CHANNEL_ID,a.CHANNEL_NAME,a.CARRIER,a.BUSINESS_TYPE,a.MAX_COMPLAINT_RATE");
 		sql.append(",a.ACCESS_PROVINCE,a.CHANNEL_PROVDER,a.INFO_TYPE,a.BUSINESS_AREA_TYPE,a.SUPPORT_AREA_CODES");
-		sql.append(",a.CHANNEL_STATUS,a.CHANNEL_RUN_STATUS,a.PRICE_STYLE");
+		sql.append(",a.CHANNEL_STATUS,a.CHANNEL_RUN_STATUS,a.PRICE_STYLE,a.IS_REGISTER");
 		sql.append(",b.CHANNEL_ACCESS_ACCOUNT,b.CHANNEL_ACCESS_PASSWORD,b.CHANNEL_SERVICE_URL,b.SP_ID,b.SRC_ID");
 		sql.append(",b.BUSINESS_CODE,b.CONNECT_NUMBER,b.MAX_SEND_SECOND,b.HEARTBEAT_INTERVAL,b.PROTOCOL,b.VERSION ");
 
@@ -374,6 +404,8 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 				int maxSendSecond = rs.getInt("MAX_SEND_SECOND");
 				int connectNumber = rs.getInt("CONNECT_NUMBER");
 				String secId = rs.getString("SRC_ID");
+				String carrier = rs.getString("CARRIER");
+				String isRegister = rs.getString("IS_REGISTER");
 
 				ChannelInfo channelInfo = new ChannelInfo();
 				Map<String, String> interfaceInfo = new HashMap<String, String>();
@@ -400,7 +432,9 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 				channelInfo.setMaxSendSecond(maxSendSecond);
 				channelInfo.setConnectNumber(connectNumber);
 				channelInfo.setChannelSRCID(secId);
+				channelInfo.setCarriers(carrier);
 				channelInfo.setInterfaceInfo(interfaceInfo);
+				channelInfo.setIsRegister(isRegister);
 
 				resultMap.put(channelID, channelInfo);
 			}
@@ -469,7 +503,17 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 		 * 通道接口参数
 		 */
 		private Map<String, String> interfaceInfo = new HashMap<String, String>();
-
+		
+		/**
+		 * 发送范围
+		 */
+		private String carriers;
+		
+		/**
+		 * 是否需要报备 0 不需要报备 1 需要报备
+		 */
+		private String isRegister;
+		
 		public String getChannelSRCID() {
 			return channelSRCID;
 		}
@@ -556,6 +600,22 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 
 		public void setConnectNumber(int connectNumber) {
 			this.connectNumber = connectNumber;
+		}
+
+		public String getCarriers() {
+			return carriers;
+		}
+
+		public void setCarriers(String carriers) {
+			this.carriers = carriers;
+		}
+
+		public String getIsRegister() {
+			return isRegister;
+		}
+
+		public void setIsRegister(String isRegister) {
+			this.isRegister = isRegister;
 		}
 
 		/**

@@ -15,15 +15,15 @@ import com.business.access.worker.InsideFilterWorker;
  * 内部过滤线程管理
  */
 public class InsideFilterWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
-	
-	private static InsideFilterWorkerManager manager = new InsideFilterWorkerManager();
 	//内部过滤线程数与cpu的倍数
 	private static int insideFilterWorkerMultiple = ResourceManager.getInstance().getIntValue("inside.filter.worker.multiple");
+
+	private static InsideFilterWorkerManager manager = new InsideFilterWorkerManager();
 
 	private InsideFilterWorkerManager(){
 		
 		if(insideFilterWorkerMultiple == 0){
-			insideFilterWorkerMultiple = 32;
+			insideFilterWorkerMultiple = 1;
 		}
 
 		//预估50毫秒处理一次http请求，启动cpu的数量*64的系数，并发请求为 cpu数量*64*10 当cpu=8时，并发量为5000

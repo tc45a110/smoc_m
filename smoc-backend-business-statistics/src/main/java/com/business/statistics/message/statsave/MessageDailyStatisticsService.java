@@ -19,7 +19,7 @@ import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.ResourceManager;
 import com.base.common.util.DateUtil;
 import com.base.common.util.UUIDUtil;
-import com.business.statistics.message.pojo.MessageDailyStatistics;
+import com.business.statistics.message.entity.MessageDailyStatistics;
 import com.business.statistics.util.FileFilterUtil;
 
 /**

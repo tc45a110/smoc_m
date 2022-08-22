@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO" monitorInterval="180">
     <properties>
-        <property name="Log_Home">/alidata/smoc-protocol-proxy-cmpp/logs</property>
+        <property name="Log_Home">/smoc/logs/protocol-proxy-cmpp</property>
     </properties>
 
     <Appenders>
-
         <RollingRandomAccessFile name="RollingFileInfo" fileName="${Log_Home}/log4jauth2.log" immediateFlush="true"
                                  filePattern="${Log_Home}/log4jauth2.log.%d{yyyy-MM-dd-HH}.log">
             <PatternLayout pattern="[%d{yyyy.MM.dd HH:mm:ss,SSS}][%t][%c][%M](%L)[%p] - %m%n"/>
+
             <filters>
                 <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
+
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
             </Policies>
+
         </RollingRandomAccessFile>
 
         <RollingFile name="RollingFileWarn" fileName="${Log_Home}/warn.log" immediateFlush="true"
                      filePattern="${Log_Home}/warn.log.%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="[%d{yyyy.MM.dd HH:mm:ss,SSS}][%t][%c][%M](%L)[%p] - %m%n"/>
             <filters>
+
                 <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+
             </filters>
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
             </Policies>
         </RollingFile>
+
+
 
         <RollingFile name="RollingFileError" fileName="${Log_Home}/error.log" immediateFlush="true"
                      filePattern="${Log_Home}/error.log.%d{yyyy-MM-dd}.log">
@@ -40,6 +46,8 @@
             </Policies>
         </RollingFile>
 
+
+
         <RollingFile name="common_appender" fileName="${Log_Home}/common.log"
                      filePattern="${Log_Home}/common.log.%d{yyyy-MM-dd}.log" >
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -49,14 +57,18 @@
             </Policies>
         </RollingFile>
 
+
+
         <RollingFile name="connection_appender" fileName="${Log_Home}/connection.log"
                      filePattern="${Log_Home}/connection.log.%d{yyyy-MM-dd}.log" >
-            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{yyyy.MM.dd HH:mm:ss,SSS}][%t][%c][%class.%M](%L)[%p] - %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
             </Policies>
         </RollingFile>
+
+
 
         <RollingFile name="message_appender" fileName="${Log_Home}/message.log"
                      filePattern="${Log_Home}/message.log.%d{yyyy-MM-dd-HH}.log" >
@@ -67,21 +79,30 @@
             </Policies>
         </RollingFile>
 
+
+
     </Appenders>
+
     <Loggers>
         <Root level="info" includeLocation="true">
             <appender-ref ref="RollingFileInfo"/>
             <appender-ref ref="RollingFileWarn"/>
             <appender-ref ref="RollingFileError"/>
         </Root>
+
         <logger name="common" additivity="false" level="info" includeLocation="true">
             <appender-ref ref="common_appender"/>
         </logger>
-        <logger name="connection" additivity="false" level="info" includeLocation="true">
+
+        <logger name="connection" additivity="false" level="debug" includeLocation="true">
             <appender-ref ref="connection_appender"/>
         </logger>
+
         <logger name="message" additivity="false" level="info" includeLocation="true">
             <appender-ref ref="message_appender"/>
         </logger>
+
     </Loggers>
+
 </Configuration>
+

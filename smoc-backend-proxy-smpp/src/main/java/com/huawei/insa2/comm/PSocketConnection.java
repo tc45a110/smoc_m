@@ -13,19 +13,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.CategoryLog;
 import com.base.common.manager.ChannelRunStatusManager;
 import com.base.common.manager.ResourceManager;
-import com.huawei.insa2.comm.sgip.SGIPConstant;
-import com.huawei.insa2.comm.sgip.message.SGIPBindMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPBindRepMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPDeliverMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPReportMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPUnbindMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPUserReportMessage;
+import com.base.common.worker.SuperCacheWorker;
+import com.huawei.insa2.comm.smpp.SMPPConstant;
+import com.huawei.insa2.comm.smpp.message.SMPPEnquireLinkMessage;
+import com.huawei.insa2.comm.smpp.message.SMPPLoginMessage;
+import com.huawei.insa2.comm.smpp.message.SMPPLoginRespMessage;
+import com.huawei.insa2.comm.smpp.message.SMPPMessage;
+import com.huawei.insa2.comm.smpp.message.SMPPUnbindMessage;
 import com.huawei.insa2.util.Args;
 import com.huawei.insa2.util.Resource;
 import com.huawei.insa2.util.WatchThread;
@@ -39,10 +39,24 @@ import com.protocol.proxy.util.ChannelInterfaceUtil;
  * @version 1.0
  */
 public abstract class PSocketConnection{
-	
+
 	protected String source_addr = null;
 	protected int version;// 双方协商的版本号
 	protected String shared_secret;// 事先商定的值，用于生成SP认证码
+	
+	private long readBytes;
+	private long writeBytes;
+	private long lastReadBytes = 0;
+	private long lastWriteBytes = 0;
+	
+    private String systemId;	//账号
+    private String password;	//密码
+    private String systemType;		//连接类型
+    private byte interfaceVersion;   //接口版本号
+    private byte addrTon;
+    private byte addrNpi;
+    private String addressRange;
+    private int loginType;
 	
 	//通道id
 	protected String channelID;
@@ -61,10 +75,12 @@ public abstract class PSocketConnection{
 	
 	protected Timer timer;
 	
-	protected Map<Integer, TimerTask> taskMap = new HashMap<Integer, TimerTask>();
-	protected BlockingQueue<SGIPMessage> connectionSubmitRespQueue = new LinkedBlockingQueue<SGIPMessage>();
+	SubmitRespWorker connectionSubmitRespWorker;
 	
-	protected BlockingQueue<SGIPMessage> sendSubmitRespQueue;
+	protected Map<Integer, TimerTask> taskMap = new HashMap<Integer, TimerTask>();
+	protected BlockingQueue<SMPPMessage> connectionSubmitRespQueue = new LinkedBlockingQueue<SMPPMessage>();
+	
+	protected BlockingQueue<SMPPMessage> sendSubmitRespQueue;
 	
 	private int  localPort;
 	
@@ -205,9 +221,9 @@ public abstract class PSocketConnection{
 
 		private int key;
 		private long time;
-		private SGIPMessage message;
+		private SMPPMessage message;
 
-		public ConnectionTask(int key,SGIPMessage message) {
+		public ConnectionTask(int key,SMPPMessage message) {
 			this.key = key;
 			this.message = message;
 			time = System.currentTimeMillis();
@@ -233,7 +249,7 @@ public abstract class PSocketConnection{
 	/**
 	 * 初始化操作。
 	 */
-	protected void init(BlockingQueue<SGIPMessage> sendSubmitRespQueue) {
+	protected void init(BlockingQueue<SMPPMessage> sendSubmitRespQueue) {
 		setAttributes(new Args(ChannelInterfaceUtil.getArgMap(channelID)));
 		
 		timer = new Timer("Connection-Timer-" + channelID + "-" + index);
@@ -241,9 +257,46 @@ public abstract class PSocketConnection{
 		
 		final long mark = System.currentTimeMillis();
 		
-		SubmitRespWorker connectionSubmitRespWorker = new SubmitRespWorker();
+		connectionSubmitRespWorker = new SubmitRespWorker();
 		connectionSubmitRespWorker.setName("connectionSubmitRespWorker-" + channelID + "-" + index);
 		connectionSubmitRespWorker.start();
+		
+		// 心跳发送线程定义
+		class HeartbeatThread extends WatchThread {
+			public HeartbeatThread() {
+				super("heartbeat-["+channelID+"-"+index+"]-"+mark);
+				setThreadState(HEARTBEATING);
+			}
+
+			public void task() {
+				try {
+					sleep(heartbeatInterval);
+				} catch (InterruptedException ex) {
+					// 忽略
+				}
+				if (out != null) { // 连接没有出错并且编码器存在
+					try {
+				    	if(readBytes - lastReadBytes > 10 && writeBytes - lastWriteBytes > 5){
+				    		lastReadBytes = readBytes;
+				    		return ;
+				    	}
+				    	lastReadBytes = readBytes;
+				    	lastWriteBytes = writeBytes;
+						heartbeat();
+					} catch (IOException ex) {
+						CategoryLog.connectionLogger.error(ex.getMessage(),ex);
+					}
+				}
+			}
+		}
+		;
+
+		// 如果需要，创建并启动心跳线程
+		if (heartbeatInterval > 0) {
+			heartbeatThread = new HeartbeatThread();
+			CategoryLog.connectionLogger.info("心跳线程启动");
+			heartbeatThread.start();
+		}
 
 		// 接收线程定义
 		class ReceiveThread extends WatchThread {
@@ -258,14 +311,18 @@ public abstract class PSocketConnection{
 					
 					if (networkStatus) { // 如果网络状态正常则一直读取数据
 						if (socket != null) { // 如果socket对象存在，在连接前先把它关闭。
-							CategoryLog.connectionLogger.debug(channelID+"-"+index+",isConnected="+socket.isConnected()+",isClosed="+socket.isClosed());
+							CategoryLog.connectionLogger.info(channelID+"-"+index+",isConnected="+socket.isConnected()+",isClosed="+socket.isClosed());
 						}
-						SGIPMessage m = in.read();
+						SMPPMessage m = in.read();
 						// logger.info("m="+m);
 						if (m != null) {
+							increaseReadByte(m.getSequenceId(),1);
 							onReceive(m);
-						}
+						}else
+							sleep(5);
 					} else { // 连接不正常则进行重连
+						//进行网络层连接时，应用层连接肯定是不可用的
+						health =false;
 						if (notInitFlag) { // 如果不是第一次建立连接
 							try {
 								//ChannelInterruptManager.getInstance().add(String.valueOf(channelID),String.valueOf(index));
@@ -283,6 +340,7 @@ public abstract class PSocketConnection{
 						connect();
 					}
 				} catch (Exception ex) {
+					health =false;
 					networkStatus = false;
 					CategoryLog.connectionLogger.error(ex.getMessage(), ex);
 				}
@@ -310,11 +368,17 @@ public abstract class PSocketConnection{
 		port = Integer.parseInt(args.get("port", ""));
 		
 		name = host + ':' + port; 
-		source_addr = args.get("login-name", "");
-		version = args.get("version", 32);
-		shared_secret = args.get("login-pass", "");
+		systemId = args.get("login-name", "");
+		interfaceVersion = (byte)args.get("version", 34);
+		password = args.get("login-pass", "");
+		systemType = args.get("systemType", "");
+        addrTon = (byte)args.get("addr-ton", 0);
+        addrNpi = (byte)args.get("addr-npi", 0);
+        addressRange = args.get("address-range", "");
+        
+        // commonID  消息标识
+        loginType = Integer.valueOf(args.get("loginType", "1"));
 		
-
 		// 读取数据最长等待时间，超过此时间没有读到数据认为连接中断。0表示永不超时。
 		readTimeout = 1000 * args.get("read-timeout", 90);
 
@@ -328,78 +392,6 @@ public abstract class PSocketConnection{
 		transactionTimeout = 1000 * args.get("transaction-timeout", 10);
 
 	}
-	
-	//上行和状态回执
-    protected void init(Socket socket)
-    {
-        //resource = getResource();
-    	resource = SGIPConstant.resource;
-        initResource();
-        error = NOT_INIT;
-        if(socket != null)
-        {
-            this.socket = socket;
-            try
-            {
-                out = getWriter(this.socket.getOutputStream());
-                in = getReader(this.socket.getInputStream());
-                setError(null);
-            }
-            catch(Exception ex)
-            {
-            	logger.error(ex);
-                setError(String.valueOf(CONNECT_ERROR));
-            }
-            if(args != null)
-                setAttributes1(args);
-            class ReceiveThread1 extends WatchThread
-            {
-
-                public void task()
-                {
-                    try
-                    {
-                        if(error == null)
-                        {
-                            PMessage m = in.read();
-                            if(m != null){
-                            	lastReadtime = System.currentTimeMillis();
-                                onReceive(m);
-                            }
-                            else
-                            	logger.warn("数据读取为空");
-                        }else{
-                        	logger.error("错误信息:"+error);
-                        	kill();
-                        	onReadTimeOut();
-                        }
-                    }
-                    catch(Exception ex)
-                    {
-                    	logger.error(ex.getMessage(),ex);
-                    	//this.interrupt();
-                    	//System.out.println(new Date()+","+this.getName()+"中断线程");
-                        setError(explain(ex));
-                        //当超时才进行连接关闭和释放
-                        //if(error == SGIPSocketConnection.RECEIVE_TIMEOUT)
-                        //{
-                        	kill();
-                            //setError(null);
-                            onReadTimeOut();
-                        //}
-                    }
-                }
-
-            public ReceiveThread1()
-            {
-                super(String.valueOf(String.valueOf(name)).concat("-receive-mo"));
-            }
-            }
-
-            receiveThread = new ReceiveThread1();
-            receiveThread.start();
-        }
-    }
 
 	/**
 	 * 发送消息。
@@ -407,13 +399,15 @@ public abstract class PSocketConnection{
 	 * @param message
 	 *            发送的消息。
 	 */
-	public void send(SGIPMessage message){
+	public void send(SMPPMessage message){
 
 		try {
 			
-			CategoryLog.connectionLogger.debug("start write sequence="+message.getSequenceId());		
+			CategoryLog.connectionLogger.info("start write sequence="+message.getSequenceId());		
 			out.write(message);
 			CategoryLog.connectionLogger.debug("end write sequence="+message.getSequenceId());
+
+			increaseWriteByte(message.getSequenceId(),1);
 			
 			CategoryLog.connectionLogger.debug("start fireEvent  ,sequence="+message.getSequenceId());
 			//fireEvent(new PEvent(PEvent.MESSAGE_SEND_SUCCESS, this, message));
@@ -422,31 +416,36 @@ public abstract class PSocketConnection{
 			
 	
 		} catch (Exception ex) {
+			health = false;
 			CategoryLog.connectionLogger.error(ex.getMessage(),ex);
 		}
 	}
 	
-	public void close(boolean flag) {
-
+	public void close(boolean flag,String trigger) {
+		CategoryLog.connectionLogger.info("关闭链接{},trigger={},flag={}",socket,trigger,flag);
 		try {
-			SGIPUnbindMessage msg = new SGIPUnbindMessage();
-			send(msg);
-			CategoryLog.connectionLogger.info("关闭链接["+channelID+"-"+index+"],flag="+flag);
+			if(health){
+				SMPPUnbindMessage msg = new SMPPUnbindMessage();
+				send(msg);
+			}
+			
 			if(flag){
 				if (socket != null) {
-					// Log.info(CLOSEING + this);
-
 					// Socket关闭时其输入、输出流自动关闭，不必再调用流的关闭
 					socket.close();
 					in = null;
 					out = null;
 					socket = null;
 				}
+				if(timer != null){
+					timer.cancel();
+				}
 				// 杀死心跳线程和接收线程
 				if (heartbeatThread != null) {
 					heartbeatThread.kill();
 				}
 				receiveThread.kill();
+				connectionSubmitRespWorker.exit();
 				notInitFlag = false;
 			}
 		} catch (Exception ex) {
@@ -464,8 +463,6 @@ public abstract class PSocketConnection{
 		
 		//每次重新获取连接参数
 		notInitFlag = true;
-		//进行网络层连接时，应用层连接肯定是不可用的
-		health =false;
 		if (socket != null) { // 如果socket对象存在，在连接前先把它关闭。
 			CategoryLog.connectionLogger.info(channelID+"-"+index+",isConnected="+socket.isConnected()+",isClosed="+socket.isClosed());
 			try {
@@ -504,10 +501,9 @@ public abstract class PSocketConnection{
 			return;
 		}
 		
-		SGIPBindMessage request = null;
+		SMPPLoginMessage request = null;
 		try {
-			request = new SGIPBindMessage(1,source_addr,
-					shared_secret);
+			request = new SMPPLoginMessage(loginType, systemId, password, systemType, interfaceVersion, addrTon, addrNpi, addressRange);
 			request.setSequenceId(proxy.getSequence());
 			ConnectionTask task = new ConnectionTask(request.getSequenceId(), request);
 			taskMap.put(request.getSequenceId(),task);
@@ -515,7 +511,7 @@ public abstract class PSocketConnection{
 			send(request);
 		} catch (Exception e) {
 			CategoryLog.connectionLogger.error(e.getMessage(), e);
-			close(false);
+			//close(false);
 		}
 	}
 
@@ -534,64 +530,75 @@ public abstract class PSocketConnection{
 	 *            解码器读取数据的输入流。
 	 */
 	protected abstract PReader getReader(InputStream in);
-	
-	public void onReceive(SGIPMessage message) {
-		int sequence = message.getSequenceId();
-		int command = message.getCommandId();
-		CategoryLog.connectionLogger.info("接收:CommandId={},sequence={},localPort={}",Integer.toHexString(command),sequence,localPort);
-		//Submit_Rep_Command_Id、Connect_Rep_Command_Id、Active_Test_Rep_Command_Id只需要接收
 
-		if(command == SGIPConstant.Submit_Rep_Command_Id ){
+	/**
+	 * 执行定期心跳。缺省什么也不做，须心跳的协议子类须重载该方法。
+	 * 如果协议中心跳是有响应的，则等待响应。可在连续失败计数达到累计值时抛出IOException异常 则连接将会自动重新建立。
+	 */
+	protected void heartbeat() throws IOException {
+		if(health){
+			SMPPEnquireLinkMessage message = new SMPPEnquireLinkMessage();
+			CategoryLog.connectionLogger.info("发送心跳:{}",message.toString());
+			message.setSequenceId(proxy.getSequence());
+			//taskMap.put(message.getSequenceId(), new ConnectionTask(message.getSequenceId(), message));
+			send(message);
+		}
+
+	}
+	
+	public void increaseReadByte(int sequence,long bytes){
+		readBytes+=bytes;
+	}
+
+	public void increaseWriteByte(int sequence,long bytes){
+		writeBytes+=bytes;
+	}
+	
+	public void onReceive(SMPPMessage message) {
+		int sequence = message.getSequenceId();
+		int commandId = message.getCommandId();
+		CategoryLog.connectionLogger.info("接收:CommandId={},sequence={},localPort={}",Integer.toHexString(commandId),sequence,localPort);
+		//Submit_Rep_Command_Id、Connect_Rep_Command_Id、Active_Test_Rep_Command_Id只需要接收
+		if(commandId == SMPPConstant.Submit_Rep_Command_Id){
 			this.sendSubmitRespQueue.add(message);
-		}else if(command == SGIPConstant.Bind_Rep_Command_Id ){
+		}else if(commandId == SMPPConstant.Bind_Receiver_Rep_Command_Id	 || commandId == SMPPConstant.Bind_Transmitter_Rep_Command_Id ||  commandId == SMPPConstant.Bind_Transceiver_Rep_Command_Id){
 			this.connectionSubmitRespQueue.add(message);
 		}else{	//需要写响应数据
-			SGIPMessage responseMessage = null;
+			SMPPMessage responseMessage = null;
 			//状态报告
-			if(command == SGIPConstant.Deliver_Command_Id){
-				responseMessage = proxy.onDeliver((SGIPDeliverMessage)message);
-			}else if(command == SGIPConstant.Report_Command_Id){
-				responseMessage = proxy.onReport((SGIPReportMessage)message);
-			}else if(command == SGIPConstant.UserReport_Command_Id){
-				responseMessage = proxy.onUserReport((SGIPUserReportMessage)message);
+			if(commandId == SMPPConstant.Deliver_Command_Id){
+				responseMessage = proxy.onDeliver(message);
+			}else if(commandId == SMPPConstant.Enquire_Link_Command_Id){
+				responseMessage = proxy.onActive(message);
 			}
 			if(responseMessage != null){
 				send(responseMessage);
 			}
-			
 		}
-		
 	}
 	
-	class SubmitRespWorker extends Thread {
+	class SubmitRespWorker extends SuperCacheWorker {
 
 		@Override
-		public void run() {
-			CategoryLog.connectionLogger.info("启动");
-			while (true) {
-				try {
-					SGIPMessage message = connectionSubmitRespQueue.take();
-					CategoryLog.connectionLogger.info("响应:CommandId={},sequence={},localPort={}",Integer.toHexString(message.getCommandId()),message.getSequenceId(),localPort);
-					ConnectionTask task = (ConnectionTask)taskMap.remove(message.getSequenceId());
-					if(task != null ){
-						task.cancel();
-						if(message instanceof SGIPBindRepMessage){
-							SGIPBindRepMessage rsp = (SGIPBindRepMessage) message;
-							CategoryLog.connectionLogger.info("连接响应[" + host + ":" + port+"("+source_addr+")"+ "]["+channelID+"-"+index+"]" + rsp);
-							if(rsp.getResult() == 0){
-								health = true;
-								resetTimes();
-							}
-						} 
-					}
+		protected void doRun() throws Exception {
+			SMPPMessage message = connectionSubmitRespQueue.poll(FixedConstant.COMMON_POLL_INTERVAL_TIME,TimeUnit.SECONDS);
+			if (message != null) {
+				CategoryLog.connectionLogger.info("响应:RequestId={},sequence={},localPort={}",
+						Integer.toHexString(message.getCommandId()), message.getSequenceId(), localPort);
 
-				} catch (Exception e) {
-					CategoryLog.connectionLogger.error(e.getMessage(), e);
+				ConnectionTask task = (ConnectionTask) taskMap.remove(message.getSequenceId());
+				if (task != null) {
+					task.cancel();
+					SMPPLoginRespMessage rsp = (SMPPLoginRespMessage) message;
+					CategoryLog.connectionLogger.info("连接响应[" + host + ":" + port + "(" + systemId + ")" + "]["
+							+ channelID + "-" + index + "]" + rsp);
+					if (rsp.getStatus() == 0) {
+						health = true;
+						resetTimes();
+					}
 				}
 			}
-
 		}
-
 	}
 
 }

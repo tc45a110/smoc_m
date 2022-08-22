@@ -1,4 +1,4 @@
-export _HOME=/apps/smoc-protocol-proxy-cmpp
+export _HOME=/smoc/apps/protocol-proxy-cmpp
 export _LIB=$_HOME/lib
 export _CONFIG=$_HOME/config
 

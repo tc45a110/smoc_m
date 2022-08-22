@@ -30,7 +30,7 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 		this.channelID = channelID;
 		init();
 		//先判断表是否存在，初始化时会建表
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("ReportWorker-").append(channelID).append("-").append(index).toString());
 		this.start();
 	}
 	
@@ -48,55 +48,60 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 
 	@Override
 	protected void doRun() throws Exception {
-		CMPPMessage message = take();
-		CategoryLog.messageLogger.info(message.toString());
-		int registeredDeliver = 0;
-		//短信是否包含长短信头的标识
-		int tpUdhi=0;
-		int messageFormat=0;
-		String channelReportSRCID=null;
-		String phoneNumber=null;
-		byte[] messageContent=null;
-		byte[] channelMessageID=null;
-		String statusCode=null;
-		String sequenceID=null;
-		
-		sequenceID = String.valueOf(message.getSequenceId());
-		
-		if(message instanceof CMPPDeliverMessage){
-			CMPPDeliverMessage deliverMessage = (CMPPDeliverMessage)message;
-			registeredDeliver = deliverMessage.getRegisteredDeliver();
-			tpUdhi = deliverMessage.getTpUdhi();
-			channelReportSRCID = deliverMessage.getDestnationId();
-			phoneNumber = deliverMessage.getSrcterminalId();
-			messageFormat = deliverMessage.getMsgFmt();
-			if(registeredDeliver == 1){
-				channelMessageID = deliverMessage.getStatusMsgId();
-				statusCode = deliverMessage.getStat();
-			}else{
-				messageContent = deliverMessage.getMsgContent();
+		CMPPMessage message = poll();
+		if(message != null){
+			CategoryLog.messageLogger.info(message.toString());
+			int registeredDeliver = 0;
+			//短信是否包含长短信头的标识
+			int tpUdhi=0;
+			int messageFormat=0;
+			String channelReportSRCID=null;
+			String phoneNumber=null;
+			byte[] messageContent=null;
+			byte[] channelMessageID=null;
+			String statusCode=null;
+			String sequenceID=null;
+			
+			sequenceID = String.valueOf(message.getSequenceId());
+			
+			if(message instanceof CMPPDeliverMessage){
+				CMPPDeliverMessage deliverMessage = (CMPPDeliverMessage)message;
+				registeredDeliver = deliverMessage.getRegisteredDeliver();
+				tpUdhi = deliverMessage.getTpUdhi();
+				channelReportSRCID = deliverMessage.getDestnationId();
+				phoneNumber = deliverMessage.getSrcterminalId();
+				messageFormat = deliverMessage.getMsgFmt();
+				if(registeredDeliver == 1){
+					channelMessageID = deliverMessage.getStatusMsgId();
+					statusCode = deliverMessage.getStat();
+				}else{
+					messageContent = deliverMessage.getMsgContent();
+				}
+			}else if(message instanceof CMPP30DeliverMessage){
+				CMPP30DeliverMessage deliverMessage = (CMPP30DeliverMessage)message;
+				registeredDeliver = deliverMessage.getRegisteredDeliver();
+				tpUdhi = deliverMessage.getTpUdhi();
+				channelReportSRCID = deliverMessage.getDestnationId();
+				phoneNumber = deliverMessage.getSrcterminalId();
+				messageFormat = deliverMessage.getMsgFmt();
+				if(registeredDeliver == 1){
+					channelMessageID = deliverMessage.getStatusMsgId();
+					statusCode = deliverMessage.getStat();
+				}else{
+					messageContent = deliverMessage.getMsgContent();
+				}
 			}
-		}else if(message instanceof CMPP30DeliverMessage){
-			CMPP30DeliverMessage deliverMessage = (CMPP30DeliverMessage)message;
-			registeredDeliver = deliverMessage.getRegisteredDeliver();
-			tpUdhi = deliverMessage.getTpUdhi();
-			channelReportSRCID = deliverMessage.getDestnationId();
-			phoneNumber = deliverMessage.getSrcterminalId();
-			messageFormat = deliverMessage.getMsgFmt();
+			if (phoneNumber.length() > 11) {
+				phoneNumber = phoneNumber.substring(phoneNumber
+						.length() - 11);
+			}
+			//状态报告
 			if(registeredDeliver == 1){
-				channelMessageID = deliverMessage.getStatusMsgId();
-				statusCode = deliverMessage.getStat();
-			}else{
-				messageContent = deliverMessage.getMsgContent();
+				processChannelReport(statusCode, channelReportSRCID, String.valueOf(TypeConvert.byte2long(channelMessageID)), phoneNumber,sequenceID);
+			}else if(registeredDeliver == 0){
+				processChannelMO(tpUdhi, messageFormat, phoneNumber, channelReportSRCID, messageContent,sequenceID);
 			}
 		}
-		//状态报告
-		if(registeredDeliver == 1){
-			processChannelReport(statusCode, channelReportSRCID, String.valueOf(TypeConvert.byte2long(channelMessageID)), phoneNumber,sequenceID);
-		}else if(registeredDeliver == 0){
-			processChannelMO(tpUdhi, messageFormat, phoneNumber, channelReportSRCID, messageContent,sequenceID);
-		}
-		
 	}
 	
 	/**

@@ -17,6 +17,9 @@ import com.base.common.worker.SuperQueueWorker;
 import com.business.access.dao.ExternalBlacklistFilterDAO;
 import com.business.access.manager.ExternalBlacklistFilterPersistenceWorkerManager.ExternalBlacklistFilterPersistenceWorker;
 
+/**
+ * 过滤外部黑名单的数据持久化线程管理
+ */
 public class ExternalBlacklistFilterPersistenceWorkerManager extends SuperMapWorker<Integer,ExternalBlacklistFilterPersistenceWorker>{
 	
 	private static ExternalBlacklistFilterPersistenceWorkerManager manager = new ExternalBlacklistFilterPersistenceWorkerManager();
@@ -28,10 +31,12 @@ public class ExternalBlacklistFilterPersistenceWorkerManager extends SuperMapWor
 			externalBlacklistFilterPersistenceWorker.start();
 			add(i, externalBlacklistFilterPersistenceWorker);
 		}
+		System.out.println("外部黑名单持久化线程数:"+FixedConstant.CPU_NUMBER);
 		this.start();
 		externalBlacklistFilterLoadWorker = new ExternalBlacklistFilterLoadWorker();
 		externalBlacklistFilterLoadWorker.setName("ExternalBlacklistFilterLoadWorker");
 		externalBlacklistFilterLoadWorker.start();
+		System.out.println("外部黑名单加载线程数:1");
 	}
 	
 	public static ExternalBlacklistFilterPersistenceWorkerManager getInstance(){
