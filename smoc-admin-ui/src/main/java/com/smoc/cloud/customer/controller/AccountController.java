@@ -24,6 +24,7 @@ import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.*;
 import com.smoc.cloud.properties.SmocProperties;
 import com.smoc.cloud.sequence.service.SequenceService;
+import com.smoc.cloud.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -250,6 +251,8 @@ public class AccountController {
                 accountBasicInfoValidator.setBusinessType("INTERNATIONAL_SMS");
                 accountBasicInfoValidator.setTransferType("0");
                 accountBasicInfoValidator.setRepairStatus("0");//默认不补发
+                //国际账号：随机生成扩展码
+                accountBasicInfoValidator.setExtendNumber(Utils.getRandom(6));
                 view.setViewName("customer/account/international/account_international_edit_base");
             }
 
