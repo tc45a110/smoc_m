@@ -41,7 +41,7 @@ public class DAO {
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql.toString());
-			
+			int num = 0;
 			for(MessageInfo vo : list) {
 				pstmt.setString(1, vo.getAccountId());
 				pstmt.setString(2, vo.getPhoneNumber());
@@ -57,7 +57,10 @@ public class DAO {
 				pstmt.setInt(12, vo.getMessageContentNumber());
 				pstmt.setInt(13, vo.getReportFlag());
 				pstmt.setString(14, vo.getOptionParam());
-				
+				num++;
+				if(num % 10240 == 0) {
+					pstmt.executeBatch();
+				}
 				pstmt.addBatch();
 			}
 
@@ -86,9 +89,9 @@ public class DAO {
 		ResultSet rs = null;
 		sql.append("INSERT INTO smoc_route.route_message_mr_info ");
 		sql.append("(ACCOUNT_ID,PHONE_NUMBER,REPORT_TIME,SUBMIT_TIME,STATUS_CODE, MESSAGE_ID,TEMPLATE_ID,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,");
-		sql.append("MESSAGE_TOTAL,MESSAGE_INDEX,OPTION_PARAM,CREATED_TIME) ");
+		sql.append("MESSAGE_TOTAL,MESSAGE_INDEX,OPTION_PARAM,REPEAT_PUSH_TIMES,CREATED_TIME) ");
 		sql.append("values(");
-		sql.append("?,?,?,?,?,?,?,?,?,?,?,?,NOW()");
+		sql.append("?,?,?,?,?,?,?,?,?,?,?,?,?,NOW()");
 		sql.append(")");
 		logger.debug("save report sql:"+sql.toString());
 		
@@ -96,6 +99,7 @@ public class DAO {
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql.toString());
+			int num = 0;
 			for(Report vo:reports){
 				pstmt.setString(1, vo.getAccountId());
 				pstmt.setString(2, vo.getPhoneNumber());
@@ -111,6 +115,11 @@ public class DAO {
 				
 				pstmt.setInt(11, vo.getMessageIndex());
 				pstmt.setString(12, vo.getOptionParam());
+				pstmt.setInt(13, vo.getReportPushTimes());
+				num++;
+				if(num % 10240 == 0) {
+					pstmt.executeBatch();
+				}
 				
 				pstmt.addBatch();
 			}
@@ -189,9 +198,9 @@ public class DAO {
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
-		sql.append("SELECT ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,REPORT_TIME,STATUS_CODE,MESSAGE_ID,TEMPLATE_ID,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,MESSAGE_TOTAL,MESSAGE_INDEX,OPTION_PARAM ");
+		sql.append("SELECT ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,REPORT_TIME,STATUS_CODE,MESSAGE_ID,TEMPLATE_ID,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,MESSAGE_TOTAL,MESSAGE_INDEX,OPTION_PARAM,REPEAT_PUSH_TIMES ");
 		sql.append("FROM smoc_route.route_message_mr_info ");
-		sql.append("WHERE ACCOUNT_ID = ? ORDER BY ID ASC");
+		sql.append("WHERE ACCOUNT_ID = ? ORDER BY ID ASC LIMIT 0,1000");
 		
 		List<Report> list = new ArrayList<Report>();
 		Report vo = null;
@@ -216,24 +225,29 @@ public class DAO {
 				vo.setMessageTotal(rs.getInt("MESSAGE_TOTAL"));
 				vo.setMessageIndex(rs.getInt("MESSAGE_INDEX"));
 				vo.setOptionParam(rs.getString("OPTION_PARAM"));
-				vo.setDbFlag(true);
+				vo.setReportPushTimes(rs.getInt("REPEAT_PUSH_TIMES"));
 				list.add(vo);	
 			}
 			
 			if(list.size() > 0){
 				logger.info("{}本次load report 数据:{}",accountId,list.size());
-				long max =  list.get(list.size() - 1).getId();
 				StringBuffer sql2 = new StringBuffer();
 				sql2.append("DELETE FROM smoc_route.route_message_mr_info ");
-				sql2.append("WHERE ID <= ? ");
-				sql2.append("AND ACCOUNT_ID = ?");
-				logger.info("delete report sql:"+sql2.toString());
+				sql2.append("WHERE ID in (");
+				for(int i = 0;i < list.size();i++) {
+					sql2.append(list.get(i).getId());
+					if((list.size() - 1) != i) {
+						sql2.append(",");
+					}
+				}
+				sql2.append(")");
+				//sql2.append(") AND ACCOUNT_ID = ?");
+				//logger.info("delete report sql:"+sql2.toString());
 				pstmt2 = conn.prepareStatement(sql2.toString());
-				pstmt2.setLong(1, max);
-				pstmt2.setString(2, accountId);
-				int count = pstmt2.executeUpdate();
+				//pstmt2.setString(1, accountId);
+				pstmt2.execute();
 				conn.commit();
-				logger.info("{}删除report ID<={},共{}条",accountId,max,count);
+				logger.info("{}删除report,共{}条",accountId,list.size());
 			}
 				
 		} catch (Exception e) {

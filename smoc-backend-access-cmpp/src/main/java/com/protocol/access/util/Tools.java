@@ -6,12 +6,20 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.base.common.manager.ResourceManager;
+
 public class Tools {
 	private static Logger logger = Logger.getLogger(Tools.class);
 	private static int msgi = 1000;
 	private static Object obj = new Object();
 	private static Object obj2 = new Object();
-	private static int gateway = 85;
+	private static int gateway = 10 + (int)(Math.random()*90);
+	static{
+		//指定网关ID，避免多节点msgid重复
+		if(ResourceManager.getInstance().getIntValue("gateway.id") > 0){
+			gateway = ResourceManager.getInstance().getIntValue("gateway.id");
+		}
+	}
 	private static int sequence = 1;
 
 	public static byte[] GetMsgid() {

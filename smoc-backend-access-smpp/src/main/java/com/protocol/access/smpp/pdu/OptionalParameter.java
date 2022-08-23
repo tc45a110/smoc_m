@@ -342,7 +342,7 @@ public abstract class OptionalParameter {
 	 *
 	 * Wireless Network Technology: GSM
 	 */
-	public static class Dest_addr_subunit extends Byte {
+	public static class Dest_addr_subunit extends OptionalParameter.Byte {
 
 		public Dest_addr_subunit(Addr_subunit addr_subunit) {
 			this(addr_subunit.value());
@@ -415,7 +415,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Dest_network_type extends Byte {
+	public static class Dest_network_type extends OptionalParameter.Byte {
 
 		public Dest_network_type(Network_type network_type) {
 			this(network_type.value);
@@ -488,7 +488,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Dest_bearer_type extends Byte {
+	public static class Dest_bearer_type extends OptionalParameter.Byte {
 
 		public Dest_bearer_type(Bearer_type bearer_type) {
 			this(bearer_type.value);
@@ -527,7 +527,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Dest_telematics_id extends Short {
+	public static class Dest_telematics_id extends OptionalParameter.Short {
 
 		public Dest_telematics_id(short value) {
 			super(Tag.DEST_TELEMATICS_ID, value);
@@ -547,7 +547,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Source_addr_subunit extends Byte {
+	public static class Source_addr_subunit extends OptionalParameter.Byte {
 
 		public Source_addr_subunit(Addr_subunit addr_subunit) {
 			this(addr_subunit.value());
@@ -583,7 +583,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Source_network_type extends Byte {
+	public static class Source_network_type extends OptionalParameter.Byte {
 
 		public Source_network_type(Network_type network_type) {
 			this(network_type.value);
@@ -619,7 +619,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Source_bearer_type extends Byte {
+	public static class Source_bearer_type extends OptionalParameter.Byte {
 
 		public Source_bearer_type(Bearer_type bearer_type) {
 			this(bearer_type.value);
@@ -655,7 +655,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Source_telematics_id extends Byte {
+	public static class Source_telematics_id extends OptionalParameter.Byte {
 
 		public Source_telematics_id(byte value) {
 			super(Tag.SOURCE_TELEMATICS_ID, value);
@@ -675,7 +675,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Qos_time_to_live extends Int {
+	public static class Qos_time_to_live extends OptionalParameter.Int {
 
 		public Qos_time_to_live(int value) {
 			super(Tag.QOS_TIME_TO_LIVE, value);
@@ -694,7 +694,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Payload_type extends Byte {
+	public static class Payload_type extends OptionalParameter.Byte {
 
 		/**
 		 * Represents valid values for the optional parameter payload_type.
@@ -771,7 +771,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Additional_status_info_text extends COctetString {
+	public static class Additional_status_info_text extends OptionalParameter.COctetString {
 		public Additional_status_info_text(byte[] value) {
 			super(Tag.ADDITIONAL_STATUS_INFO_TEXT.code(), value);
 		}
@@ -790,7 +790,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Receipted_message_id extends COctetString {
+	public static class Receipted_message_id extends OptionalParameter.COctetString {
 		public Receipted_message_id(byte[] value) {
 			super(Tag.RECEIPTED_MESSAGE_ID.code(), value);
 		}
@@ -810,7 +810,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Ms_msg_wait_facilities extends Byte {
+	public static class Ms_msg_wait_facilities extends OptionalParameter.Byte {
 
 		public enum Ms_msg_wait_facilities_type {
 			VOICEMAIL_MESSAGE_WAITING(0),
@@ -891,7 +891,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Privacy_indicator extends Byte {
+	public static class Privacy_indicator extends OptionalParameter.Byte {
 
 		public Privacy_indicator(byte value) {
 			super(Tag.PRIVACY_INDICATOR, value);
@@ -910,7 +910,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Source_subaddress extends OctetString {
+	public static class Source_subaddress extends OptionalParameter.OctetString {
 		
 		/**
 		 * The first octet of the data field is a Type of
@@ -955,7 +955,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Dest_subaddress extends OctetString {
+	public static class Dest_subaddress extends OptionalParameter.OctetString {
 		/**
 		 * The first octet of the data field is a Type of
 		 * Subaddress tag and indicates the type of
@@ -998,7 +998,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class User_message_reference extends Short {
+	public static class User_message_reference extends OptionalParameter.Short {
 		
 		/**
 		 * From SMPP specs: "All values allowed."
@@ -1021,7 +1021,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class User_response_code extends Byte {
+	public static class User_response_code extends OptionalParameter.Byte {
 		
 		/**
 		 * From SMPP specs:
@@ -1047,7 +1047,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Source_port extends Short {
+	public static class Source_port extends OptionalParameter.Short {
 		
 		/**
 		 * From SMPP specs: "All values allowed."
@@ -1072,7 +1072,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Destination_port extends Short {
+	public static class Destination_port extends OptionalParameter.Short {
 		
 		/**
 		 * From SMPP specs: "All values allowed."
@@ -1096,7 +1096,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Sar_msg_ref_num extends Short {
+	public static class Sar_msg_ref_num extends OptionalParameter.Short {
 		
 		/**
 		 * This parameter shall contain a originator generated reference number so that a
@@ -1125,7 +1125,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Language_indicator extends Byte {
+	public static class Language_indicator extends OptionalParameter.Byte {
 		
 		/**
 		 * Represents valid values for the optional parameter language_indicator.
@@ -1191,7 +1191,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Sar_total_segments extends Byte {
+	public static class Sar_total_segments extends OptionalParameter.Byte {
 		
 		public Sar_total_segments(byte value) {
 			super(Tag.SAR_TOTAL_SEGMENTS, value);
@@ -1217,7 +1217,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Sar_segment_seqnum extends Byte {
+	public static class Sar_segment_seqnum extends OptionalParameter.Byte {
 		
 		public Sar_segment_seqnum(byte value) {
 			super(Tag.SAR_SEGMENT_SEQNUM, value);
@@ -1236,7 +1236,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Sc_interface_version extends Byte {
+	public static class Sc_interface_version extends OptionalParameter.Byte {
 		
 		public Sc_interface_version(InterfaceVersion interface_version) {
 			this(interface_version.value());
@@ -1282,7 +1282,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Callback_num_pres_ind extends Byte {
+	public static class Callback_num_pres_ind extends OptionalParameter.Byte {
 		
 		public enum Presentation_Indicator {
 			/**
@@ -1407,7 +1407,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Callback_num_atag extends OctetString {
+	public static class Callback_num_atag extends OptionalParameter.OctetString {
 		
 		public Callback_num_atag(byte[] content) {
 			super(Tag.CALLBACK_NUM_ATAG.code, content);
@@ -1424,7 +1424,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Number_of_messages extends Byte {
+	public static class Number_of_messages extends OptionalParameter.Byte {
 		
 		public Number_of_messages(byte value) {
 			super(Tag.NUMBER_OF_MESSAGES, value);
@@ -1463,7 +1463,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Callback_num extends OctetString {
+	public static class Callback_num extends OptionalParameter.OctetString {
 		
 		public Callback_num(byte[] content) {
 			super(Tag.CALLBACK_NUM.code, content);
@@ -1485,7 +1485,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Dpf_result extends Byte {
+	public static class Dpf_result extends OptionalParameter.Byte {
 		
 		public Dpf_result(boolean dpf_result) {
 			this(dpf_result ? (byte)1 : (byte)0);
@@ -1523,7 +1523,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Set_dpf extends Byte {
+	public static class Set_dpf extends OptionalParameter.Byte {
 		
 		public Set_dpf(boolean set_dpf) {
 			this(set_dpf ? (byte)1 : (byte)0);
@@ -1557,7 +1557,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Ms_availability_status extends Byte {
+	public static class Ms_availability_status extends OptionalParameter.Byte {
 		
 		public enum Ms_availability_status_enum {
 			AVAILABLE(0),
@@ -1629,7 +1629,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Network_error_code extends OctetString {
+	public static class Network_error_code extends OptionalParameter.OctetString {
 		
 		public enum Network_error_code_type {
 			/**
@@ -1719,7 +1719,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Message_payload extends OctetString {
+	public static class Message_payload extends OptionalParameter.OctetString {
 
 		public Message_payload(byte[] value) {
 			super(Tag.MESSAGE_PAYLOAD.code(), value);
@@ -1743,7 +1743,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Delivery_failure_reason extends Byte {
+	public static class Delivery_failure_reason extends OptionalParameter.Byte {
 		public enum Delivery_failure_reason_enum {
 			/**
 			 * 0 = Destination unavailable
@@ -1816,7 +1816,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class More_messages_to_send extends Byte {
+	public static class More_messages_to_send extends OptionalParameter.Byte {
 		public enum More_messages_to_send_enum {
 			/**
 			 * 0 = No more messages to follow
@@ -1875,7 +1875,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Message_state extends Byte {
+	public static class Message_state extends OptionalParameter.Byte {
 
 		/**
 		 * Represents valid values for the optional parameter message_state.
@@ -1940,7 +1940,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Ussd_service_op extends Byte {
+	public static class Ussd_service_op extends OptionalParameter.Byte {
 
 		public Ussd_service_op(byte value) {
 			super(Tag.USSD_SERVICE_OP, value);
@@ -1959,7 +1959,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_channel_indicator extends Byte {
+	public static class Broadcast_channel_indicator extends OptionalParameter.Byte {
 
 		public Broadcast_channel_indicator(byte value) {
 			super(Tag.BROADCAST_CHANNEL_INDICATOR, value);
@@ -1987,13 +1987,13 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_content_type extends OctetString {
+	public static class Broadcast_content_type extends OptionalParameter.OctetString {
 		public Broadcast_content_type(byte[] value) {
 			super(Tag.BROADCAST_CONTENT_TYPE.code, value);
 		}
 	}
 
-	public static class Broadcast_content_type_info extends OctetString {
+	public static class Broadcast_content_type_info extends OptionalParameter.OctetString {
 		public Broadcast_content_type_info(byte[] value) {
 			super(Tag.BROADCAST_CONTENT_TYPE_INFO.code, value);
 		}
@@ -2009,7 +2009,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_message_class extends Byte {
+	public static class Broadcast_message_class extends OptionalParameter.Byte {
 		public Broadcast_message_class(byte[] value) {
 			super(Tag.BROADCAST_MESSAGE_CLASS.code, value);
 		}
@@ -2020,7 +2020,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_rep_num extends Short {
+	public static class Broadcast_rep_num extends OptionalParameter.Short {
 		public Broadcast_rep_num(short value) {
 			super(Tag.BROADCAST_REP_NUM.code, value);
 		}
@@ -2047,7 +2047,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_frequency_interval extends OctetString {
+	public static class Broadcast_frequency_interval extends OptionalParameter.OctetString {
 		public Broadcast_frequency_interval(byte[] value) {
 			super(Tag.BROADCAST_FREQUENCY_INTERVAL.code, value);
 		}
@@ -2058,7 +2058,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_area_identifier extends OctetString {
+	public static class Broadcast_area_identifier extends OptionalParameter.OctetString {
 		public Broadcast_area_identifier(byte[] value) {
 			super(Tag.BROADCAST_AREA_IDENTIFIER.code, value);
 		}
@@ -2070,7 +2070,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_error_status extends Int {
+	public static class Broadcast_error_status extends OptionalParameter.Int {
 		public Broadcast_error_status(int value) {
 			super(Tag.BROADCAST_ERROR_STATUS.code, value);
 		}
@@ -2086,7 +2086,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_area_success extends Byte {
+	public static class Broadcast_area_success extends OptionalParameter.Byte {
 		public Broadcast_area_success(byte value) {
 			super(Tag.BROADCAST_AREA_SUCCESS.code, value);
 		}
@@ -2102,7 +2102,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_end_time extends COctetString {
+	public static class Broadcast_end_time extends OptionalParameter.COctetString {
 		public Broadcast_end_time(String value) {
 			super(Tag.BROADCAST_END_TIME.code, value);
 		}
@@ -2117,7 +2117,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author pmoerenhout
 	 */
-	public static class Broadcast_service_group extends OctetString {
+	public static class Broadcast_service_group extends OptionalParameter.OctetString {
 		public Broadcast_service_group(byte[] value) {
 			super(Tag.BROADCAST_SERVICE_GROUP.code, value);
 		}
@@ -2137,7 +2137,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Billing_identification extends OctetString {
+	public static class Billing_identification extends OptionalParameter.OctetString {
 		public Billing_identification(byte[] value) {
 			super(Tag.BILLING_IDENTIFICATION.code, value);
 		}
@@ -2148,7 +2148,7 @@ public abstract class OptionalParameter {
 	 * by the node owner without establishing a central assignment and management authority.
 	 * When this TLV is specified, it must be accompanied with a source_node_id TLV.
 	 */
-	public static class Source_network_id extends COctetString {
+	public static class Source_network_id extends OptionalParameter.COctetString {
 		public Source_network_id(String value) {
 			super(Tag.SOURCE_NETWORK_ID.code, value);
 		}
@@ -2162,7 +2162,7 @@ public abstract class OptionalParameter {
 	 * by the node owner without establishing a central assignment and management authority.
 	 * When this TLV is specified, it must be accompanied with a dest_node_id TLV.
 	 */
-	public static class Dest_network_id extends COctetString {
+	public static class Dest_network_id extends OptionalParameter.COctetString {
 		public Dest_network_id(String value) {
 			super(Tag.DEST_NETWORK_ID.code, value);
 		}
@@ -2178,7 +2178,7 @@ public abstract class OptionalParameter {
 	 *
 	 * Sequence of 6 decimal digits
 	 */
-	public static class Source_node_id extends OctetString {
+	public static class Source_node_id extends OptionalParameter.OctetString {
 		public Source_node_id(byte[] value) {
 			super(Tag.SOURCE_NODE_ID.code, value);
 		}
@@ -2191,7 +2191,7 @@ public abstract class OptionalParameter {
 	 *
 	 * Sequence of 6 decimal digits
 	 */
-	public static class Dest_node_id extends OctetString {
+	public static class Dest_node_id extends OptionalParameter.OctetString {
 		public Dest_node_id(byte[] value) {
 			super(Tag.DEST_NODE_ID.code, value);
 		}
@@ -2205,7 +2205,7 @@ public abstract class OptionalParameter {
 	 * 1 = query has been performed, number not ported
 	 * 2 = query has been performed, number ported
 	 */
-	public static class Dest_addr_np_resolution extends Byte {
+	public static class Dest_addr_np_resolution extends OptionalParameter.Byte {
 		public Dest_addr_np_resolution(byte value) {
 			super(Tag.DEST_ADDR_NP_RESOLUTION.code, value);
 		}
@@ -2224,7 +2224,7 @@ public abstract class OptionalParameter {
 	 * A LRN is a 10-digit number, in the format NPA- NXX-XXXX, that uniquely identifies a switch or point of interconnection (POI).
 	 * The NPA-NXX portion of the LRN is used to route calls to numbers that have been ported.
 	 */
-	public static class Dest_addr_np_information extends OctetString {
+	public static class Dest_addr_np_information extends OptionalParameter.OctetString {
 		public Dest_addr_np_information(byte[] value) {
 			super(Tag.DEST_ADDR_NP_INFORMATION.code, value);
 		}
@@ -2236,7 +2236,7 @@ public abstract class OptionalParameter {
 	 * 1 to 5 digits
 	 * Country code of the origination operator (E.164 Region Code)
 	 */
-	public static class Dest_addr_np_country extends OctetString {
+	public static class Dest_addr_np_country extends OptionalParameter.OctetString {
 		public Dest_addr_np_country(byte[] value) {
 			super(Tag.DEST_ADDR_NP_COUNTRY.code, value);
 		}
@@ -2249,7 +2249,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Display_time extends Byte {
+	public static class Display_time extends OptionalParameter.Byte {
 
 		public Display_time(byte value) {
 			super(Tag.DISPLAY_TIME, value);
@@ -2270,7 +2270,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Sms_signal extends Short {
+	public static class Sms_signal extends OptionalParameter.Short {
 
 		public Sms_signal(short value) {
 			super(Tag.SMS_SIGNAL, value);
@@ -2295,7 +2295,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Ms_validity extends Byte {
+	public static class Ms_validity extends OptionalParameter.Byte {
 
 		public Ms_validity(byte value) {
 			super(Tag.MS_VALIDITY, value);
@@ -2321,7 +2321,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Alert_on_message_delivery extends Byte {
+	public static class Alert_on_message_delivery extends OptionalParameter.Byte {
 		
 		public Alert_on_message_delivery(byte value) {
 			super(Tag.ALERT_ON_MESSAGE_DELIVERY, value);
@@ -2352,7 +2352,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Its_reply_type extends Byte {
+	public static class Its_reply_type extends OptionalParameter.Byte {
 
 		public Its_reply_type(byte value) {
 			super(Tag.ITS_REPLY_TYPE, value);
@@ -2383,7 +2383,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Its_session_info extends Short {
+	public static class Its_session_info extends OptionalParameter.Short {
 
 		public Its_session_info(short value) {
 			super(Tag.ITS_SESSION_INFO, value);
@@ -2400,7 +2400,7 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Vendor_specific_source_msc_addr extends Vendor_specific_msc_addr {
+	public static class Vendor_specific_source_msc_addr extends OptionalParameter.Vendor_specific_msc_addr {
 		
 		public Vendor_specific_source_msc_addr(byte[] value) {
 			super(Tag.VENDOR_SPECIFIC_SOURCE_MSC_ADDR.code, value);
@@ -2414,14 +2414,14 @@ public abstract class OptionalParameter {
 	 *
 	 * @author stefanth
 	 */
-	public static class Vendor_specific_dest_msc_addr extends Vendor_specific_msc_addr {
+	public static class Vendor_specific_dest_msc_addr extends OptionalParameter.Vendor_specific_msc_addr {
 		
 		public Vendor_specific_dest_msc_addr(byte[] value) {
 			super(Tag.VENDOR_SPECIFIC_DEST_MSC_ADDR.code, value);
 		}
 	}
 
-	private static class Vendor_specific_msc_addr extends OctetString {
+	private static class Vendor_specific_msc_addr extends OptionalParameter.OctetString {
 		String address;
 		
 		private Vendor_specific_msc_addr(short tag, byte[] value) {
@@ -2471,7 +2471,7 @@ public abstract class OptionalParameter {
 	 * @author pmoerenhout
 	 * @since 3.0
 	 */
-	public static class Congestion_state extends Byte {
+	public static class Congestion_state extends OptionalParameter.Byte {
 
 		public Congestion_state(byte value) {
 			super(Tag.CONGESTION_STATE, value);

@@ -103,7 +103,7 @@ public class DeliverUtil {
 			
 			if(session != null && !session.isClosing() && session.isConnected()){
 				
-				Deliver delive = packageDeliver(report, SessionManager
+				com.protocol.access.smgp.pdu.Deliver delive = packageDeliver(report, SessionManager
 						.getInstance().getSessionVersion(session));
 				//记录状态报告的参数
 				CategoryLog.messageLogger.info("SMGP_DELIVER{}{}",FixedConstant.LOG_SEPARATOR,delive.dump());

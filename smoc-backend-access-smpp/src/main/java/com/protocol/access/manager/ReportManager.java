@@ -32,7 +32,7 @@ public class ReportManager {
 	private static ReportManager manager = new ReportManager();
 	
 	//存储线程集合
-	Map<Integer,ReportStoreWorker> reportStoreWorkerMap = new HashMap<Integer, ReportStoreWorker>();
+	Map<Integer,ReportStoreWorker> reportStoreWorkerMap = new HashMap<Integer, ReportManager.ReportStoreWorker>();
 	//数据库状态报告加载线程
 	ReportLoadOfflineWorker reportLoadOfflineWorker;
 	

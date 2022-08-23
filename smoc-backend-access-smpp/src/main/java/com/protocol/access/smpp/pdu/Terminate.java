@@ -31,7 +31,7 @@ public class Terminate extends Request {
 	/* (non-Javadoc)
 	 * @see cmpp.sms.ByteData#setData(cmpp.sms.util.ByteBuffer)
 	 */
-	public void setData(ByteBuffer buffer) throws PDUException {
+	public void setData(com.protocol.access.smpp.sms.ByteBuffer buffer) throws PDUException {
 		header.setData(buffer);
 		
 	}

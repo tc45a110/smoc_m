@@ -18,6 +18,7 @@ import java.util.Map;
 import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.dao.LavenderDBSingleton;
+import com.base.common.log.CategoryLog;
 import com.base.common.util.DateUtil;
 import com.base.common.worker.SuperMapWorker;
 import com.protocol.access.cmpp.CmppConstant;
@@ -33,10 +34,9 @@ public class AuthCheckerManager extends SuperMapWorker<String, AuthClient>{
 	}
 
 	private AuthCheckerManager() {
-		loadDate();
+		loaData();
 		if (superMap == null) {
 			logger.error("client鉴权加载失败");
-			System.exit(0);
 		}
 		this.start();
 		
@@ -53,11 +53,11 @@ public class AuthCheckerManager extends SuperMapWorker<String, AuthClient>{
 	@Override
 	protected void doRun() throws Exception {
 		Thread.sleep(FixedConstant.COMMON_EFFECTIVE_TIME);
-		loadDate();
+		loaData();
 	}
 
 	public synchronized int authClient(String ip, String clientID, byte[] authClient, byte version, int timeStamp) {
-		logger.info(new StringBuilder(DateUtil.getCurDateTime())
+		CategoryLog.connectionLogger.info(new StringBuilder(DateUtil.getCurDateTime())
 				.append("开始鉴权:")
 				.append("client={}")
 				.append("{}authClient={}")
@@ -73,17 +73,17 @@ public class AuthCheckerManager extends SuperMapWorker<String, AuthClient>{
 				);
 		
 
-		if ((int) version != 48 && (int) version != 32 && (int) version != 0) {
+		/*if ((int) version != 48 && (int) version != 32 && (int) version != 0) {
 			logger.error("版本错误:client={}", clientID);
 			return 4;
-		}
+		}*/
 		if (String.valueOf(timeStamp).length() > 10 || String.valueOf(timeStamp).length() < 7) {
 			logger.error(new StringBuilder(DateUtil.getCurDateTime())
 					.append("时间格式错误:")
 					.append("client={}")
 					.append("{}version={}").toString()
 					,clientID,
-					FixedConstant.LOG_SEPARATOR,version == 48 ? CmppConstant.VERSION3 : CmppConstant.VERSION2);
+					FixedConstant.LOG_SEPARATOR,version >= 48 ? CmppConstant.VERSION3 : CmppConstant.VERSION2);
 			return 3;
 		}
 
@@ -110,7 +110,7 @@ public class AuthCheckerManager extends SuperMapWorker<String, AuthClient>{
 		}
 		byte[] sourceAuthClient = genAuthClient(accountInterfaceInfo.getAccountID(),
 				DES.decrypt(accountInterfaceInfo.getAccountPassword()), time);
-		logger.info(new StringBuilder(DateUtil.getCurDateTime())
+		CategoryLog.connectionLogger.info(new StringBuilder(DateUtil.getCurDateTime())
 				.append("匹配MD5:")
 				.append("client={}")
 				.append("{}source={}")
@@ -137,7 +137,7 @@ public class AuthCheckerManager extends SuperMapWorker<String, AuthClient>{
 					FixedConstant.LOG_SEPARATOR,accountInterfaceInfo.getMaxConnect());
 			return 5;
 		}
-		logger.info(
+		CategoryLog.connectionLogger.info(
 				new StringBuilder(DateUtil.getCurDateTime())
 				.append("连接成功:")
 				.append("client={}")
@@ -165,7 +165,7 @@ public class AuthCheckerManager extends SuperMapWorker<String, AuthClient>{
 	/**
 	 * 加载数据
 	 */
-	private void loadDate() {
+	private void loaData() {
 		Map<String, AuthClient> newmap = loadClientAuth(DynamicConstant.PLATFORM_IDENTIFIER);
 		if (newmap != null) {
 			superMap = newmap;

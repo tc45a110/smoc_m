@@ -7,10 +7,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;
-import com.base.common.worker.SuperMapWorker;
+import com.base.common.worker.SuperCacheWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 import com.protocol.access.vo.Report;
 
-public class ReportTimerTaskWorkerManager extends SuperMapWorker<String, TimerTask> {
+public class ReportTimerTaskWorkerManager extends SuperConcurrentMapWorker<String, TimerTask> {
 
 	private static ReportTimerTaskWorkerManager manager = new ReportTimerTaskWorkerManager();
 	
@@ -21,6 +22,11 @@ public class ReportTimerTaskWorkerManager extends SuperMapWorker<String, TimerTa
 	private ReportTimerTaskWorkerManager() {
 		timer = new Timer();
 		this.start();
+		for(int i = 0;i < FixedConstant.CPU_NUMBER;i++) {
+			ReportTimerTaskWorker worker = new ReportTimerTaskWorker();
+			worker.setName("ReportTimerTaskWorker-"+(i+1));
+			worker.start();
+		}
 	}
 
 	public static ReportTimerTaskWorkerManager getInstance() {
@@ -42,18 +48,25 @@ public class ReportTimerTaskWorkerManager extends SuperMapWorker<String, TimerTa
 	
 	@Override
 	protected void doRun() throws Exception {
-		String messageID = msgIds.take();
-		ResponseTimeoutTask responseTimeoutTask = (ResponseTimeoutTask)remove(messageID);
-		
-		if(responseTimeoutTask == null){
-			logger.info(new StringBuilder().append("未找到对面的状态报告信息")
-					.append("{}messageID={}")
-					.toString(),
-					FixedConstant.SPLICER,messageID
-					);
-			return;
+		logger.info("等待状态报告响应数量:{},待匹配状态报告响应数量:{}",superMap.size(),msgIds.size());
+		sleep(FixedConstant.COMMON_MONITOR_INTERVAL_TIME);
+	}
+	
+	class ReportTimerTaskWorker extends SuperCacheWorker {
+
+		@Override
+		protected void doRun() throws Exception {
+			String messageID = msgIds.take();
+			logger.debug("待处理已接收响应的状态报告数{}:", msgIds.size());
+			ResponseTimeoutTask responseTimeoutTask = (ResponseTimeoutTask) remove(messageID);
+
+			if (responseTimeoutTask == null) {
+				logger.info(new StringBuilder().append("未找到状态报告信息").append("{}messageID={}").toString(),
+						FixedConstant.SPLICER, messageID);
+				return;
+			}
+			responseTimeoutTask.cancel();
 		}
-		responseTimeoutTask.cancel();
 	}
 	
 	/**
@@ -75,7 +88,7 @@ public class ReportTimerTaskWorkerManager extends SuperMapWorker<String, TimerTa
 			try {
 				remove(messageID);
 				logger.info(
-						new StringBuilder().append("未成功接收状态报告")
+						new StringBuilder().append("推送状态报告未收到状态报告响应信息")
 						.append("{}accountID={}")
 						.append("{}phoneNumber={}")
 						.append("{}submitTime={}")

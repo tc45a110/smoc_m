@@ -80,7 +80,7 @@ public class ConnectResp extends Response {
 	public ByteBuffer getBody() {
 		//3.0 status为4个字节，2.0staus为1个字节
 		ByteBuffer buffer = new ByteBuffer();
-		if(getVersion() == 48){
+		if(getVersion() >= 48){
 			buffer.appendInt(getStatus());
 		}else{
 			buffer.appendByte((byte)getStatus());

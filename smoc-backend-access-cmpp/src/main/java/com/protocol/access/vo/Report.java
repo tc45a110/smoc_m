@@ -69,30 +69,42 @@ public class Report implements Serializable {
 	 */
 	private String optionParam;
 	/**
-	 * 是否从数据库中加载出来的
+	 * 状态报告推送次数
 	 */
-	private boolean dbFlag;
+	private int reportPushTimes = 0;
 	/**
 	 * 业务标识
 	 * @return
 	 */
 	private String businessMessageID;
+	/**
+	 * 账号需要状态报告标识，1为需要返回，其他为不需要返回
+	 */
+	private int accountReportFlag = 1;
 	
 	
+	public int getReportPushTimes() {
+		return reportPushTimes;
+	}
+
+	public void setReportPushTimes(int reportPushTimes) {
+		this.reportPushTimes = reportPushTimes;
+	}
+
+	public int getAccountReportFlag() {
+		return accountReportFlag;
+	}
+
+	public void setAccountReportFlag(int accountReportFlag) {
+		this.accountReportFlag = accountReportFlag;
+	}
+
 	public String getBusinessMessageID() {
 		return businessMessageID;
 	}
 
 	public void setBusinessMessageID(String businessMessageID) {
 		this.businessMessageID = businessMessageID;
-	}
-
-	public boolean getDbFlag() {
-		return dbFlag;
-	}
-
-	public void setDbFlag(boolean dbFlag) {
-		this.dbFlag = dbFlag;
 	}
 
 	public String getMoTime() {
@@ -226,7 +238,8 @@ public class Report implements Serializable {
 				+ ", messageId=" + messageId + ", templateId=" + templateId + ", accountSrcId=" + accountSrcId
 				+ ", MOMessageContent=" + MOMessageContent + ", accountBusinessCode=" + accountBusinessCode
 				+ ", messageTotal=" + messageTotal + ", messageIndex=" + messageIndex + ", optionParam=" + optionParam
-				+ ", dbFlag=" + dbFlag + "]";
+				+ ", reportPushTimes=" + reportPushTimes + ", businessMessageID=" + businessMessageID
+				+ ", accountReportFlag=" + accountReportFlag + "]";
 	}
 
 }

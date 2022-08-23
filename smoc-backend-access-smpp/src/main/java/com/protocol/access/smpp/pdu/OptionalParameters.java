@@ -44,8 +44,8 @@ public class OptionalParameters {
      * @param value is the value.
      * @return the optional parameter.
      */
-    public static Short newSarMsgRefNum(short value) {
-        return new Short(Tag.SAR_MSG_REF_NUM, value);
+    public static OptionalParameter.Short newSarMsgRefNum(short value) {
+        return new OptionalParameter.Short(Tag.SAR_MSG_REF_NUM, value);
     }
 
     /**
@@ -55,7 +55,7 @@ public class OptionalParameters {
      * @param value is the value.
      * @return the optional parameter.
      */
-    public static Short newSarMsgRefNum(int value) {
+    public static OptionalParameter.Short newSarMsgRefNum(int value) {
         return newSarMsgRefNum((byte)value);
     }
 
@@ -65,8 +65,8 @@ public class OptionalParameters {
      * @param value is the value.
      * @return the optional parameter.
      */
-    public static Byte newSarSegmentSeqnum(byte value) {
-        return new Byte(Tag.SAR_SEGMENT_SEQNUM, value);
+    public static OptionalParameter.Byte newSarSegmentSeqnum(byte value) {
+        return new OptionalParameter.Byte(Tag.SAR_SEGMENT_SEQNUM, value);
     }
 
     /**
@@ -76,7 +76,7 @@ public class OptionalParameters {
      * @param value is the value.
      * @return the optional parameter.
      */
-    public static Byte newSarSegmentSeqnum(int value) {
+    public static OptionalParameter.Byte newSarSegmentSeqnum(int value) {
         return newSarSegmentSeqnum((byte)value);
     }
 
@@ -86,8 +86,8 @@ public class OptionalParameters {
      * @param value is the value.
      * @return the optional parameter.
      */
-    public static Byte newSarTotalSegments(byte value) {
-        return new Byte(Tag.SAR_TOTAL_SEGMENTS, value);
+    public static OptionalParameter.Byte newSarTotalSegments(byte value) {
+        return new OptionalParameter.Byte(Tag.SAR_TOTAL_SEGMENTS, value);
     }
 
     /**
@@ -97,7 +97,7 @@ public class OptionalParameters {
      * @param value is the value.
      * @return the optional parameter.
      */
-    public static Byte newSarTotalSegments(int value) {
+    public static OptionalParameter.Byte newSarTotalSegments(int value) {
         return newSarTotalSegments((byte)value);
     }
 

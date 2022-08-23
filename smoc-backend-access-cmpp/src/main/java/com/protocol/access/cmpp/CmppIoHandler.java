@@ -8,9 +8,9 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.service.IoHandlerAdapter;
+import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +63,22 @@ public class CmppIoHandler extends IoHandlerAdapter {
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
 		session.removeAttribute(OPEN);
+		session.closeNow();
 		logger.debug("{}> Session closed", session.getId());
-		SessionManager.getInstance().remove(session);
+		SessionManager.getInstance().remove(session,"CLOSED");
+	}
+
+	@Override
+	public void sessionIdle(IoSession session, IdleStatus status)
+			throws Exception {
+		session.closeNow();
+		SessionManager.getInstance().remove(session,"IDLE");
+	}
+
+	@Override
+	public void inputClosed(IoSession session) throws Exception {
+		session.closeNow();
+		SessionManager.getInstance().remove(session,"INPUT_CLOSED");
 	}
 
 	/**
@@ -77,16 +91,16 @@ public class CmppIoHandler extends IoHandlerAdapter {
 		String ip = sa.getAddress().getHostAddress();
 		String sid = String.valueOf(session.getId());
 		CmppPDU pdu = (CmppPDU) message;
-		String SequenceNumber = String.valueOf(pdu.header.getSequenceNumber());
-		CategoryLog.connectionLogger.debug(
-				new StringBuilder(DateUtil.getCurDateTime()).append("message:")
+		String sequenceNumber = String.valueOf(pdu.header.getSequenceNumber());
+		logger.debug(
+				new StringBuilder().append("message:")
 				.append("commandID={}")
-				.append("{}SequenceID={}")
+				.append("{}sequenceID={}")
 				.append("{}sessionID={}")
 				.append("{}ip={}").toString()
 				,
 				String.valueOf(pdu.header.getCommandId()),
-				FixedConstant.LOG_SEPARATOR,SequenceNumber,
+				FixedConstant.LOG_SEPARATOR,sequenceNumber,
 				FixedConstant.LOG_SEPARATOR,sid,
 				FixedConstant.LOG_SEPARATOR,session,
 				FixedConstant.LOG_SEPARATOR,ip
@@ -110,7 +124,7 @@ public class CmppIoHandler extends IoHandlerAdapter {
 			conresp.setStatus(status);
 			if (status == 0) {
 				ByteBuffer buffer = new ByteBuffer();
-				if (con.getVersion() == 48) {
+				if (con.getVersion() >= 48) {
 					buffer.appendInt(status);
 				} else {
 					buffer.appendByte((byte) status);
@@ -124,7 +138,6 @@ public class CmppIoHandler extends IoHandlerAdapter {
 
 			conresp.setVersion(con.getVersion());
 			// 应答响应
-			session.write(conresp);
 			CategoryLog.connectionLogger.info(
 					new StringBuilder(DateUtil.getCurDateTime()).append("ConnectResp:")
 					.append("sequenceID={}")
@@ -133,12 +146,27 @@ public class CmppIoHandler extends IoHandlerAdapter {
 					.append("{}session={}")
 					.append("{}status={}").toString()
 					,
-					SequenceNumber,
+					sequenceNumber,
 					FixedConstant.LOG_SEPARATOR,con.getVersion(),
 					FixedConstant.LOG_SEPARATOR,con.getClientId(),
 					FixedConstant.LOG_SEPARATOR,session,
 					FixedConstant.LOG_SEPARATOR,status
 					);
+			session.write(conresp);
+//			CategoryLog.connectionLogger.info(
+//					new StringBuilder(DateUtil.getCurDateTime()).append("ConnectResp:")
+//					.append("sequenceID={}")
+//					.append("{}version={}")
+//					.append("{}client={}")
+//					.append("{}session={}")
+//					.append("{}status={}").toString()
+//					,
+//					SequenceNumber,
+//					FixedConstant.LOG_SEPARATOR,con.getVersion(),
+//					FixedConstant.LOG_SEPARATOR,con.getClientId(),
+//					FixedConstant.LOG_SEPARATOR,session,
+//					FixedConstant.LOG_SEPARATOR,status
+//					);
 			
 			if (status != 0) {
 				session.closeOnFlush();
@@ -147,9 +175,8 @@ public class CmppIoHandler extends IoHandlerAdapter {
 			break;
 		case CmppConstant.CMD_ACTIVE_TEST:
 			com.protocol.access.cmpp.pdu.ActiveTest activeTest = (com.protocol.access.cmpp.pdu.ActiveTest) pdu;
-
 			com.protocol.access.cmpp.pdu.ActiveTestResp activeTestResp = (com.protocol.access.cmpp.pdu.ActiveTestResp) activeTest.getResponse();
-			CategoryLog.connectionLogger.debug(
+			logger.debug(
 					new StringBuilder(DateUtil.getCurDateTime()).append("response(active_test):")
 					.append("commandID={}")
 					.append("{}sessionID={}")
@@ -173,24 +200,25 @@ public class CmppIoHandler extends IoHandlerAdapter {
 
 			byte[] msgid = Tools.getStandardMsgID();
 			submit.setMsgId(msgid);
-			String accountId = SessionManager.getInstance().getClient(session);
-			int subStatus = AuthSubmitMessageManager.getInstance().authSubmitMessage(session, submit);
+			String accountId = SessionManager.getInstance().getClient(session);	
+			int subStatus = AuthSubmitMessageManager.getInstance().authSubmitMessage(session,sequenceNumber,accountId,submit);
 			com.protocol.access.cmpp.pdu.SubmitResp subresp = (com.protocol.access.cmpp.pdu.SubmitResp) submit.getResponse();
 
 			subresp.setResult(subStatus);
 			subresp.setMsgId(msgid);
 			// 应答响应
 			WriteFuture future = session.write(subresp);
-			future.awaitUninterruptibly();
+			//future.awaitUninterruptibly();
 			boolean result = future.isWritten();
 			
-			CategoryLog.connectionLogger.info(
-					new StringBuilder(DateUtil.getCurDateTime()).append("SubmitResp:")
+			logger.info(
+					new StringBuilder().append("SubmitResp:")
 					.append("client={}")
 					.append("{}msgid={}")
 					.append("{}serviceId={}")
 					.append("{}status={}")
 					.append("{}result={}")
+					.append("{}sequenceID={}")
 					.append("{}响应耗时{}毫秒").toString()
 					,
 					accountId,
@@ -198,6 +226,7 @@ public class CmppIoHandler extends IoHandlerAdapter {
 					FixedConstant.LOG_SEPARATOR,submit.getServiceId(),
 					FixedConstant.LOG_SEPARATOR,String.valueOf(subStatus),
 					FixedConstant.LOG_SEPARATOR,String.valueOf(result),
+					FixedConstant.LOG_SEPARATOR,sequenceNumber,
 					FixedConstant.LOG_SEPARATOR,(System.currentTimeMillis() - start)
 					);
 			
@@ -209,8 +238,8 @@ public class CmppIoHandler extends IoHandlerAdapter {
 			String messageID = String.valueOf(TypeConvert.byte2long(delresp.getMsgId()));
 			ReportTimerTaskWorkerManager.getInstance().removeReportTaskByResponse(messageID);
 			
-			CategoryLog.connectionLogger.info(
-					new StringBuilder(DateUtil.getCurDateTime()).append("DeliverResp")
+			logger.info(
+					new StringBuilder().append("DeliverResp")
 					.append("{}sequenceID={}")
 					.append("{}session={}")
 					.append("{}msgid={}").toString()
@@ -230,6 +259,7 @@ public class CmppIoHandler extends IoHandlerAdapter {
 		CategoryLog.messageLogger.info(
 				new StringBuilder().append("CMPP_SUBMIT")
 				.append(":command_Id={}")
+				.append("{}Sequence_Id={}")
 				.append("{}msg_id={}")
 				.append("{}pk_Total={}")
 				.append("{}pk_Number={}")
@@ -256,6 +286,7 @@ public class CmppIoHandler extends IoHandlerAdapter {
 				.append("{}LinkID={}")
 				.toString(),
 				submit.getCommandId(),
+				FixedConstant.LOG_SEPARATOR,submit.getSequenceNumber(),
 				FixedConstant.LOG_SEPARATOR,String.valueOf(TypeConvert.byte2long(submit.getMsgId())),
 				FixedConstant.LOG_SEPARATOR,submit.getPkTotal(),
 				FixedConstant.LOG_SEPARATOR,submit.getPkNumber(),

@@ -5,10 +5,9 @@
 package com.protocol.access.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.mina.core.session.IoSession;
 
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
@@ -16,15 +15,13 @@ import com.base.common.constant.LogPathConstant;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.CacheNameGeneratorUtil;
 import com.base.common.util.DateUtil;
+import com.base.common.vo.ProtocolRouteValue;
 import com.base.common.worker.SuperCacheWorker;
 import com.base.common.worker.SuperConcurrentMapWorker;
-import com.base.common.worker.SuperQueueWorker;
 import com.protocol.access.util.DAO;
-import com.protocol.access.util.DeliverUtil;
-import com.protocol.access.vo.Report;
-
 import com.protocol.access.vo.AuthClient;
 import com.protocol.access.vo.MessageInfo;
+import com.protocol.access.vo.Report;
 
 
 /**
@@ -34,20 +31,19 @@ public class ReportManager {
 	
 	private static ReportManager manager = new ReportManager();
 	
-	ReportStoreWorker reportStoreWorker;
-	
-	ReportPushWorker reportPushWorker;
-	
+	//存储线程集合
+	Map<Integer,ReportStoreWorker> reportStoreWorkerMap = new HashMap<Integer, ReportManager.ReportStoreWorker>();
+	//数据库状态报告加载线程
 	ReportLoadOfflineWorker reportLoadOfflineWorker;
 	
+	
 	private  ReportManager(){
-		reportStoreWorker = new ReportStoreWorker();
-		reportStoreWorker.setName("report-store-worker");
-		reportStoreWorker.start();
-		
-		reportPushWorker = new ReportPushWorker();
-		reportPushWorker.setName("report-push-worker");
-		reportPushWorker.start();
+		for(int i = 0;i<=FixedConstant.CPU_NUMBER * 2;i++){
+			ReportStoreWorker reportStoreWorker = new ReportStoreWorker();
+			reportStoreWorker.setName("report-store-worker-"+(i+1));
+			reportStoreWorker.start();
+			reportStoreWorkerMap.put(i, reportStoreWorker);
+		}
 		
 		reportLoadOfflineWorker = new ReportLoadOfflineWorker();
 		reportLoadOfflineWorker.setName("report-load-Offline-worker");
@@ -90,66 +86,73 @@ public class ReportManager {
 
 	}
 	
-	/**
-	 * 回执信息分发线程
-	 */
-	class ReportPushWorker extends SuperQueueWorker<Report>{
-		
-		@Override
-		protected void doRun() throws Exception {
-			Report vo = take();
-			if(vo.getAccountId() != null){
-				processReport(vo);
-			}
-		}
-		
-	}
-	
 	class ReportLoadOfflineWorker extends SuperCacheWorker {
 
 		@Override
 		protected void doRun() throws Exception {
+			
 			Map<String, AuthClient> map = AuthCheckerManager.getInstance().getMap();
-			for(Map.Entry<String, AuthClient> entry : map.entrySet()){
+			for (Map.Entry<String, AuthClient> entry : map.entrySet()) {
 				String accountID = entry.getKey();
-				if(SessionManager.getInstance().getSessionValid(accountID) != null){
-					String lockName = CacheNameGeneratorUtil.generateReportRedisLockCacheName(accountID);
-					boolean result = CacheBaseService.lock(lockName, LogPathConstant.LOCALHOST_IP , BusinessDataManager.getInstance().getRedisLockExpirationTime());
-					//当获取资源锁失败时，直接获取下一个用户的离线状态报告
-					if(!result){
-						logger.info("load离线状态报告数据资源锁{}获取失败",lockName);
-						continue;
-					}
-					List<Report> reportList = DAO.loadRouteMessageMrInfoList(accountID);
+				//存在有效队列
+				if (SessionManager.getInstance().getSessionValid(accountID) != null) {
+					//队列阀值
+					int queueThresholdNum = BusinessDataManager.getInstance().getAccountReportQueueThreshold(accountID);
+					//当前队列数量
+					int reportQueueSize = CacheBaseService.getAccountReportQueueSizeFromMiddlewareCache(accountID);
 					
-					boolean result2 = CacheBaseService.unlock(lockName,LogPathConstant.LOCALHOST_IP);
-					if(!result2){
-						logger.info("load离线状态报告数据资源锁{}释放失败",lockName);
-					}
-					
-					if(reportList!= null && reportList.size() > 0 ){
-						logger.info("{}检索离线状态消息{}条",accountID,reportList.size());
-						for(Report report:reportList){
-							reportPushWorker.add(report);
+					//控制redis队列中状态报告数量
+					if (reportQueueSize < queueThresholdNum) {
+						String lockName = CacheNameGeneratorUtil.generateReportRedisLockCacheName(accountID);
+						boolean result = CacheBaseService.lock(lockName, LogPathConstant.LOCALHOST_IP,
+								BusinessDataManager.getInstance().getRedisLockExpirationTime());
+						// 当获取资源锁失败时，直接获取下一个用户的离线状态报告
+						if (!result) {
+							logger.info("检索离线状态报告资源锁{}获取失败", lockName);
+							continue;
 						}
-					}else{
-						logger.info("{}无离线状态消息",accountID);
+						List<Report> reportList = DAO.loadRouteMessageMrInfoList(accountID);
+
+						boolean result2 = CacheBaseService.unlock(lockName, LogPathConstant.LOCALHOST_IP);
+						if (!result2) {
+							logger.info("检索离线状态报告资源锁{}释放失败", lockName);
+						}
+
+						if (reportList != null && reportList.size() > 0) {
+							logger.info("{}检索离线状态报告{}条,redisReportQueueSize={}", accountID, reportList.size(),reportQueueSize);
+							for (Report report : reportList) {
+								CacheBaseService.saveReportToMiddlewareCache(accountID, getProtocolRouteValue(report));
+							}
+						}
 					}
 				}
 			}
-			Thread.sleep(FixedConstant.COMMON_EFFECTIVE_TIME);
+
+			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME);
 		}
 	}
 	
-	/**
-	 * 推送回执
-	 * @param report
-	 * @param msgid
-	 */
-	private void processReport(Report report) {
-		IoSession session = SessionManager.getInstance().getSession(
-				report.getAccountId());
-		DeliverUtil.sendReport(session, report);
+	public ProtocolRouteValue getProtocolRouteValue(Report report) {
+		ProtocolRouteValue protocolRouteValue = new ProtocolRouteValue();
+		protocolRouteValue.setAccountID(report.getAccountId());
+		protocolRouteValue.setPhoneNumber(report.getPhoneNumber());
+		protocolRouteValue.setChannelReportTime(report.getReportTime());
+		protocolRouteValue.setAccountSubmitTime(report.getSubmitTime());
+		protocolRouteValue.setStatusCode(report.getStatusCode());
+
+		protocolRouteValue.setAccountTemplateID(report.getTemplateId());
+		protocolRouteValue.setAccountSubmitSRCID(report.getAccountSrcId());
+		protocolRouteValue.setAccountBusinessCode(report.getAccountBusinessCode());
+		protocolRouteValue.setMessageTotal(report.getMessageTotal());
+		protocolRouteValue.setMessageIndex(report.getMessageIndex());
+
+		protocolRouteValue.setOptionParam(report.getOptionParam());
+		protocolRouteValue.setRouteLabel(FixedConstant.RouteLable.MR.name());
+		protocolRouteValue.setAccountMessageIDs(report.getMessageId());
+		protocolRouteValue.setAccountReportFlag(report.getAccountReportFlag());
+		//protocolRouteValue.setSubStatusCode(report.getStatusCode());
+		protocolRouteValue.setReportPushTimes(report.getReportPushTimes());
+		return protocolRouteValue;
 	}
 	
 	/**
@@ -157,7 +160,8 @@ public class ReportManager {
 	 * @param vo
 	 */
 	public void addPushFailReport(Report vo){
-		reportStoreWorker.put(vo.getMessageId(), vo);
+		int index = (int)(Math.random() * reportStoreWorkerMap.size());
+		reportStoreWorkerMap.get(index).put(vo.getMessageId(), vo);
 	}
 	
 	/**
@@ -182,7 +186,8 @@ public class ReportManager {
 		for(String msgId : vo.getMessageId().split(FixedConstant.SPLICER)) {
 			report.setMessageIndex(i++);
 			report.setMessageId(msgId);
-			reportPushWorker.add(report);
+			CacheBaseService.saveReportToMiddlewareCache(report.getAccountId(), getProtocolRouteValue(report));
+			//reportPushQueue.add(report);
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class AuthSubmitMessageManager {
 	 * @param submit
 	 * @return
 	 */
-	public int authSubmitMessage(IoSession session, String sequenceNumber,String client,final Submit submit) {
+	public int authSubmitMessage(IoSession session, String sequenceNumber,String client,final com.protocol.access.smgp.pdu.Submit submit) {
 		
 		if (client == null) {
 			logger.warn("无效session={},sequenceNumber={}", session,sequenceNumber);
@@ -135,7 +135,7 @@ public class AuthSubmitMessageManager {
 	 * @param client
 	 * @return
 	 */
-	private int checkBusinessParameters(Submit submit, String client) {
+	private int checkBusinessParameters(com.protocol.access.smgp.pdu.Submit submit, String client) {
 
 		if ((submit.getSrcTermID() == null || !submit.getSrcTermID().startsWith(AuthCheckerManager.getInstance().getAuthClient(client).getSrcId())) 
 			&& !pattern.matcher(submit.getSrcTermID()).matches()) {

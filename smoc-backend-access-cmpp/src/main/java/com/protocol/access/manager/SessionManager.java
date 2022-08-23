@@ -14,18 +14,19 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.protocol.access.cmpp.CmppConstant;
-import com.protocol.access.util.DeliverUtil;
-import com.protocol.access.vo.Report;
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.CategoryLog;
 import com.base.common.manager.BusinessDataManager;
-import com.base.common.vo.BusinessRouteValue;
+import com.base.common.vo.ProtocolRouteValue;
+import com.protocol.access.cmpp.CmppConstant;
+import com.protocol.access.util.DeliverUtil;
+import com.protocol.access.vo.Report;
 
 //维护每个session的版本
 /**
@@ -40,6 +41,9 @@ public class SessionManager {
 	public Map<IoSession, PeportPullWorker> reportThreadMap = new ConcurrentHashMap<IoSession, PeportPullWorker>();
 
 	public int getSessionVersion(IoSession session) {
+		if(session == null){
+			return CmppConstant.VERSION2;
+		}
 		PeportPullWorker worker = reportThreadMap.get(session);
 		if (worker != null) {
 			return worker.getVersion();
@@ -66,7 +70,14 @@ public class SessionManager {
 	 * @param version
 	 */
 	public void put(String clientId, IoSession session, byte version) {
-		
+	
+		PeportPullWorker worker = new PeportPullWorker(clientId, session,
+				version >= 48 ? CmppConstant.VERSION3 : CmppConstant.VERSION2);
+		worker.setTimestamp(System.currentTimeMillis());
+		worker.setReadBytes(session.getReadBytes());
+		worker.setName("PeportPullWorker_" + clientId + "_" + session.getId());
+		worker.start();
+		reportThreadMap.put(session, worker);
 		//加锁保证clientId和set的一致性
 		synchronized (lock) {
 			Set<IoSession> set = clientMap.get(clientId);
@@ -75,16 +86,8 @@ public class SessionManager {
 				clientMap.put(clientId, set);
 			}
 		}
-		
 		clientMap.get(clientId).add(session);
-		PeportPullWorker worker = new PeportPullWorker(clientId, session,
-				version == 48 ? CmppConstant.VERSION3 : CmppConstant.VERSION2);
-		worker.setTimestamp(System.currentTimeMillis());
-		worker.setReadBytes(session.getReadBytes());
-		worker.setName("PeportPullWorker_" + clientId + "_" + session.getId());
-		worker.start();
-		reportThreadMap.put(session, worker);
-
+		CategoryLog.connectionLogger.info("维护session,clientId={},session={}",clientId,session);
 	}
 
 	/**
@@ -92,22 +95,39 @@ public class SessionManager {
 	 * 
 	 * @param session
 	 */
-	public void remove(IoSession session) {
-		if(session == null){
-			return;
-		}
-		PeportPullWorker worker = reportThreadMap.remove(session);
-		ActiveManager.getInstance().remove(session);
-		
-		if(worker != null){
-			String client = worker.getUsername();
-			worker.setFlag(false);
-			CategoryLog.connectionLogger.info("client={}连接中断", client);
-			Set<IoSession> set = clientMap.get(client);
-			if (set != null) {
-				set.remove(session);
-				CategoryLog.connectionLogger.info("client={}从session集合中删除{}", client, session);
+	public synchronized void remove(IoSession session,String Trigger) {
+		try {
+			if(session == null){
+				return;
 			}
+			
+			/*CategoryLog.connectionLogger.info("开始清理session={},Trigger={}",session,Trigger);
+			//清理session时，将session中的属性全部清理
+			Set<Object> attributeKeys = session.getAttributeKeys();
+			for(Object attributeKey:attributeKeys){
+				CategoryLog.connectionLogger.info("session={},isClosing={},isConnected={},attributeKey={},attributeValue={}",session,session.isClosing(),session.isConnected(),attributeKey,session.removeAttribute(attributeKey));
+			}
+			WriteRequestQueue  writeRequestQueue  = session.getWriteRequestQueue();
+			if(writeRequestQueue != null){
+				CategoryLog.connectionLogger.info("session={},isClosing={},isConnected={},writeRequestQueue={}",session,session.isClosing(),session.isConnected(),writeRequestQueue.size());
+				writeRequestQueue.clear(session);
+			}*/
+
+			PeportPullWorker worker = reportThreadMap.remove(session);
+			ActiveManager.getInstance().remove(session);
+			
+			if(worker != null){
+				String client = worker.getUsername();
+				worker.setFlag(false);
+				CategoryLog.connectionLogger.info("client={}session={},Trigger={},isClosing={},isConnected={}", client,session,Trigger,session.isClosing(),session.isConnected());
+				Set<IoSession> set = clientMap.get(client);
+				if (set != null) {
+					set.remove(session);
+					CategoryLog.connectionLogger.info("client={}从集合中删除session={},Trigger={},isClosing={},isConnected={}", client, session,Trigger,session.isClosing(),session.isConnected());
+				}
+			}
+		} catch (Exception e) {
+			CategoryLog.connectionLogger.error(e.getMessage(),e);
 		}
 	}
 
@@ -124,7 +144,7 @@ public class SessionManager {
 					break;
 				} else {
 					if (count == index) {
-						if (session.isConnected()) {
+						if (!session.isClosing() && session.isConnected()) {
 							return session;
 						}
 					}
@@ -146,7 +166,7 @@ public class SessionManager {
 		Set<IoSession> sessions = clientMap.get(clientId);
 		if (sessions != null && sessions.size() > 0) {
 			for (IoSession session : sessions) {
-				if (session.isConnected())
+				if (!session.isClosing() && session.isConnected())
 					return session;
 			}
 		}
@@ -188,6 +208,7 @@ public class SessionManager {
 		public void run() {
 			while (true) {
 				try {
+					int sessionSize = 0;
 					if (clientMap.size() == 0) {
 						CategoryLog.connectionLogger.info("session monitor,sessions=0");
 					} else {
@@ -211,6 +232,7 @@ public class SessionManager {
 									}
 								}
 							}
+							sessionSize += set.size();
 							CategoryLog.connectionLogger.info(new StringBuffer("session monitor:")
 									.append("client={}")
 									.append("{}session size={}")
@@ -218,12 +240,12 @@ public class SessionManager {
 									.append("{}sessions={}").toString()
 									,
 									entry.getKey(),
-									FixedConstant.LOG_SEPARATOR,entry.getValue().size(),
+									FixedConstant.LOG_SEPARATOR,set.size(),
 									FixedConstant.LOG_SEPARATOR,ips.toString(),
 									FixedConstant.LOG_SEPARATOR,sessions);
 
 						}
-
+						CategoryLog.connectionLogger.info("总链接数:{}",sessionSize);
 						for (Map.Entry<IoSession, PeportPullWorker> entry : reportThreadMap.entrySet()) {
 
 							IoSession session = entry.getKey();
@@ -239,16 +261,25 @@ public class SessionManager {
 										worker.setTimestamp(System.currentTimeMillis());
 										worker.setReadBytes(session.getReadBytes());
 									}else{
-										CategoryLog.connectionLogger.warn("超时会话:session={},client={}", session, client);
+										CategoryLog.connectionLogger.warn("超时会话:client={},session={},isClosing={},isConnected={}", client,session,session.isClosing(),session.isConnected());
 										temp.add(session);
 									}
 								}
 							}
 						}
+						
 						CategoryLog.connectionLogger.info("会话过期数量:{}", temp.size());
 						for (IoSession session : temp) {
-							session.closeNow();
+							CloseFuture closeFuture  = session.closeNow();
+							closeFuture.awaitUninterruptibly();
+							CategoryLog.connectionLogger.info("关闭会话session={},isClosing={},isConnected={},isDone={}",session,session.isClosing(),session.isConnected(),closeFuture.isDone());
 						}
+		
+						for (IoSession session : temp) {
+							remove(session,"TIMEOUT");
+							CategoryLog.connectionLogger.info("清理会话session={},isClosing={},isConnected={}",session,session.isClosing(),session.isConnected());
+						}
+						CategoryLog.connectionLogger.info("有效总链接数:{}",sessionSize-temp.size());
 					}
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
@@ -323,40 +354,45 @@ public class SessionManager {
 			logger.info(this.getName() + "启动!");
 			while (flag) {
 				try {
-					BusinessRouteValue value = CacheBaseService.getReportFromMiddlewareCache(clientId);
-					if (value != null) {
-						//logger.info("获取状态报告{}{}",FixedConstant.SPLICER,value.toString());
-						long start = System.currentTimeMillis();
-						if (FixedConstant.RouteLable.MR.toString().equals(value.getRouteLabel())) {
-							if (value.getAccountReportFlag() != 1) {
-								logger.info("{}发送{}不需要返回状态报告", value.getAccountID(), value.getPhoneNumber());
-								continue;
-							}
-							String accountMessageIDs = value.getAccountMessageIDs();
+					if(!session.isClosing() && session.isConnected()){
+						ProtocolRouteValue value = CacheBaseService.getReportFromMiddlewareCache(clientId);
+						if (value != null) {
+							//logger.info("获取状态报告{}{}",FixedConstant.SPLICER,value.toString());
+							long start = System.currentTimeMillis();
+							if (FixedConstant.RouteLable.MR.toString().equals(value.getRouteLabel())) {
+								if (value.getAccountReportFlag() != 1) {
+									logger.info("{}发送{}不需要返回状态报告", value.getAccountID(), value.getPhoneNumber());
+									continue;
+								}
+								String accountMessageIDs = value.getAccountMessageIDs();
 
-							Report report = new Report();
+								Report report = new Report();
 
-							report.setAccountId(value.getAccountID());
-							report.setPhoneNumber(value.getPhoneNumber());
-							report.setReportTime(value.getChannelReportTime());
-							report.setSubmitTime(value.getAccountSubmitTime());
-							report.setStatusCode(value.getStatusCode());
-							report.setTemplateId(value.getAccountTemplateID());
-							report.setAccountSrcId(value.getAccountSubmitSRCID());
-							report.setAccountBusinessCode(value.getAccountBusinessCode());
-							report.setMessageTotal(value.getMessageTotal());
-							report.setMessageIndex(value.getMessageIndex());
-							report.setOptionParam(value.getOptionParam());
-							for(String msgId : accountMessageIDs.split(FixedConstant.SPLICER)) {
-								report.setMessageId(msgId);
-								DeliverUtil.sendReport(session, report);
+								report.setAccountId(value.getAccountID());
+								report.setPhoneNumber(value.getPhoneNumber());
+								report.setReportTime(value.getChannelReportTime());
+								report.setSubmitTime(value.getAccountSubmitTime());
+								report.setStatusCode(value.getStatusCode());
+								report.setTemplateId(value.getAccountTemplateID());
+								report.setAccountSrcId(value.getAccountSubmitSRCID());
+								report.setAccountBusinessCode(value.getAccountBusinessCode());
+								report.setMessageTotal(value.getMessageTotal());
+								report.setMessageIndex(value.getMessageIndex());
+								report.setOptionParam(value.getOptionParam());
+								report.setReportPushTimes(value.getReportPushTimes());
+								for(String msgId : accountMessageIDs.split(FixedConstant.SPLICER)) {
+									report.setMessageId(msgId);
+									DeliverUtil.sendReport(session, report);
+								}
 							}
+							logger.debug("推送状态报告耗时{}",(System.currentTimeMillis() - start));
+						} else {
+							sleep(BusinessDataManager.getInstance().getReportRedisPopIntervalTime());
 						}
-						logger.info("推送状态报告耗时{}",(System.currentTimeMillis() - start));
-					} else {
-						sleep(BusinessDataManager.getInstance().getReportRedisPopIntervalTime());
+					}else{
+						CategoryLog.connectionLogger.info("session={},isClosing={},isConnected={}已中断不拉取状态报告",session,session.isClosing(),session.isConnected());
+						flag = false;
 					}
-
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 				}

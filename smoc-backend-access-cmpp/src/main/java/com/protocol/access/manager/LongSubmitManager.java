@@ -194,8 +194,8 @@ public class LongSubmitManager {
 							);
 					
 					// 增加对长短信的长度校验
-					int byteLength = BusinessDataManager.getInstance().getMaxSmsTextLength();
-					if (vo.getMessageContent().getBytes("UTF-8").length > byteLength) {
+					int charLength = BusinessDataManager.getInstance().getMaxSmsTextLength();
+					if (vo.getMessageContent().length() > charLength) {
 						logger.warn(new StringBuilder().append("短信长度超过限制:")
 								.append("client={}")
 								.append("{}mobile={}")
@@ -205,10 +205,10 @@ public class LongSubmitManager {
 								vo.getAccountId(), 
 								FixedConstant.LOG_SEPARATOR,vo.getPhoneNumber(),
 								FixedConstant.LOG_SEPARATOR,vo.getMessageContent().getBytes("UTF-8").length,
-								FixedConstant.LOG_SEPARATOR,byteLength,
+								FixedConstant.LOG_SEPARATOR,charLength,
 								FixedConstant.LOG_SEPARATOR,vo.getTotal()
 								);
-						ReportManager.getIntance().addSendFailReport(vo, InsideStatusCodeConstant.StatusCode.MISSING.name());
+						ReportManager.getIntance().addSendFailReport(vo, InsideStatusCodeConstant.StatusCode.OVERLEN.name());
 						continue;							
 					}
 					SubmitWorkerManager.getInstance().process(vo);

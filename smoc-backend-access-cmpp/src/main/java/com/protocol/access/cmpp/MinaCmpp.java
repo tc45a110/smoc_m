@@ -24,18 +24,17 @@ import org.slf4j.LoggerFactory;
 
 import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
+import com.protocol.access.manager.AuthCheckerManager;
+import com.protocol.access.manager.AuthSubmitMessageManager;
 import com.protocol.access.manager.MOManager;
 import com.protocol.access.manager.ReportManager;
 import com.protocol.access.manager.SessionManager;
-import com.protocol.access.manager.AuthCheckerManager;
-import com.protocol.access.manager.AuthSubmitMessageManager;
 
 
 public class MinaCmpp extends IoHandlerAdapter {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MinaCmpp.class);
 	
-	public static  int MAXI_MUM_POOL_SIZE = 1024;
 	//服务监听端口
 	private static int PORT = 7890;
 	private static final int BUFFER_SIZE = 8192;
@@ -56,19 +55,19 @@ public class MinaCmpp extends IoHandlerAdapter {
 	public static AtomicInteger sent = new AtomicInteger(0);
 
 	public MinaCmpp() throws IOException {
-		MAXI_MUM_POOL_SIZE = ((ResourceManager.getInstance().getIntValue("receive.max.conn")==0)?1024:ResourceManager.getInstance().getIntValue("receive.max.conn"));
 		
 		if(ResourceManager.getInstance().getIntValue("receive.port") > 0){
 			PORT = ResourceManager.getInstance().getIntValue("receive.port");
 		}
 		
-		executor = new OrderedThreadPoolExecutor(64, MAXI_MUM_POOL_SIZE, 60, TimeUnit.SECONDS, THREAD_FACTORY);
-
+		executor = new OrderedThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),128, 60, TimeUnit.SECONDS, THREAD_FACTORY);
+		//executor = new OrderedThreadPoolExecutor();
 		acceptor = new NioSocketAcceptor(Runtime.getRuntime().availableProcessors() + 1);
 		acceptor.setReuseAddress(true);
 		acceptor.getSessionConfig().setReceiveBufferSize(BUFFER_SIZE);
-
+		//acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
 		acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(executor));
+		//acceptor.getFilterChain().addLast("threadPool",new ExecutorFilter(Executors.newCachedThreadPool()));
 		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new CmppProtocolCodecFactory()));
 
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
@@ -81,13 +80,14 @@ public class MinaCmpp extends IoHandlerAdapter {
 					+ acceptor.getClass().getSimpleName());
 			mBeanServer.registerMBean(acceptorMBean, acceptorName);
 
+			ResourceManager.getInstance();
+			ExtendParameterManager.getInstance();
 			AuthCheckerManager.getInstance();
 			SessionManager.getInstance();
 			AuthSubmitMessageManager.getInstance();
 			MOManager.getInstance();
 			ReportManager.getIntance();
-			ResourceManager.getInstance();
-			ExtendParameterManager.getInstance();
+
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -99,7 +99,7 @@ public class MinaCmpp extends IoHandlerAdapter {
 				"0.0.0.0", PORT);
 		acceptor.setHandler(new CmppIoHandler());
 		acceptor.bind(socketAddress);
-		logger.info("MinaCmpp启动端口{},支持最大链接数{}" ,PORT,MAXI_MUM_POOL_SIZE);
+		logger.info("MinaCmpp启动端口{}" ,PORT);
 	}
 
 	@Override

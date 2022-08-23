@@ -42,10 +42,10 @@ public class AuthSubmitMessageManager {
 	 * @param submit
 	 * @return
 	 */
-	public int authSubmitMessage(IoSession session, final Submit submit) {
-		final String client = SessionManager.getInstance().getClient(session);
+	public int authSubmitMessage(IoSession session, String sequenceNumber,String client,final com.protocol.access.cmpp.pdu.Submit submit) {
+	
 		if (client == null) {
-			logger.error("无效session={}", session);
+			logger.error("无效session={},sequenceNumber={}", session,sequenceNumber);
 			return 14;
 		}
 		AuthClient authClientVO = AuthCheckerManager.getInstance().getAuthClient(client);
@@ -53,6 +53,11 @@ public class AuthSubmitMessageManager {
 		if (authClientVO == null) {
 			logger.error("无效client={}", client);
 			return 110;
+		}
+		
+		if(submit.getMsgContentLength() == 0) {
+			logger.error("内容为空,client={},SequenceNumber={}",client,submit.getSequenceNumber());
+			return 99;
 		}
 		
 		if (CacheBaseService.isOverAccountSpeed(client, 1, authClientVO.getMaxSendSecond())) {
@@ -130,7 +135,7 @@ public class AuthSubmitMessageManager {
 	 * @param client
 	 * @return
 	 */
-	private int checkBusinessParameters(Submit submit, String client) {
+	private int checkBusinessParameters(com.protocol.access.cmpp.pdu.Submit submit, String client) {
 
 		if ((submit.getSrcId() == null || !submit.getSrcId().startsWith(AuthCheckerManager.getInstance().getAuthClient(client).getSrcId())) 
 				&& !pattern.matcher(submit.getSrcId()).matches()) {

@@ -37,7 +37,7 @@ public class AuthSubmitMessageManager {
 	 * @param submit
 	 * @return
 	 */
-	public int authSubmitMessage(IoSession session, String sequenceNumber,String client,final Submit submit) {
+	public int authSubmitMessage(IoSession session, String sequenceNumber,String client,final com.protocol.access.smpp.pdu.Submit submit) {
 	
 		if (client == null) {
 			logger.warn("无效session={},sequenceNumber={}", session,sequenceNumber);
