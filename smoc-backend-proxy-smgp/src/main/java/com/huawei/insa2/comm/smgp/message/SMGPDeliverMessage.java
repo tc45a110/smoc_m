@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.alibaba.druid.util.Base64;
 import com.huawei.insa2.comm.smgp.SMGPConstant;
 import com.huawei.insa2.util.TypeConvert;
 
@@ -152,7 +153,7 @@ public class SMGPDeliverMessage extends SMGPMessage
         strBuf.append(",SrcTermID=".concat(String.valueOf(String.valueOf(getSrcTermID()))));
         strBuf.append(",DestTermID=".concat(String.valueOf(String.valueOf(getDestTermID()))));
         strBuf.append(",MsgLength=".concat(String.valueOf(String.valueOf(getMsgLength()))));
-        strBuf.append(",MsgContent=".concat(String.valueOf(String.valueOf(new String(getMsgContent())))));
+        strBuf.append(",MsgContentBase64=".concat(Base64.byteArrayToBase64(getMsgContent())));
         strBuf.append(",reserve=".concat(String.valueOf(String.valueOf(getReserve()))));
         return strBuf.toString();
     }

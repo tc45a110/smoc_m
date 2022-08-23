@@ -37,11 +37,12 @@ public class ChannelInterfaceUtil {
 			}
 		}else{
 			resultMap.put("host","127.0.0.1");
-			resultMap.put("port", "7890");
+			resultMap.put("port", "8890");
 		}
 		
 		resultMap.put("login-name", interfaceInfoMap.get("CHANNEL_ACCESS_ACCOUNT"));
 		resultMap.put("login-pass", interfaceInfoMap.get("CHANNEL_ACCESS_PASSWORD"));
+		resultMap.put("loginMode", "2");
 		resultMap.put("version", interfaceInfoMap.get("VERSION"));
 		resultMap.put("srcId", interfaceInfoMap.get("SRC_ID"));
 		resultMap.put("corpId", interfaceInfoMap.get("SP_ID"));
@@ -49,7 +50,8 @@ public class ChannelInterfaceUtil {
 		resultMap.put("heartbeat-interval", interfaceInfoMap.get("HEARTBEAT_INTERVAL"));
 		resultMap.put("priority", "5");
 		resultMap.put("reportFlag","1");
-		resultMap.put("feeType","01");
+		resultMap.put("feeType","00");
+		resultMap.put("feeCode","0");
 		
 		//个性化扩展参数可以覆盖默认参数
 		String extendInterfaceParam = BusinessDataManager.getInstance().getExtendInterfaceParam(channelID);

@@ -89,7 +89,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 	 * @return
 	 */
 	private Map<String,ChannelWeight>  convertToAccountCarrierAreaCodeChannelWeightMap(Map<String,List<AccountChannelInfo>> accountCarrierAreaCodeChannelInfoMap){
-		Map<String,ChannelWeight> resultMap = new HashMap<String, ChannelWeight>();
+		Map<String,ChannelWeight> resultMap = new HashMap<String, AccountChannelManager.ChannelWeight>();
 		for(Map.Entry<String, List<AccountChannelInfo>> entry : accountCarrierAreaCodeChannelInfoMap.entrySet()){
 			String accountCarrierAreaCode = entry.getKey();
 			String areaCode = accountCarrierAreaCode.split(FixedConstant.SPLICER)[2];
@@ -116,7 +116,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 			//当存在分省时，维护分省通道，支持多个分省通道
 			if(result){
 				if(proviceAccountChannelInfoList == null){
-					proviceAccountChannelInfoList = new ArrayList<AccountChannelInfo>();
+					proviceAccountChannelInfoList = new ArrayList<AccountChannelManager.AccountChannelInfo>();
 				}
 				proviceAccountChannelInfoList.add(accountChannelInfo);
 			}
@@ -136,7 +136,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 	 */
 	private ChannelWeight convertToChannelWeight(List<AccountChannelInfo> accountChannelInfoList){
 		
-		List<AccountChannelInfo> notFullAccountChannelInfoList = new ArrayList<AccountChannelInfo>();
+		List<AccountChannelInfo> notFullAccountChannelInfoList = new ArrayList<AccountChannelManager.AccountChannelInfo>();
 		//先判断每个通道的量是否满了日限量或月限量
 		for(AccountChannelInfo accountChannelInfo:accountChannelInfoList){
 			String channelID = accountChannelInfo.getChannelID();
@@ -222,7 +222,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 					.append(areaCode).toString();	
 					List<AccountChannelInfo> resultList = resultMap.get(key);
 					if(resultList == null){
-						resultList = new ArrayList<AccountChannelInfo>();
+						resultList = new ArrayList<AccountChannelManager.AccountChannelInfo>();
 						resultMap.put(key, resultList);
 					}
 					resultList.add(accountChannelInfo);
@@ -262,6 +262,10 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 				String accountID = rs.getString("ACCOUNT_ID");
 				String carrier = rs.getString("CARRIER");
 				String channelID = rs.getString("CHANNEL_ID");
+				if(!ChannelInfoManager.getInstance().isSupportCarrier(channelID, carrier)){
+					CategoryLog.commonLogger.error("通道{}不支持账号{}的发送范围{}",channelID,accountID,carrier);
+					continue;
+				}
 				int channelWeight = rs.getInt("CHANNEL_WEIGHT");
 				String channelGroupID = rs.getString("CHANNEL_GROUP_ID");
 				if(StringUtils.isEmpty(channelGroupID)){
@@ -278,7 +282,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 					areaCodeSet.addAll(Arrays.asList(areaCodes.split(FixedConstant.DATABASE_SEPARATOR)));	
 					List<AccountChannelInfo> accountChannelInfoList = resultMap.get(accountID);
 					if(accountChannelInfoList == null){
-						accountChannelInfoList = new ArrayList<AccountChannelInfo>();
+						accountChannelInfoList = new ArrayList<AccountChannelManager.AccountChannelInfo>();
 						resultMap.put(accountID, accountChannelInfoList);
 					}
 					AccountChannelInfo accountChannelInfo = new AccountChannelInfo(accountID, carrier, areaCodeSet, channelID, businessAreaType, channelWeight);

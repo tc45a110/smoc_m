@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>smoc-base-common</artifactId>
-    <version>4.0.0</version>
+    <groupId>com.smoc.backend</groupId>
+    <artifactId>com.smoc.backend.smoc-backend-base-common</artifactId>
+    <version>4.0.2</version>
 
     <properties>
         <!--编译编码-->
@@ -14,6 +14,7 @@
     </properties>
 
     <build>
+        <finalName>base-cmomon-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

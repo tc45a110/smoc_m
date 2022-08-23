@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import com.base.common.log.CategoryLog;
 import com.huawei.insa2.comm.PReader;
 import com.huawei.insa2.comm.cmpp.message.CMPPActiveMessage;
 import com.huawei.insa2.comm.cmpp.message.CMPPActiveRepMessage;
@@ -35,12 +36,15 @@ public class CMPPReader extends PReader {
 	}
 
 	public CMPPMessage read() throws IOException {
+//    	if(in.available() == 0){
+//    		return null;
+//    	}
 		int total_Length = in.readInt();
 		int command_Id = in.readInt();
 		byte buf[] = new byte[total_Length - 8];
 
 		in.readFully(buf);
-		logger.debug("command="+Integer.toHexString(command_Id)+",sequence="+ TypeConvert.byte2int(buf));
+		CategoryLog.connectionLogger.debug("command="+Integer.toHexString(command_Id)+",sequence="+ TypeConvert.byte2int(buf));
 		if (command_Id == CMPPConstant.Connect_Rep_Command_Id)// 0x80000001)
 			return new CMPPConnectRepMessage(buf);
 		if (command_Id == CMPPConstant.Deliver_Command_Id)// 5)

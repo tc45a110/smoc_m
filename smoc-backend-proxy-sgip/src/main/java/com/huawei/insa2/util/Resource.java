@@ -1,10 +1,8 @@
 package com.huawei.insa2.util;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.MissingResourceException;
 
 /**
@@ -42,12 +40,14 @@ public class Resource {
 	 * 初始化
 	 */
 	public void init(String url) throws IOException {
-		String str = url + '_' + Locale.getDefault();
-		InputStream in = null;
+		//String str = url + '_' + Locale.getDefault();
+		String str = url+".xml";
+		System.out.println("资源文件路径:"+str);
+		//InputStream in = null;
 		int i;
 		for (;;) {
 			try {
-				resource = new Cfg(str + ".xml", false);
+				resource = new Cfg(str, false);
 				return;
 			} catch (IOException ex) {
 				i = str.lastIndexOf('_');

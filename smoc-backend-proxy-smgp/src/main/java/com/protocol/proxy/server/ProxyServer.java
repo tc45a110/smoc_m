@@ -50,7 +50,12 @@ public class ProxyServer {
 	public void stop(){
 		try {
 			SubmitPullWorkerManager.getInstance().exit();
-			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME);
+			int sleepTime = ResourceManager.getInstance().getIntValue("shutdown.sleep.time");
+			if(sleepTime == 0) {
+				sleepTime = 5;
+			}
+			// 默认5秒之后 关闭服务  保证足够的时间处理内存中的数据
+			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME * sleepTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

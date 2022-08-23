@@ -5,61 +5,35 @@
 
 package com.huawei.smproxy;
 
-import java.io.IOException;
+import java.net.Socket;
 
-import com.huawei.insa2.comm.sgip.SGIPConnection;
-import com.huawei.insa2.comm.sgip.message.SGIPDeliverMessage;
+import com.base.common.log.CategoryLog;
+import com.huawei.insa2.comm.sgip.SGIPMOConnection;
 import com.huawei.insa2.comm.sgip.message.SGIPDeliverRepMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPReportMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPReportRepMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPUserReportMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPUserReportRepMessage;
+import com.protocol.proxy.manager.MOWorkerManager;
+import com.protocol.proxy.manager.ReportWorkerManager;
 
 /**
  * 对外提供的API接口。
  */
-public class SGIPMOProxy extends Proxy
+public class SGIPMOProxy
 {
   /**
    * 收发消息使用的连接对象。
    */
-  private SGIPConnection conn;
+  private SGIPMOConnection conn;
   
-  public boolean isHealth(){
-	return conn.isHealth();
-  }
-  
-  /**
-   * 建立连接并登录。
-   * @param args 保存建立连接所需的参数。
-   */
 	public SGIPMOProxy()
     {
-    	conn = new SGIPConnection(this);
+    	conn = new SGIPMOConnection(this);
     }
-
-    /**
-     * 发送消息，阻塞直到收到响应或超时。
-     * 返回为收到的消息
-     * @exception PException 超时或通信异常。
-     */
-    public int send(SGIPMessage message)
-        throws IOException
-    {
-    	message.setSequenceId(getSequence());
-		conn.send(message);
-		return message.getSequenceId();
-    }
-
-    /**
-     * 连接终止的处理，由API使用者实现
-     * SMC连接终止后，需要执行动作的接口
-     */
-    public void onTerminate()
-    {
-    	conn.close(true);
-    }
+	
+	public void onConnect(Socket socket){
+		conn.attach(socket);
+	}
 
     /**
      * 对收到消息的处理。API使用者应该重载本方法来处理来自短信中心的Deliver消息，
@@ -67,8 +41,9 @@ public class SGIPMOProxy extends Proxy
      * @param msg 从短消息中心来的消息。
      * @return 应该回的响应，由API使用者生成。
      */
-    public SGIPMessage onDeliver(SGIPDeliverMessage msg)
+    public SGIPMessage onDeliver(SGIPMessage msg)
     {
+    	MOWorkerManager.getInstance().process(msg);
         return new SGIPDeliverRepMessage(0);
     }
 
@@ -78,8 +53,9 @@ public class SGIPMOProxy extends Proxy
      * @param msg 从短消息中心来的消息。
      * @return 应该回的响应，由API使用者生成。
      */
-    public SGIPMessage onReport(SGIPReportMessage msg)
+    public SGIPMessage onReport(SGIPMessage msg)
     {
+    	ReportWorkerManager.getInstance().process(msg);
         return new SGIPReportRepMessage(0);
     }
 
@@ -89,17 +65,10 @@ public class SGIPMOProxy extends Proxy
      * @param msg 从短消息中心来的消息。
      * @return 应该回的响应，由API使用者生成。
      */
-    public SGIPMessage onUserReport(SGIPUserReportMessage msg)
+    public SGIPMessage onUserReport(SGIPMessage msg)
     {
+    	CategoryLog.messageLogger.info(msg.toString());
         return new SGIPUserReportRepMessage(0);
-    }
-
-    /**
-     * 提供给外部调用获取TCP连接对象
-     */
-    public SGIPConnection getConn()
-    {
-        return conn;
     }
    
 }

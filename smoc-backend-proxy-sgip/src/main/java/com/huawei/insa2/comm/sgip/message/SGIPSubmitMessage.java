@@ -8,6 +8,7 @@ package com.huawei.insa2.comm.sgip.message;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.alibaba.druid.util.Base64;
 import com.huawei.insa2.comm.sgip.SGIPConstant;
 import com.huawei.insa2.util.TypeConvert;
 
@@ -199,9 +200,8 @@ public class SGIPSubmitMessage extends SGIPMessage
         outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",MessageCoding=").append(MessageCoding)));
         outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",MessageType=").append(MessageType)));
         outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",MessageLength=").append(MessageLen)));
-        outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",MessageContent=").append(new String(MessageContent))));
-//        outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",MessageContent=").append(Arrays.toString(MessageContent))));
-        outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",reserve=").append(reserve)));
+        outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",MessageContentBase64=").append(Base64.byteArrayToBase64(MessageContent))));
+        outStr = String.valueOf(String.valueOf((new StringBuffer(String.valueOf(String.valueOf(outStr)))).append(",reserv=").append(reserve)));
     }
 
     public String toString()

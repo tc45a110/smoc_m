@@ -4,19 +4,32 @@
  */
 package com.business.proxy.manager;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import com.base.common.constant.FixedConstant;
+import com.base.common.manager.ResourceManager;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperMapWorker;
 import com.business.proxy.worker.ReportProcessWorker;
 
 public class ReportProcessWorkerManager extends SuperMapWorker<Integer, ReportProcessWorker>{
 	
+	private static int reportProcessWorkerNumber = ResourceManager.getInstance().getIntValue("report.process.worker.number");
+	
 	private static ReportProcessWorkerManager manager = new ReportProcessWorkerManager();
+	
+	private ThreadPoolExecutor threadPoolExecutor;
 		
 	private ReportProcessWorkerManager(){
-		//启动cpu的数量*8的系数
-		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
-			ReportProcessWorker reportProcessWorker = new ReportProcessWorker();
+		if(reportProcessWorkerNumber == 0) {
+			reportProcessWorkerNumber = FixedConstant.CPU_NUMBER;
+		}
+		threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER,FixedConstant.CPU_NUMBER*2, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		//启动cpu的数量*8的系数 按手机号尾号后3位平均分配
+		for(int i=0;i<100;i++){
+			ReportProcessWorker reportProcessWorker = new ReportProcessWorker(threadPoolExecutor);
 			reportProcessWorker.setName(new StringBuilder("ReportProcessWorker-").append(i+1).toString());
 			reportProcessWorker.start();
 			add(i, reportProcessWorker);

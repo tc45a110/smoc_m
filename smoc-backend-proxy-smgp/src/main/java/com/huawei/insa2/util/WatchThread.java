@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public abstract class WatchThread extends Thread {
 	private  static final Logger connectionLogger = LoggerFactory.getLogger("connection");
 	/** 该线程存活标志，kill()方法将该标志置为false。 */
-	private boolean alive = true;
+	protected boolean alive = true;
 
 	/** 当前线程状态信息。用于告知外界该线程正在做什么。 */
 	private String state = "unknown";

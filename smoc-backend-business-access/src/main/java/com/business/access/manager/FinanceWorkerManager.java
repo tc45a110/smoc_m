@@ -47,7 +47,7 @@ public class FinanceWorkerManager{
 				&& 
 				String.valueOf(FixedConstant.AccountConsumeType.SUBMIT.ordinal()).equals(businessRouteValue.getConsumeType())
 				){
-			logger.info(
+			logger.debug(
 					new StringBuilder().append("计费信息")
 					.append("{}accountID={}")
 					.append("{}phoneNumber={}")
@@ -67,7 +67,7 @@ public class FinanceWorkerManager{
 				&& 
 				InsideStatusCodeConstant.SUCCESS_CODE.equals(businessRouteValue.getSuccessCode())
 				){
-			logger.info(
+			logger.debug(
 					new StringBuilder().append("计费信息")
 					.append("{}accountID={}")
 					.append("{}phoneNumber={}")

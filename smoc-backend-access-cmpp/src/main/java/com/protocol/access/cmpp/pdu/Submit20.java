@@ -6,6 +6,8 @@
  */
 package com.protocol.access.cmpp.pdu;
 
+import java.io.UnsupportedEncodingException;
+
 import com.protocol.access.cmpp.sms.ByteBuffer;
 import com.protocol.access.cmpp.sms.NotEnoughDataInByteBufferException;
 import com.protocol.access.cmpp.sms.PDUException;
@@ -44,16 +46,25 @@ public class Submit20 extends Submit{
 				getDestTermId()[i] = phoneNumber;
 			}
 			//destTermIdType = buffer.removeByte();
+			getSm().setMsgFormat(msgFormat);
 			byte signbyte = buffer.removeByte();
 			int msgLength = signbyte < 0 ? signbyte + 256 : signbyte;
-			getSm().setData(buffer.removeBuffer(msgLength));
-			getSm().setMsgFormat(msgFormat);
+			setMsgLength(msgLength);
+			if(msgLength == 0) {
+				getSm().setData("".getBytes(getSm().getEncoding()));
+				logger.info("SequenceNumber="+getSequenceNumber()+",解析内容长度为0,解析编码为"+getSm().getEncoding());
+			}else {
+				getSm().setData(buffer.removeBuffer(msgLength));
+			}
+			
 			//长短信标识
 			getSm().setTpUdhi(getTpUdhi());
 			getSm().setPk_total(getPkTotal());
 			setLinkId(buffer.removeStringEx(8));
 		} catch (NotEnoughDataInByteBufferException e) {
 			throw new PDUException(e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage(),e);
 		}
 	}
 	

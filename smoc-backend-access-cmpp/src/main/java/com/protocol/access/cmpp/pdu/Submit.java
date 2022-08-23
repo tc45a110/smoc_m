@@ -8,6 +8,8 @@ package com.protocol.access.cmpp.pdu;
 
 
 
+import java.io.UnsupportedEncodingException;
+
 import com.protocol.access.cmpp.CmppConstant;
 import com.protocol.access.cmpp.sms.ByteBuffer;
 import com.protocol.access.cmpp.sms.NotEnoughDataInByteBufferException;
@@ -45,6 +47,7 @@ public class Submit extends Request {
 	private String destTermId[] = new String[0];
 	private byte destTermIdType = 0;
 	private ShortMessage sm = new ShortMessage();
+	private int msgLength = 0 ;
 	private String linkId = "";
 	private byte[] respMsgId = new byte[8];
 	private int respStatus;
@@ -98,16 +101,24 @@ public class Submit extends Request {
 				destTermId[i] = phoneNumber;
 			}			
 			destTermIdType = buffer.removeByte();
-			byte signbyte = buffer.removeByte();
-			int msgLength = signbyte < 0 ? signbyte + 256 : signbyte;
-			sm.setData(buffer.removeBuffer(msgLength));
 			sm.setMsgFormat(msgFormat);
+			byte signbyte = buffer.removeByte();
+			msgLength = signbyte < 0 ? signbyte + 256 : signbyte;
+			if(msgLength == 0) {
+				sm.setData("".getBytes(sm.getEncoding()));
+				logger.info("SequenceNumber={}"+getSequenceNumber()+",解析内容长度为0,解析编码为{}"+getSm().getEncoding());
+			}else {
+				sm.setData(buffer.removeBuffer(msgLength));
+			}
+			
 			//长短信标识
 			sm.setTpUdhi(tpUdhi);
 			sm.setPk_total(pkTotal);
 			linkId = buffer.removeStringEx(20);
 		} catch (NotEnoughDataInByteBufferException e) {
 			throw new PDUException(e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage(),e);
 		}
 	}
 	
@@ -419,5 +430,12 @@ public class Submit extends Request {
 	public void setChannelid(int channelid) {
 		this.channelid = channelid;
 	}
+
+	public void setMsgLength(int msgLength) {
+		this.msgLength = msgLength;
+	}
 	
+	public int getMsgContentLength() {
+		return msgLength;
+	}
 }

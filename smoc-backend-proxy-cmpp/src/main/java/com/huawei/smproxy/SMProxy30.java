@@ -59,8 +59,8 @@ public class SMProxy30 extends Proxy
 	/**
 	 * 连接终止的处理，由API使用者实现 SMC连接终止后，需要执行动作的接口
 	 */
-	public void onTerminate() {
-		conn.close(true);
+	public void onTerminate(String trigger) {
+		conn.close(true,trigger);
 	}
 
 	/**

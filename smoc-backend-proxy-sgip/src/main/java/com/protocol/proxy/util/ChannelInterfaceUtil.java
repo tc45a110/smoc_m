@@ -33,23 +33,38 @@ public class ChannelInterfaceUtil {
 			if(array.length > 1){
 				resultMap.put("port", array[1]);
 			}else{
-				resultMap.put("port", "7890");
+				resultMap.put("port", "5003");
 			}
 		}else{
 			resultMap.put("host","127.0.0.1");
-			resultMap.put("port", "7890");
+			resultMap.put("port", "5003");
 		}
 		
 		resultMap.put("login-name", interfaceInfoMap.get("CHANNEL_ACCESS_ACCOUNT"));
 		resultMap.put("login-pass", interfaceInfoMap.get("CHANNEL_ACCESS_PASSWORD"));
-		resultMap.put("version", interfaceInfoMap.get("VERSION"));
 		resultMap.put("srcId", interfaceInfoMap.get("SRC_ID"));
 		resultMap.put("corpId", interfaceInfoMap.get("SP_ID"));
 		resultMap.put("serviceType", interfaceInfoMap.get("BUSINESS_CODE"));
-		resultMap.put("heartbeat-interval", interfaceInfoMap.get("HEARTBEAT_INTERVAL"));
-		resultMap.put("priority", "5");
+		//复用HEARTBEAT_INTERVAL
+		int closeInterval = 0;
+		try {
+			closeInterval =  Integer.parseInt(interfaceInfoMap.get("HEARTBEAT_INTERVAL"));
+		} catch (Exception e) {
+			//忽略
+		}
+		if(closeInterval == 0){
+			closeInterval = 30;
+		}
+		resultMap.put("closeInterval",String.valueOf(closeInterval));
+		resultMap.put("feeType","1");
+		resultMap.put("feeValue","0");
+		resultMap.put("givenValue","0");
+		resultMap.put("agentFlag","0");
+		resultMap.put("morelatetoMTFlag","2");
+		resultMap.put("priority", "0");
 		resultMap.put("reportFlag","1");
-		resultMap.put("feeType","01");
+		resultMap.put("messageType","0");
+		resultMap.put("chargeNumber","000000000000000000000");
 		
 		//个性化扩展参数可以覆盖默认参数
 		String extendInterfaceParam = BusinessDataManager.getInstance().getExtendInterfaceParam(channelID);

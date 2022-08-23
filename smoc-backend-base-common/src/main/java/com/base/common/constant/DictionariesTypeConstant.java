@@ -277,5 +277,9 @@ public class DictionariesTypeConstant {
 	 * 码号接入点	
 	 */
 	public static String CODE_POINT = "codePoint";					//码号接入点	
+	/**
+	 * http过滤服务状态码
+	 */
+	public static String HTTP_FILTER_STATUS_CODE = "filterStatusCode";					//码号接入点	
 }
 

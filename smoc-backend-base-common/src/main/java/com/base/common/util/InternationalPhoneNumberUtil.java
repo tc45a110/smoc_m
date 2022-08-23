@@ -23,7 +23,7 @@ public class InternationalPhoneNumberUtil {
 		if(!StringUtils.equals("+", mobile.substring(0,1))) {
 			mobile = new StringBuffer("+").append(mobile).toString();
 		}
-	    PhoneNumber swissNumberProto = null;
+	    Phonenumber.PhoneNumber swissNumberProto = null;
 		try {
 			swissNumberProto = phoneNumberUtil.parse(mobile, "CH");
 			return geocoder.getDescriptionForNumber(swissNumberProto, Locale.CHINESE);
@@ -54,6 +54,6 @@ public class InternationalPhoneNumberUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(getCountryCode("8617671693401"));
+		System.out.println(getInternationalAreaName("55913853424"));
 	}
 }

@@ -5,45 +5,74 @@
 
 package com.huawei.smproxy;
 
-import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
+import com.base.common.log.CategoryLog;
 import com.base.common.util.DateUtil;
-import com.huawei.insa2.comm.sgip.SGIPConnection;
-import com.huawei.insa2.comm.sgip.message.SGIPDeliverMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPDeliverRepMessage;
+import com.huawei.insa2.comm.sgip.SGIPMTConnection;
 import com.huawei.insa2.comm.sgip.message.SGIPMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPReportMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPReportRepMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPUserReportMessage;
-import com.huawei.insa2.comm.sgip.message.SGIPUserReportRepMessage;
+import com.huawei.insa2.comm.sgip.message.SGIPUnbindMessage;
 
 /**
  * 对外提供的API接口。
  */
-public class SGIPMTProxy extends Proxy
+public class SGIPMTProxy
 {
 	
   /**
    * 收发消息使用的连接对象。
    */
-  private SGIPConnection conn;
+  private SGIPMTConnection conn;
   
   private int node;
   
+  private BlockingQueue<SGIPMessage> sendSubmitRespQueue;
+  
+  private String channelID;
+  
+  private String index;
+  
+  public SGIPMTProxy(String channelID, String index,
+		BlockingQueue<SGIPMessage> sendSubmitRespQueue) {
+	  this.channelID = channelID;
+	  this.index = index;
+	  this.sendSubmitRespQueue = sendSubmitRespQueue;
+	  //使用通道数字部分作为node
+	  StringBuilder sb = new StringBuilder();
+	  for(int i=0; i< channelID.length() ;i++){
+		  if(channelID.charAt(i)>=48 && channelID.charAt(i)<=57){
+			  sb.append(channelID.charAt(i));
+		  }
+	  }
+	  if(sb.length() > 0 ){
+		  node = Integer.parseInt(sb.toString());
+	  }else{
+		  node = 1000;
+	  }
+	 
+  }
+
+
+
   public boolean isHealth(){
 	return conn.isHealth();
   }
   
   /**
-   * 建立连接并登录。
-   * @param args 保存建立连接所需的参数。
+   * 是否存在连接
+   * @return
    */
-	public SGIPMTProxy(String channelID,String index,BlockingQueue<SGIPMessage> sendSubmitRespQueue)
-    { 	
-    	conn = new SGIPConnection(channelID, index, this, sendSubmitRespQueue);
-    	node = 
-    }
+  public boolean isConnecting(){
+	  if(conn == null){
+		  return false;
+	  }
+	 return conn.isConnecting();
+  }
+  
+  public synchronized void connect(){
+	  conn = new SGIPMTConnection(channelID, index, this, sendSubmitRespQueue);
+  }
+  
 
     /**
      * 发送消息，阻塞直到收到响应或超时。
@@ -51,63 +80,28 @@ public class SGIPMTProxy extends Proxy
      * @exception PException 超时或通信异常。
      */
     public int send(SGIPMessage message)
-        throws IOException
     {
-    	message.setSrcNodeId(src_nodeid);
+    	message.setSrcNodeId(node);
     	message.setTimeStamp(Integer.parseInt(DateUtil.getCurDateTime("MMddHHmmss")));
-    	message.setSequenceId(getSequence());
-		conn.send(message);
-		return message.getSequenceId();
+    	message.setSequenceId(ProxyUtil.getSequence());
+		boolean result = conn.send(message);
+		if(result){
+			return message.getSequenceId();
+		}
+		return 0;
+    }
+    
+    public void unbind(String trigger){
+    	if(conn != null && isConnecting()){
+        	SGIPMessage message = new SGIPUnbindMessage();
+    		int sequenceID = send(message);
+    		try {
+				Thread.sleep(50);
+			} catch (Exception e) {
+				CategoryLog.connectionLogger.error(e.getMessage(),e);
+			}
+    		conn.close((trigger+",sequenceID="+sequenceID),true);
+    	}
     }
 
-    /**
-     * 连接终止的处理，由API使用者实现
-     * SMC连接终止后，需要执行动作的接口
-     */
-    public void onTerminate()
-    {
-    	conn.close(true);
-    }
-
-    /**
-     * 对收到消息的处理。API使用者应该重载本方法来处理来自短信中心的Deliver消息，
-     * 并返回响应消息。这里缺省的实现是返回一个成功收到的响应。
-     * @param msg 从短消息中心来的消息。
-     * @return 应该回的响应，由API使用者生成。
-     */
-    public SGIPMessage onDeliver(SGIPDeliverMessage msg)
-    {
-        return new SGIPDeliverRepMessage(0);
-    }
-
-    /**
-     * 对收到状态报告消息的处理。API使用者应该重载本方法来处理来自短信中心的Report消息，
-     * 并返回响应消息。这里缺省的实现是返回一个成功收到的响应。
-     * @param msg 从短消息中心来的消息。
-     * @return 应该回的响应，由API使用者生成。
-     */
-    public SGIPMessage onReport(SGIPReportMessage msg)
-    {
-        return new SGIPReportRepMessage(0);
-    }
-
-    /**
-     * 对收到手机状态配置消息的处理。API使用者应该重载本方法来处理来自短信中心的UserReport消息，
-     * 并返回响应消息。这里缺省的实现是返回一个成功处理的响应。
-     * @param msg 从短消息中心来的消息。
-     * @return 应该回的响应，由API使用者生成。
-     */
-    public SGIPMessage onUserReport(SGIPUserReportMessage msg)
-    {
-        return new SGIPUserReportRepMessage(0);
-    }
-
-    /**
-     * 提供给外部调用获取TCP连接对象
-     */
-    public SGIPConnection getConn()
-    {
-        return conn;
-    }
-   
 }

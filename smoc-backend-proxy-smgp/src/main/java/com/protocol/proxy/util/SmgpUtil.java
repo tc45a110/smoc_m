@@ -3,8 +3,6 @@ package com.protocol.proxy.util;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.util.ChannelMTUtil;
 import com.base.common.util.LongSMSEncode6;
@@ -17,8 +15,6 @@ public class SmgpUtil  extends ChannelMTUtil{
 	final static int msgType = 6;
 	
 	final static String fixedFee = "0";
-	
-	final static String DEFAULT_FEE_CODE = "0";
 	
 	/**
 	 * 封装smgp消息，根据账号编码、通道编码、默认编码确定编码
@@ -83,10 +79,7 @@ public class SmgpUtil  extends ChannelMTUtil{
 			String content, String mobile, String spNumber, int messageCoding) {
 		String serviceType = map.get("serviceType");
 		String feeType = map.get("feeType");
-		String feeCode = DEFAULT_FEE_CODE;
-		if(StringUtils.isNotEmpty(map.get("feeCode"))) {
-			feeCode = map.get("feeCode");
-		}
+		String feeCode = map.get("feeCode");
 		int priority = Integer.valueOf(map.get("priority"));
 		int reportFlag = Integer.valueOf(map.get("reportFlag"));
 		String reserve = "";
@@ -114,10 +107,7 @@ public class SmgpUtil  extends ChannelMTUtil{
 			String content, String mobile, String spNumber, int messageCoding) {
 		String serviceType = map.get("serviceType");
 		String feeType = map.get("feeType");
-		String feeCode = DEFAULT_FEE_CODE;
-		if(StringUtils.isNotEmpty(map.get("feeCode"))) {
-			feeCode = map.get("feeCode");
-		}
+		String feeCode = map.get("feeCode");
 		int priority = Integer.valueOf(map.get("priority"));
 		int reportFlag = Integer.valueOf(map.get("reportFlag"));
 		String reserve = "";

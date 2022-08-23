@@ -49,7 +49,7 @@ public class SMGPDeliverRespMessage extends SMGPMessage
 			int len = 26;
 			super.buf = new byte[len];
 			TypeConvert.int2byte(len, super.buf, 0);
-			TypeConvert.int2byte(0x80000005, super.buf, 4);
+			TypeConvert.int2byte(0x80000003, super.buf, 4);
 			TypeConvert.int2byte(sequence, super.buf, 8);
 			System.arraycopy(msg_Id, 0, super.buf, 12, msg_Id.length);
 			TypeConvert.int2byte(status, buf, 22);

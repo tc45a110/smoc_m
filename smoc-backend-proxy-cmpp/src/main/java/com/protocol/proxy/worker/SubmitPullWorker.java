@@ -38,7 +38,7 @@ public class SubmitPullWorker extends SuperQueueWorker<CMPPMessage>{
 		responseWorker = new ResponseWorker(channelID,index,superQueue);
 		reportWorker = new ReportWorker(channelID, index);
 		init();
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("SubmitPullWorker-").append(channelID).append("-").append(index).toString());
 		//先判断表是否存在，初始化时会建表
 		this.start();
 	}
@@ -90,7 +90,7 @@ public class SubmitPullWorker extends SuperQueueWorker<CMPPMessage>{
 					logger.info(new StringBuilder().append("提交信息")
 							.append("{}accountID={}")
 							.append("{}phoneNumber={}")
-							.append("{}messageContent={}")
+							.append("{}businessMessageID={}")
 							.append("{}channelID={}")
 							.append("{}channelTotal={}")
 							.append("{}channelIndex={}")
@@ -98,7 +98,7 @@ public class SubmitPullWorker extends SuperQueueWorker<CMPPMessage>{
 							.toString(),
 							FixedConstant.SPLICER,newBusinessRouteValue.getAccountID(),
 							FixedConstant.SPLICER,newBusinessRouteValue.getPhoneNumber(),
-							FixedConstant.SPLICER,newBusinessRouteValue.getMessageContent(),
+							FixedConstant.SPLICER,newBusinessRouteValue.getBusinessMessageID(),
 							FixedConstant.SPLICER,newBusinessRouteValue.getChannelID(),
 							FixedConstant.SPLICER,newBusinessRouteValue.getChannelTotal(),
 							FixedConstant.SPLICER,newBusinessRouteValue.getChannelIndex(),
@@ -118,7 +118,7 @@ public class SubmitPullWorker extends SuperQueueWorker<CMPPMessage>{
 		//停止线程
 		super.exit();
 		//释放链接
-		proxy.onTerminate();
+		proxy.onTerminate("channel exit");
 		//维护通道运行状态
 		ChannelRunStatusManager.getInstance().process(channelID, String.valueOf(FixedConstant.ChannelRunStatus.ABNORMAL.ordinal()));
 		responseWorker.exit();

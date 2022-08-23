@@ -34,6 +34,10 @@ public class CMPP30Reader extends PReader {
 	}
 
 	public CMPPMessage read() throws IOException {
+//    	if(in.available() == 0){
+//    		return null;
+//    	}
+    	
 		int total_Length = in.readInt();
 		int command_Id = in.readInt();
 		byte buf[] = new byte[total_Length - 8];

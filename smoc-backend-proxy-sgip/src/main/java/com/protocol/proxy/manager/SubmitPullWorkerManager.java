@@ -48,6 +48,9 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String,Set<SubmitPul
 
 		start(startChannelIDCollection);
 		exit(stopChannelIDCollection);
+		
+		logger.info("运行通道{}",keySet());
+		
 		sleep(INTERVAL);
 	}
 	

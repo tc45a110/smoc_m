@@ -15,8 +15,9 @@ import com.base.common.vo.BusinessRouteValue;
 /**
  * 对外部提供带有业务含义的服务
  */
-public class MainCacheBaseService {
+class MainCacheBaseService {
 	private static final Logger logger = LoggerFactory.getLogger(MainCacheBaseService.class);
+	private static String REDIS_NAME = "jedisClientPool_main";
 	private static CacheServiceInter cacheBaseService = new JedisService();
 	
 	/**
@@ -28,7 +29,7 @@ public class MainCacheBaseService {
 	 */
 	public static boolean isOverAccountSpeed(String accountID,int messageNumber,int speed){
 		try {
-			return cacheBaseService.isOverFlow(CacheNameGeneratorUtil.generateAccountSpeedCacheName(), accountID,60, speed*60, messageNumber);
+			return cacheBaseService.isOverFlow(CacheNameGeneratorUtil.generateAccountSpeedCacheName(), accountID,60, speed*60, messageNumber,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -44,7 +45,7 @@ public class MainCacheBaseService {
 		try {
 			String result = cacheBaseService.getHashValue(
 					CacheNameGeneratorUtil.generateChannelDailyLimitCacheName(), 
-					channelID
+					channelID,REDIS_NAME
 					);
 			if(StringUtils.isNotEmpty(result)){
 				return Long.parseLong(result);
@@ -64,7 +65,7 @@ public class MainCacheBaseService {
 		try {
 			String result = cacheBaseService.getHashValue(
 					CacheNameGeneratorUtil.generateChannelMonthlyLimitCacheName(), 
-					channelID
+					channelID,REDIS_NAME
 					);
 					
 			if(StringUtils.isNotEmpty(result)){
@@ -87,11 +88,11 @@ public class MainCacheBaseService {
 		try {
 			cacheBaseService.increase(CacheNameGeneratorUtil.generateChannelDailyLimitCacheName(),
 					channelID
-					,60*60*24, successNumber);
+					,60*60*24, successNumber,REDIS_NAME);
 			
 			cacheBaseService.increase(CacheNameGeneratorUtil.generateChannelMonthlyLimitCacheName(),
 					channelID
-					,60*60*24*31, successNumber);
+					,60*60*24*31, successNumber,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -107,7 +108,7 @@ public class MainCacheBaseService {
 		try {
 			cacheBaseService.increase(CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
 					new StringBuilder().append(accountID).append("_").append(carrier).toString()
-					,60*60*24, number,1);
+					,60*60*24, number,1,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -125,7 +126,7 @@ public class MainCacheBaseService {
 					CacheNameGeneratorUtil.generateAccountPriceCacheName(), 
 					3600*24, 
 					new StringBuilder().append(accountID).append("_").append(dimension).toString(), 
-					price);
+					price,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -142,7 +143,7 @@ public class MainCacheBaseService {
 			return cacheBaseService.getHashValue(
 					CacheNameGeneratorUtil.generateAccountPriceCacheName(), 
 					new StringBuilder().append(accountID).append("_").append(dimension).toString()
-					);
+					,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -161,7 +162,7 @@ public class MainCacheBaseService {
 					CacheNameGeneratorUtil.generateChannelPriceCacheName(), 
 					3600*24, 
 					new StringBuilder().append(channelID).append("_").append(areaCode).toString(), 
-					price);
+					price,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -178,7 +179,7 @@ public class MainCacheBaseService {
 			return cacheBaseService.getHashValue(
 					CacheNameGeneratorUtil.generateChannelPriceCacheName(), 
 					new StringBuilder().append(channelID).append("_").append(areaCode).toString()
-					);
+					,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -196,7 +197,7 @@ public class MainCacheBaseService {
 					CacheNameGeneratorUtil.generateMessageIDCacheName(
 					businessRouteValue.getPhoneNumber(), businessRouteValue.getChannelMessageID()),
 					BusinessDataManager.getInstance().getResponseStoreToRedisExpirationTime(),
-					businessRouteValue);
+					businessRouteValue,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -210,7 +211,7 @@ public class MainCacheBaseService {
 	public static BusinessRouteValue getBusinessRouteValueFromMiddlewareCache(BusinessRouteValue businessRouteValue) {
 		try {
 			return cacheBaseService.getObject(CacheNameGeneratorUtil.generateMessageIDCacheName(businessRouteValue.getPhoneNumber(),
-							businessRouteValue.getChannelMessageID()), BusinessRouteValue.class);
+							businessRouteValue.getChannelMessageID()), BusinessRouteValue.class,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -225,7 +226,7 @@ public class MainCacheBaseService {
 	public static void deleteBusinessRouteValueFromMiddlewareCache(BusinessRouteValue businessRouteValue) {
 		try {
 			cacheBaseService.delObject(CacheNameGeneratorUtil.generateMessageIDCacheName(businessRouteValue.getPhoneNumber(),
-							businessRouteValue.getChannelMessageID()));
+							businessRouteValue.getChannelMessageID()),REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -239,7 +240,7 @@ public class MainCacheBaseService {
 	 */
 	public static boolean lock(String key, String requestId, int timeout) {
 		try {
-			return cacheBaseService.lock(key, requestId, timeout);
+			return cacheBaseService.lock(key, requestId, timeout,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -253,7 +254,7 @@ public class MainCacheBaseService {
 	 */
 	public static boolean unlock(String key, String requestId) {
 		try {
-			return cacheBaseService.unlock(key, requestId);
+			return cacheBaseService.unlock(key, requestId,REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}

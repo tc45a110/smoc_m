@@ -6,6 +6,7 @@ package com.business.proxy.worker;
 
 
 import com.base.common.cache.CacheBaseService;
+import com.base.common.constant.FixedConstant;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperCacheWorker;
@@ -20,6 +21,24 @@ public class ReportPullWorker extends SuperCacheWorker{
 	protected void doRun() throws Exception {
 		BusinessRouteValue businessRouteValueReport = CacheBaseService.getReportFromMiddlewareCache();
 		if(businessRouteValueReport != null){
+			logger.info(
+					new StringBuilder().append("拉取状态报告")
+					.append("{}channelID={}")
+					.append("{}phoneNumber={}")
+					.append("{}channelMessageID={}")
+					.append("{}channelReportSRCID={}")
+					.append("{}statusCode={}")
+					.append("{}subStatusCode={}")
+					.append("{}successCode={}")
+					.toString(),
+					FixedConstant.SPLICER,businessRouteValueReport.getChannelID(),
+					FixedConstant.SPLICER,businessRouteValueReport.getPhoneNumber(),
+					FixedConstant.SPLICER,businessRouteValueReport.getChannelMessageID(),
+					FixedConstant.SPLICER,businessRouteValueReport.getChannelReportSRCID(),
+					FixedConstant.SPLICER,businessRouteValueReport.getStatusCode(),
+					FixedConstant.SPLICER,businessRouteValueReport.getSubStatusCode(),
+					FixedConstant.SPLICER,businessRouteValueReport.getSuccessCode()
+					);
 			ReportProcessWorkerManager.getInstance().process(businessRouteValueReport);
 		}else{
 			Thread.sleep(BusinessDataManager.getInstance().getReportRedisPopIntervalTime());

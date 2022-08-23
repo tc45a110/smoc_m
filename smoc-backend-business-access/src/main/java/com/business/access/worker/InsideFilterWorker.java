@@ -10,12 +10,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.base.common.constant.FilterResponseCodeConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
+import com.base.common.manager.AccountInfoManager;
+import com.base.common.manager.AlarmManager;
+import com.base.common.manager.BusinessDictionaryManager;
 import com.base.common.manager.MessageSubmitFailManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.util.HttpClientUtil;
+import com.base.common.vo.AlarmMessage;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperCacheWorker;
 import com.business.access.manager.AuditWorkerManager;
@@ -110,7 +113,15 @@ public class InsideFilterWorker extends SuperCacheWorker{
 		requestBody.put("phone", businessRouteValue.getPhoneNumber());
 		requestBody.put("account", businessRouteValue.getAccountID());
 		requestBody.put("message", businessRouteValue.getMessageContent());
-		requestBody.put("templateId", businessRouteValue.getAccountTemplateID());
+		
+		//多媒体业务类型不用传templateId的值
+		String businessType = AccountInfoManager.getInstance().getBusinessType(businessRouteValue.getAccountID());
+		String noTemplateBusinessTypes = ResourceManager.getInstance().getValue("inside.filter.request.no.template.businessType");
+		if(StringUtils.isNotEmpty(noTemplateBusinessTypes) && noTemplateBusinessTypes.contains(businessType)){
+			requestBody.put("templateId", "");
+		}else{
+			requestBody.put("templateId", businessRouteValue.getAccountTemplateID());
+		}
 		requestBody.put("carrier", businessRouteValue.getBusinessCarrier());
 		requestBody.put("provinceCode", businessRouteValue.getAreaCode());
 		requestBody.put("channelId", businessRouteValue.getChannelID());
@@ -128,7 +139,7 @@ public class InsideFilterWorker extends SuperCacheWorker{
 			if(StringUtils.isNotEmpty(responseBody)){
 				JSONObject jsonObject = JSON.parseObject(responseBody);
 				String code = jsonObject.getString("code");
-				String responseCode = FilterResponseCodeConstant.mapping(code);
+				String responseCode = BusinessDictionaryManager.getInstance().getFilterStatusCode(code);
 				String message = jsonObject.getString("message");
 				ResponseValue responseValue = null;
 				
@@ -143,10 +154,17 @@ public class InsideFilterWorker extends SuperCacheWorker{
 					responseValue = new ResponseValue(responseCode, code, message);
 				}
 				return responseValue;
+			}else{
+				AlarmManager.getInstance().process(
+						new AlarmMessage(AlarmMessage.AlarmKey.InsideFilter,new StringBuilder().append("响应为空").toString())
+						);
 			}
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
+			AlarmManager.getInstance().process(
+					new AlarmMessage(AlarmMessage.AlarmKey.InsideFilter,e.getMessage())
+					);
 		}
 		
 		return new ResponseValue(InsideStatusCodeConstant.SUCCESS_CODE,null,null);

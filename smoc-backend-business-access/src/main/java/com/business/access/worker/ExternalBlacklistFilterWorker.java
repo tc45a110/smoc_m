@@ -13,10 +13,12 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
+import com.base.common.manager.AlarmManager;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.manager.MessageSubmitFailManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.util.HttpClientUtil;
+import com.base.common.vo.AlarmMessage;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperCacheWorker;
 import com.business.access.manager.ChannelWorkerManager;
@@ -144,9 +146,16 @@ public class ExternalBlacklistFilterWorker extends SuperCacheWorker{
 				if("1".equals(code)){
 					return InsideStatusCodeConstant.StatusCode.TBLACK.name();
 				}
+			}else{
+				AlarmManager.getInstance().process(
+						new AlarmMessage(AlarmMessage.AlarmKey.ExternalBlacklistFilter,new StringBuilder().append("响应为空").toString())
+						);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
+			AlarmManager.getInstance().process(
+					new AlarmMessage(AlarmMessage.AlarmKey.ExternalBlacklistFilter,e.getMessage())
+					);
 		}
 		return "";
 	}

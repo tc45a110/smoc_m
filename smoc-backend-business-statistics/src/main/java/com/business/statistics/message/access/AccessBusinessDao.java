@@ -29,7 +29,6 @@ public class AccessBusinessDao {
 		sql.append(
 				"ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,MESSAGE_INDEX,BUSINESS_MESSAGE_ID,MESSAGE_TOTAL,SUBMIT_STYLE,SIGN,CREATED_TIME)");
 		sql.append("values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())");
-		logger.info("sql={}", sql.toString());
 
 		try {
 			int num = 0;
@@ -110,12 +109,12 @@ public class AccessBusinessDao {
 		
 		try {
 			int num = 0;
-			long startTime = System.currentTimeMillis();
+			
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
 
 			sql.append("update smoc_route.").append(tableName);
-			sql.append(" set STATUS_CODE=?,MESSAGE_INDEX=?,STATUS_CODE_EXTEND=CONCAT_WS(',',STATUS_CODE_EXTEND,?),REPORT_TIME=? ");
+			sql.append(" set STATUS_CODE=?,MESSAGE_INDEX=?,STATUS_CODE_EXTEND=CONCAT_WS(',',STATUS_CODE_EXTEND,?),REPORT_TIME=?,TIME_ELAPSED=? ");
 			sql.append("where BUSINESS_MESSAGE_ID=?");
 			pstmt = conn.prepareStatement(sql.toString());
 
@@ -124,21 +123,20 @@ public class AccessBusinessDao {
 				pstmt.setString(1, businessRouteValue.getStatusCode());
 				pstmt.setInt(2, businessRouteValue.getMessageIndex());
 				// 追加状态码
-				String NewStatusCodeExtend = new StringBuilder().append(businessRouteValue.getMessageIndex())
+				String NewStatusCodeExtend =new StringBuilder().append(businessRouteValue.getMessageIndex())
 						.append("=").append(businessRouteValue.getStatusCode()).toString();
 				pstmt.setString(3, NewStatusCodeExtend);
 				pstmt.setString(4, businessRouteValue.getChannelReportTime());
-				pstmt.setString(5, businessRouteValue.getBusinessMessageID());
+				pstmt.setInt(5, businessRouteValue.getRepairTime());
+				pstmt.setString(6, businessRouteValue.getBusinessMessageID());
 
 				pstmt.addBatch();
-				if (num % 10000 == 0) {
-					
+				if (num % 10000 == 0) {					
 					pstmt.executeBatch();
 				}
-
 			}
 			pstmt.executeBatch();
-			logger.info("修改条数：：" + businessRouteValues.size() + "耗时：：" + (System.currentTimeMillis() - startTime));
+			
 
 			conn.commit();
 		} catch (Exception e) {

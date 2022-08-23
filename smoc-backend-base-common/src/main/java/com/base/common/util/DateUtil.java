@@ -139,10 +139,10 @@ public class DateUtil {
 	public static String getAfterDayDateTime(int day, String format) {
 		long lTime = new Date().getTime() + day * DAY_MILLI_SECONDE_NUMBER;
 		Calendar calendar = new GregorianCalendar();
-		Date date_now = new Date(lTime);
+		java.util.Date date_now = new java.util.Date(lTime);
 		calendar.setTime(date_now);
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		Date date = calendar.getTime();
+		java.util.Date date = calendar.getTime();
 		return sdf.format(date);
 	}
 	
@@ -155,10 +155,10 @@ public class DateUtil {
 	public static String getAfterMinuteDateTime(int minute, String format) {
 		long lTime = new Date().getTime() + minute * MINUTE_MILLI_SECONDE_NUMBER;
 		Calendar calendar = new GregorianCalendar();
-		Date date_now = new Date(lTime);
+		java.util.Date date_now = new java.util.Date(lTime);
 		calendar.setTime(date_now);
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		Date date = calendar.getTime();
+		java.util.Date date = calendar.getTime();
 		return sdf.format(date);
 	}
 	

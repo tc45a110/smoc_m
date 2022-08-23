@@ -23,6 +23,10 @@ public class FileFilterUtil {
 			}
 		};
 		File file = new File(filePath);
-		return file.listFiles(ff);
+		File[]  files = file.listFiles(ff);
+		if(files == null){
+			return new File[0];
+		}
+		return files;
 	}
 }

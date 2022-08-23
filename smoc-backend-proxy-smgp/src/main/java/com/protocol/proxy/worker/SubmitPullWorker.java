@@ -35,7 +35,7 @@ public class SubmitPullWorker extends SuperQueueWorker<SMGPMessage>{
 		responseWorker = new ResponseWorker(channelID,index,superQueue);
 		reportWorker = new ReportWorker(channelID, index);
 		init();
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("SubmitPullWorker-").append(channelID).append("-").append(index).toString());
 		//先判断表是否存在，初始化时会建表
 		this.start();
 	}
@@ -49,9 +49,7 @@ public class SubmitPullWorker extends SuperQueueWorker<SMGPMessage>{
 
 
 	@Override
-	protected void doRun() throws Exception {
-		try {
-		
+	protected void doRun() throws Exception {	
 		long startTime = System.currentTimeMillis();
 		//获取提交的时间间隔
 		long interval = ChannelInfoManager.getInstance().getSubmitInterval(channelID);
@@ -104,23 +102,18 @@ public class SubmitPullWorker extends SuperQueueWorker<SMGPMessage>{
 		}
 		long endTime = System.currentTimeMillis();
 		controlSubmitSpeed(interval,(endTime - startTime));
-		} catch (Exception e) {
-			// TODO: handle exception
-			logger.error(e.getMessage(),e);
-		}
+
 	}
 	
 	public void exit(){
 		//停止线程
 		super.exit();
 		//释放链接
-		proxy.onTerminate();
+		proxy.onTerminate("channel exit");
 		//维护通道运行状态
 		ChannelRunStatusManager.getInstance().process(channelID, String.valueOf(FixedConstant.ChannelRunStatus.ABNORMAL.ordinal()));
 		responseWorker.exit();
-		responseWorker.interrupt();
 		reportWorker.exit();
-		reportWorker.interrupt();
 	}
 	
 }

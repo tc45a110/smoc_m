@@ -26,7 +26,7 @@ public class ChannelMOUtil {
 		try {
 			
 			String encoding = "UTF-16BE";
-			if (messageFormat == 0) {
+			if (messageFormat == 0 || messageFormat == 1) {
 				encoding = "US-ASCII";
 			}else if (messageFormat == 15) {
 				encoding = "GBK";

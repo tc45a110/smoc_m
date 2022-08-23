@@ -191,7 +191,7 @@ public class CMPPSubmitMessage extends CMPPMessage {
 		loc = loc + 1 + msg_Content.length;
 		System.arraycopy(reserve.getBytes(), 0, super.buf, loc,
 				reserve.length());
-		outStr = ",msg_id=00000000";
+		outStr = "msg_id=00000000";
 		outStr = String.valueOf(String.valueOf((new StringBuffer(String
 				.valueOf(String.valueOf(outStr)))).append(",pk_Total=").append(
 				pk_Total)));

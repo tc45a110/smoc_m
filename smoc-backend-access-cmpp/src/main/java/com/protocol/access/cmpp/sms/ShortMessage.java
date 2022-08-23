@@ -177,6 +177,10 @@ public class ShortMessage extends ByteData {
 			logger.warn("msgFormat unsupportted!", e);
 		}
 	}
+	
+	public String getEncoding() {
+		return encoding;
+	}
 
 	public int getTpUdhi() {
 		return tpUdhi;

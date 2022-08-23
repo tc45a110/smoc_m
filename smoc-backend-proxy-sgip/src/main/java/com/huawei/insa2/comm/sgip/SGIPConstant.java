@@ -104,5 +104,8 @@ public class SGIPConstant
             REGISTERED_DELIVERY_ERROR = resource.get("smproxy/registered-delivery-erro");
         }
     }
-
+    
+    public static void main(String[] args) {
+		
+	}
 }

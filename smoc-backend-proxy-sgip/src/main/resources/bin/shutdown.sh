@@ -1,1 +1,1 @@
-nohup /apps/smoc-protocol-proxy-cmpp/bin/_startup.sh > /logs/smoc-protocol-proxy-cmpp/system.log &
+nohup /smoc/apps/protocol-proxy-sgip/bin/_shutdown.sh > /smoc/logs/protocol-proxy-sgip/system.log &

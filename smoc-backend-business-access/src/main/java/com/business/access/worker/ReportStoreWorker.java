@@ -29,7 +29,7 @@ public class ReportStoreWorker extends SuperConcurrentMapWorker<String,BusinessR
 			
 			//将已经取走的数据在原始缓存中进行删除
 			for(BusinessRouteValue businessRouteValue : businessRouteValueList){
-				superMap.remove(businessRouteValue.getBusinessMessageID());
+				superMap.remove(businessRouteValue.getAccountMessageIDs());
 			}
 			saveRouteMessageMrInfo(businessRouteValueList);
 			long interval = System.currentTimeMillis() - startTime;
@@ -41,8 +41,8 @@ public class ReportStoreWorker extends SuperConcurrentMapWorker<String,BusinessR
 		}
 	}
 	
-	public void put(String businessMessageID, BusinessRouteValue businessRouteValue) {
-		this.add(businessMessageID,businessRouteValue);
+	public void put(String accountMessageID, BusinessRouteValue businessRouteValue) {
+		this.add(accountMessageID,businessRouteValue);
 	}
 	
 	/**

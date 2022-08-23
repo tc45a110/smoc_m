@@ -81,38 +81,31 @@ public class SgipUtil extends ChannelMTUtil{
 		
 		String CorpId = map.get("corpId");
 		String ServiceType = map.get("serviceType");
-		String FeeType = map.get("feeType");
+		int FeeType = Integer.parseInt(map.get("feeType"));
+		String FeeValue = map.get("feeValue");
+		String GivenValue = map.get("givenValue");
+		int AgentFlag = Integer.valueOf(map.get("agentFlag"));
+		int MorelatetoMTFlag = Integer.valueOf(map.get("morelatetoMTFlag"));
 		int Priority = Integer.valueOf(map.get("priority"));
+		Date ExpireTime = null;
+		Date ScheduleTime = null;
 		int ReportFlag = Integer.valueOf(map.get("reportFlag"));
-		int feeUserType = 2;
-		if (map.get("feeUserType") != null) {
-			feeUserType = Integer.valueOf(map.get("feeUserType"));
-		}
-		String feeTerminalId = "";
-		if(map.get("feeTerminalId") != null){
-			feeTerminalId = map.get("feeTerminalId");
-		}
 		String reserve = "";
+		int TP_pid = 0;
+		int TP_udhi = 0;
+		int MessageType = Integer.valueOf(map.get("messageType"));
+		String ChargeNumber = map.get("chargeNumber");
+		
 		byte[] msgByte = null;
 		try {
 			msgByte = content.getBytes(charsetMap.get(String.valueOf(messageCoding)));
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
-		int TP_pid = 0;
-		int TP_udhi = 0;
-		// 存活有效期，格式遵循SMPP3.3协议
-		Date Valid_Time = new Date(System.currentTimeMillis()+SMS_VALID_TIME);
-		// 定时发送时间
-		Date At_Time = null;
 
-		// 被计费用户的号码类型 0：真实号码；1：伪码
-		int Fee_Terminal_Type = 0;
-		// 接收短信的用户的号码类型，0：真实号码；1：伪码
-		int Dest_Terminal_Type = 0;
 		SGIPMessage[] submitParamArray = new SGIPMessage[1];
 	
-		//submitParamArray[0] = new SGIPSubmitMessage(SPNumber, ChargeNumber, UserNumber, CorpId, ServiceType, FeeType, FeeValue, GivenValue, AgentFlag, MorelatetoMTFlag, Priority, ExpireTime, ScheduleTime, ReportFlag, TP_pid, TP_udhi, MessageCoding, MessageType, MessageLen, MessageContent, reserve)
+		submitParamArray[0] = new SGIPSubmitMessage(spNumber, ChargeNumber, new String[]{mobile}, CorpId, ServiceType, FeeType, FeeValue, GivenValue, AgentFlag, MorelatetoMTFlag, Priority, ExpireTime, ScheduleTime, ReportFlag, TP_pid, TP_udhi, messageCoding, MessageType, msgByte.length, msgByte, reserve);
 		
 
 		return submitParamArray;
@@ -123,37 +116,27 @@ public class SgipUtil extends ChannelMTUtil{
 
 		String CorpId = map.get("corpId");
 		String ServiceType = map.get("serviceType");
-		String FeeType = map.get("feeType");
+		int FeeType = Integer.parseInt(map.get("feeType"));
+		String FeeValue = map.get("feeValue");
+		String GivenValue = map.get("givenValue");
+		int AgentFlag = Integer.valueOf(map.get("agentFlag"));
+		int MorelatetoMTFlag = Integer.valueOf(map.get("morelatetoMTFlag"));
 		int Priority = Integer.valueOf(map.get("priority"));
+		Date ExpireTime = null;
+		Date ScheduleTime = null;
 		int ReportFlag = Integer.valueOf(map.get("reportFlag"));
-		int feeUserType = 2;
-		if (map.get("feeUserType") != null) {
-			feeUserType = Integer.valueOf(map.get("feeUserType"));
-		}
-		String feeTerminalId = "";
-		if(map.get("feeTerminalId") != null){
-			feeTerminalId = map.get("feeTerminalId");
-		}
 		String reserve = "";
 		int TP_pid = 0;
 		int TP_udhi = 1;
-		// 存活有效期，格式遵循SMPP3.3协议
-		Date Valid_Time = new Date(System.currentTimeMillis() + SMS_VALID_TIME);
-		// 定时发送时间
-		Date At_Time = null;
-
-		// 被计费用户的号码类型 0：真实号码；1：伪码
-		int Fee_Terminal_Type = 0;
-		// 接收短信的用户的号码类型，0：真实号码；1：伪码
-		int Dest_Terminal_Type = 0;
-		byte[][] longSmsArray = null;
-				
-		longSmsArray = LongSMSEncode6.enCodeBytes(content,charsetMap.get(String.valueOf(messageCoding)));
+		int MessageType = Integer.valueOf(map.get("messageType"));
+		String ChargeNumber = map.get("chargeNumber");
+		
+		byte[][] longSmsArray = LongSMSEncode6.enCodeBytes(content,charsetMap.get(String.valueOf(messageCoding)));
 		
 		SGIPMessage[] submitParamArray = new SGIPMessage[longSmsArray.length];
 
 		for (int i = 0; i < longSmsArray.length; i++) {		
-			//submitParamArray[i] = new SGIPSubmitMessage(SPNumber, ChargeNumber, UserNumber, CorpId, ServiceType, FeeType, FeeValue, GivenValue, AgentFlag, MorelatetoMTFlag, Priority, ExpireTime, ScheduleTime, ReportFlag, TP_pid, TP_udhi, MessageCoding, MessageType, MessageLen, MessageContent, reserve)	
+			submitParamArray[i] = new SGIPSubmitMessage(spNumber, ChargeNumber, new String[]{mobile}, CorpId, ServiceType, FeeType, FeeValue, GivenValue, AgentFlag, MorelatetoMTFlag, Priority, ExpireTime, ScheduleTime, ReportFlag, TP_pid, TP_udhi, messageCoding, MessageType, longSmsArray[i].length, longSmsArray[i], reserve);	
 		}
 		return submitParamArray;
 	}

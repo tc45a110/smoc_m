@@ -1,6 +1,7 @@
 package com.base.common.cache;
 
 import com.base.common.vo.BusinessRouteValue;
+import com.base.common.vo.ProtocolRouteValue;
 
 /**
  * 对外部提供带有业务含义的服务
@@ -23,7 +24,7 @@ public class CacheBaseService {
 	 * @param accountID
 	 * @return
 	 */
-	public static BusinessRouteValue getReportFromMiddlewareCache(String accountID){
+	public static ProtocolRouteValue getReportFromMiddlewareCache(String accountID){
 		return AccountCacheBaseService.getReportFromMiddlewareCache(accountID);
 	}
 	
@@ -32,8 +33,8 @@ public class CacheBaseService {
 	 * @param accountID
 	 * @param businessRouteValue
 	 */
-	public static void saveReportToMiddlewareCache(String accountID,BusinessRouteValue businessRouteValue){
-		AccountCacheBaseService.saveReportToMiddlewareCache(accountID, businessRouteValue);
+	public static void saveReportToMiddlewareCache(String accountID,ProtocolRouteValue protocolRouteValue){
+		AccountCacheBaseService.saveReportToMiddlewareCache(accountID, protocolRouteValue);
 	}
 	
 	/**
@@ -237,6 +238,15 @@ public class CacheBaseService {
 	 */
 	public static boolean unlock(String key, String requestId) {
 		return MainCacheBaseService.unlock(key, requestId);
+	}
+	
+	/**
+	 * 从缓存中获取一个账号队列中元素数量
+	 * @param channelID
+	 * @return
+	 */
+	public static int getAccountReportQueueSizeFromMiddlewareCache(String accountID){
+		return AccountCacheBaseService.getAccountReportQueueSizeFromMiddlewareCache(accountID);
 	}
 }
 

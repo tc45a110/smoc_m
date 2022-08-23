@@ -30,7 +30,15 @@ public class MessageSubmitFailWorker extends SuperCacheWorker{
 			businessRouteValue.setAccountMessageIDs(accountMessageID);
 			businessRouteValue.setMessageIndex(messageIndex);
 			CacheBaseService.saveBusinessReportToMiddlewareCache(businessRouteValue);
-			logger.info("模拟回执{}{}",FixedConstant.SPLICER,businessRouteValue.toString());
+			logger.debug(
+					new StringBuilder().append("模拟回执").append("{}accountID={}").append("{}phoneNumber={}")
+							.append("{}businessMessageID={}").append("{}statusCode={}").append("{}statusCodeSource={}")
+							.toString(),
+					FixedConstant.SPLICER, businessRouteValue.getAccountID(), 
+					FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
+					FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID(),
+					FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
+					FixedConstant.SPLICER, businessRouteValue.getStatusCodeSource());
 		}
 		businessRouteValue = null;
 	}

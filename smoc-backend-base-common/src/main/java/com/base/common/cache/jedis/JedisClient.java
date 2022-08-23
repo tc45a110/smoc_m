@@ -10,8 +10,10 @@ import redis.clients.jedis.params.SetParams;
 public interface JedisClient {
 	
 	String set(String key, String value);
+	String setMnp(String key, String value);
 	String setex(String key,long seconds, String value);
 	String get(String key);
+	String getMnp(String key);
 	Boolean exists(String key);
 	Long expire(String key, long seconds);
 	Long expire(String key, long seconds,int database);

@@ -15,7 +15,8 @@ import com.base.common.util.CacheNameGeneratorUtil;
 public class MNPCacheBaseService {
 	private static final Logger logger = LoggerFactory.getLogger(MNPCacheBaseService.class);
 	
-	private static CacheServiceInter MNPCacheBaseService = new JedisService("jedisClientPool_mnp");
+	private static String REDIS_NAME = "jedisClientPool_mnp";
+	private static CacheServiceInter MNPCacheBaseService = new JedisService(REDIS_NAME);
 
 	/**
 	 * 从中间件缓存中获取一个号码是否携号转网为其他运营商
@@ -24,7 +25,7 @@ public class MNPCacheBaseService {
 	 */
 	public static String getMNPFromMiddlewareCache(String phoneNumber){
 		try {
-			return MNPCacheBaseService.getString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber));
+			return MNPCacheBaseService.getMnpString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber), REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -38,10 +39,15 @@ public class MNPCacheBaseService {
 	 */
 	public static void saveMNPToMiddlewareCache(String phoneNumber,String carrier){
 		try {
-			MNPCacheBaseService.putString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber), carrier);
+			MNPCacheBaseService.putMnpString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber), carrier, REDIS_NAME);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
+		
+	}
+	
+	public static String getPoolString(){
+		return MNPCacheBaseService.getPoolString(REDIS_NAME);
 	}
 	
 }

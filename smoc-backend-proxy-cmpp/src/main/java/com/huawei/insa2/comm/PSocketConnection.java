@@ -13,11 +13,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.CategoryLog;
 import com.base.common.manager.ChannelRunStatusManager;
 import com.base.common.manager.ResourceManager;
+import com.base.common.worker.SuperCacheWorker;
 import com.huawei.insa2.comm.cmpp.CMPPConstant;
 import com.huawei.insa2.comm.cmpp.message.CMPPActiveMessage;
 import com.huawei.insa2.comm.cmpp.message.CMPPConnectMessage;
@@ -63,6 +65,7 @@ public abstract class PSocketConnection{
 	private boolean notInitFlag = false;
 	
 	protected Timer timer;
+	SubmitRespWorker connectionSubmitRespWorker;
 	
 	protected Map<Integer, TimerTask> taskMap = new HashMap<Integer, TimerTask>();
 	protected BlockingQueue<CMPPMessage> connectionSubmitRespQueue = new LinkedBlockingQueue<CMPPMessage>();
@@ -244,14 +247,14 @@ public abstract class PSocketConnection{
 		
 		final long mark = System.currentTimeMillis();
 		
-		SubmitRespWorker connectionSubmitRespWorker = new SubmitRespWorker();
+		connectionSubmitRespWorker = new SubmitRespWorker();
 		connectionSubmitRespWorker.setName("connectionSubmitRespWorker-" + channelID + "-" + index);
 		connectionSubmitRespWorker.start();
 		
 		// 心跳发送线程定义
 		class HeartbeatThread extends WatchThread {
 			public HeartbeatThread() {
-				super("heartbeat-["+channelID+"-"+index+"]-"+mark);
+				super("heartbeat-"+channelID+"-"+index+"-"+mark);
 				setThreadState(HEARTBEATING);
 			}
 
@@ -289,7 +292,7 @@ public abstract class PSocketConnection{
 		class ReceiveThread extends WatchThread {
 			// convertTools cts=null;//字符编码转化
 			public ReceiveThread() {
-				super("receive-["+channelID+"-"+index+"]-"+mark);
+				super("receive-"+channelID+"-"+index+"-"+mark);
 				// cts=convertTools.getInstance();
 			}
 
@@ -305,8 +308,11 @@ public abstract class PSocketConnection{
 						if (m != null) {
 							increaseReadByte(m.getSequenceId(),1);
 							onReceive(m);
-						}
+						}else
+							sleep(5);
 					} else { // 连接不正常则进行重连
+						//进行网络层连接时，应用层连接肯定是不可用的
+						health =false;
 						if (notInitFlag) { // 如果不是第一次建立连接
 							try {
 								//ChannelInterruptManager.getInstance().add(String.valueOf(channelID),String.valueOf(index));
@@ -321,9 +327,12 @@ public abstract class PSocketConnection{
 						}else{
 							
 						}
-						connect();
+						if(alive){
+							connect();
+						}
 					}
 				} catch (Exception ex) {
+					health =false;
 					networkStatus = false;
 					CategoryLog.connectionLogger.error(ex.getMessage(), ex);
 				}
@@ -393,16 +402,20 @@ public abstract class PSocketConnection{
 			
 	
 		} catch (Exception ex) {
+			health = false;
 			CategoryLog.connectionLogger.error(ex.getMessage(),ex);
 		}
 	}
 	
-	public void close(boolean flag) {
-
+	public void close(boolean flag,String trigger) {
+		CategoryLog.connectionLogger.info("关闭链接{},trigger={},flag={}",socket,trigger,flag);
 		try {
-			CMPPTerminateMessage msg = new CMPPTerminateMessage();
-			send(msg);
-			CategoryLog.connectionLogger.info("关闭链接["+channelID+"-"+index+"],flag="+flag);
+			//链接正常则发送中断请求
+			if(health){
+				CMPPTerminateMessage msg = new CMPPTerminateMessage();
+				send(msg);
+			}
+
 			if(flag){
 				if (socket != null) {
 					// Log.info(CLOSEING + this);
@@ -413,11 +426,15 @@ public abstract class PSocketConnection{
 					out = null;
 					socket = null;
 				}
+				if(timer != null){
+					timer.cancel();
+				}
 				// 杀死心跳线程和接收线程
 				if (heartbeatThread != null) {
 					heartbeatThread.kill();
 				}
 				receiveThread.kill();
+				connectionSubmitRespWorker.exit();
 				notInitFlag = false;
 			}
 		} catch (Exception ex) {
@@ -435,8 +452,6 @@ public abstract class PSocketConnection{
 		
 		//每次重新获取连接参数
 		notInitFlag = true;
-		//进行网络层连接时，应用层连接肯定是不可用的
-		health =false;
 		if (socket != null) { // 如果socket对象存在，在连接前先把它关闭。
 			CategoryLog.connectionLogger.info(channelID+"-"+index+",isConnected="+socket.isConnected()+",isClosed="+socket.isClosed());
 			try {
@@ -486,7 +501,7 @@ public abstract class PSocketConnection{
 			send(request);
 		} catch (Exception e) {
 			CategoryLog.connectionLogger.error(e.getMessage(), e);
-			close(false);
+			//close(false,e.getMessage());
 		}
 	}
 
@@ -514,7 +529,7 @@ public abstract class PSocketConnection{
 		if(health){
 			CMPPActiveMessage message = new CMPPActiveMessage();
 			message.setSequenceId(proxy.getSequence());
-			taskMap.put(message.getSequenceId(), new ConnectionTask(message.getSequenceId(), message));
+			//taskMap.put(message.getSequenceId(), new ConnectionTask(message.getSequenceId(), message));
 			send(message);
 		}
 
@@ -553,40 +568,33 @@ public abstract class PSocketConnection{
 		
 	}
 	
-	class SubmitRespWorker extends Thread {
+	class SubmitRespWorker extends SuperCacheWorker {
 
 		@Override
-		public void run() {
-			CategoryLog.connectionLogger.info("启动");
-			while (true) {
-				try {
-					CMPPMessage message = connectionSubmitRespQueue.take();
-					CategoryLog.connectionLogger.info("响应:CommandId={},sequence={},localPort={}",Integer.toHexString(message.getCommandId()),message.getSequenceId(),localPort);
-					ConnectionTask task = (ConnectionTask)taskMap.remove(message.getSequenceId());
-					if(task != null ){
-						task.cancel();
-						if(message instanceof CMPPConnectRepMessage){
-							CMPPConnectRepMessage rsp = (CMPPConnectRepMessage) message;
-							CategoryLog.connectionLogger.info("连接响应[" + host + ":" + port+"("+source_addr+")"+ "]["+channelID+"-"+index+"]" + rsp);
-							if(rsp.getStatus() == 0){
-								health = true;
-								resetTimes();
-							}
-						} else if(message instanceof CMPP30ConnectRepMessage){
-							CMPP30ConnectRepMessage rsp = (CMPP30ConnectRepMessage) message;
-							CategoryLog.connectionLogger.info("连接响应[" + host + ":" + port+"("+source_addr+")"+ "]["+channelID+"-"+index+"]" + rsp);
-							if(rsp.getStatus() == 0){
-								health = true;
-								resetTimes();
-							}
+		protected void doRun() throws Exception {
+			CMPPMessage message = connectionSubmitRespQueue.poll(FixedConstant.COMMON_POLL_INTERVAL_TIME,TimeUnit.SECONDS);
+			if(message != null){
+				CategoryLog.connectionLogger.info("响应:CommandId={},sequence={},localPort={}",Integer.toHexString(message.getCommandId()),message.getSequenceId(),localPort);
+				ConnectionTask task = (ConnectionTask)taskMap.remove(message.getSequenceId());
+				if(task != null ){
+					task.cancel();
+					if(message instanceof CMPPConnectRepMessage){
+						CMPPConnectRepMessage rsp = (CMPPConnectRepMessage) message;
+						CategoryLog.connectionLogger.info("连接响应[" + host + ":" + port+"("+source_addr+")"+ "]["+channelID+"-"+index+"]" + rsp);
+						if(rsp.getStatus() == 0){
+							health = true;
+							resetTimes();
+						}
+					} else if(message instanceof CMPP30ConnectRepMessage){
+						CMPP30ConnectRepMessage rsp = (CMPP30ConnectRepMessage) message;
+						CategoryLog.connectionLogger.info("连接响应[" + host + ":" + port+"("+source_addr+")"+ "]["+channelID+"-"+index+"]" + rsp);
+						if(rsp.getStatus() == 0){
+							health = true;
+							resetTimes();
 						}
 					}
-
-				} catch (Exception e) {
-					CategoryLog.connectionLogger.error(e.getMessage(), e);
 				}
-			}
-
+			}		
 		}
 
 	}

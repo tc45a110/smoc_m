@@ -2,6 +2,9 @@ package com.base.common.worker;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import com.base.common.constant.FixedConstant;
 
 
 /**
@@ -22,6 +25,10 @@ public abstract class SuperQueueWorker<T> extends SuperWorker{
 	
 	public T take() throws InterruptedException{
 		return superQueue.take();
+	}
+	
+	public T poll() throws InterruptedException{
+		return superQueue.poll(FixedConstant.COMMON_POLL_INTERVAL_TIME,TimeUnit.SECONDS);
 	}
 	
 	/**
