@@ -10,7 +10,7 @@ import redis.clients.jedis.params.SetParams;
 
 public class JedisClientPool implements JedisClient {
 	private static int DATABASE = ResourceManager.getInstance().getIntValue("redis.database");
-
+	
 	private JedisPool jedisPool;
 
 	public JedisPool getJedisPool() {
@@ -20,7 +20,7 @@ public class JedisClientPool implements JedisClient {
 	public void setJedisPool(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
 	}
-
+	
 	@Override
 	public String set(String key, String value) {
 		Jedis jedis = null;
@@ -36,8 +36,8 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
-
+	
+	
 	@Override
 	public String setMnp(String key, String value) {
 		Jedis jedis = null;
@@ -84,7 +84,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public String getMnp(String key) {
 		Jedis jedis = null;
@@ -211,7 +211,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public Long del(String key) {
 		Jedis jedis = null;
@@ -227,7 +227,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public String setex(byte[] key, long seconds, byte[] value) {
 		Jedis jedis = null;
@@ -243,7 +243,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public String set(byte[] key, byte[] value) {
 		Jedis jedis = null;
@@ -259,7 +259,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public byte[] get(byte[] key) {
 		Jedis jedis = null;
@@ -275,7 +275,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public Long del(byte[] key) {
 		Jedis jedis = null;
@@ -307,7 +307,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public byte[] rpop(byte[] key) {
 		Jedis jedis = null;
@@ -323,7 +323,7 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
+	
 	@Override
 	public Long incrBy(byte[] key, long by) {
 		Jedis jedis = null;
@@ -435,6 +435,6 @@ public class JedisClientPool implements JedisClient {
 			}
 		}
 	}
-
-
+	
+	
 }

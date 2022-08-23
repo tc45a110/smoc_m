@@ -1,6 +1,6 @@
 /**
  * @desc
- *
+ * 
  */
 package com.base.common.cache.jedis;
 
@@ -24,9 +24,9 @@ import com.base.common.vo.AlarmMessage.AlarmKey;
 public class JedisService implements CacheServiceInter{
 
 	private static final Logger logger = LoggerFactory.getLogger(JedisService.class);
-
+	
 	private JedisClient jedisClient;
-
+	
 	@SuppressWarnings("resource")
 	public JedisService() {
 		ApplicationContext ac = new ClassPathXmlApplicationContext(
@@ -34,16 +34,16 @@ public class JedisService implements CacheServiceInter{
 		jedisClient = (JedisClient) ac.getBean("jedisClientPool");
 		logger.info("redis 客户端初始化完成!");
 	}
-
+	
 	@SuppressWarnings("resource")
 	public JedisService(String jedisClientName) {
 		ApplicationContext ac = new ClassPathXmlApplicationContext(
 				"jedis-config.xml");
 		jedisClient = (JedisClient) ac.getBean(jedisClientName);
-
+		
 		logger.info("{} redis客户端初始化完成!",jedisClientName);
 	}
-
+	
 	@Override
 	public void putString(String key, int timeout, String str,String redisName) {
 		try {
@@ -51,7 +51,7 @@ public class JedisService implements CacheServiceInter{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			AlarmManager.getInstance().process(new AlarmMessage(AlarmKey.Redis, redisName+":"+e.getMessage()));
-		}
+		}	
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class JedisService implements CacheServiceInter{
 			AlarmManager.getInstance().process(new AlarmMessage(AlarmKey.Redis, redisName+":"+e.getMessage()));
 		}
 	}
-
+	
 
 	@Override
 	public void putMnpString(String key, String str, String redisName) {
@@ -222,7 +222,7 @@ public class JedisService implements CacheServiceInter{
 		}
 		return false;
 	}
-
+	
 	private byte[] serialize(Object object) {
 		try {
 			return SerializationUtils.serialize(object);
@@ -267,7 +267,7 @@ public class JedisService implements CacheServiceInter{
 
 	@Override
 	public void increase(String key, String field, int timeout, int by,
-						 int database,String redisName) {
+			int database,String redisName) {
 		try {
 			jedisClient.hincrBy(key,field, by,database);
 			jedisClient.expire(key, timeout,database);
@@ -289,7 +289,7 @@ public class JedisService implements CacheServiceInter{
 
 	@Override
 	public void putHashString(String key, int timeout, String field,
-							  String value,String redisName) {
+			String value,String redisName) {
 		try {
 			jedisClient.hset(key, field, value);
 			jedisClient.expire(key, timeout);
@@ -298,11 +298,11 @@ public class JedisService implements CacheServiceInter{
 			AlarmManager.getInstance().process(new AlarmMessage(AlarmKey.Redis, redisName+":"+e.getMessage()));
 		}
 	}
-
+	
 	public String getPoolString(String redisName){
 		try {
 			JedisPool jedisPool = ((JedisClientPool)jedisClient).getJedisPool();
-
+			
 			StringBuilder sb = new StringBuilder();
 			sb.append(redisName);
 			sb.append(":");

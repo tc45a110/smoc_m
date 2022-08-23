@@ -4,9 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.smoc.backend</groupId>
     <artifactId>com.smoc.backend.smoc-backend-business-proxy</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <!--编译编码-->
+        <project.common.version>4.0.2</project.common.version>
+    </properties>
 
     <build>
         <plugins>
@@ -45,9 +50,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.example</groupId>
+            <groupId>com.smoc.backend</groupId>
             <artifactId>com.smoc.backend.smoc-backend-base-common</artifactId>
-            <version>4.0.0</version>
+            <version>${project.common.version}</version>
         </dependency>
     </dependencies>
 </project>

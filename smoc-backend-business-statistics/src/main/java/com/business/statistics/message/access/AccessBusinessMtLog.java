@@ -78,7 +78,7 @@ public class AccessBusinessMtLog {
 
 				for (File file : fileList) {
 					// 一个文件用一个线程去处理
-					Worker worker = new AccessBusinessMtLog().new Worker(file, lineTime);
+					AccessBusinessMtLog.Worker worker = new AccessBusinessMtLog().new Worker(file, lineTime);
 					Future<Integer> call = threadPoolExecutor.submit(worker);
 					calls.add(call);
 				}

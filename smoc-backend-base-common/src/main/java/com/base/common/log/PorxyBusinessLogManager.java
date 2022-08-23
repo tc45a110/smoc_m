@@ -22,7 +22,7 @@ public class PorxyBusinessLogManager extends SuperQueueWorker<LogValue>{
 	/**
 	 * Worker集合:通道ID-Worker
 	 */
-	Map<String,Worker> workerMap = new HashMap<String, Worker>();
+	Map<String,Worker> workerMap = new HashMap<String, PorxyBusinessLogManager.Worker>();
 	
 	private PorxyBusinessLogManager(){
 		this.start();

@@ -233,7 +233,7 @@ public class AccountAlarm {
 
 						// 一个文件用一个线程去处理
 						Set<String> acccountSet = enterpriseFlagAccountMap.get(enterpriseFlag);
-						MTWorker worker = new AccountAlarm().new MTWorker(file, lineTime, acccountSet);
+						AccountAlarm.MTWorker worker = new AccountAlarm().new MTWorker(file, lineTime, acccountSet);
 						Future<Integer> call = threadPoolExecutor.submit(worker);
 						calls.add(call);
 					}
@@ -288,7 +288,7 @@ public class AccountAlarm {
 						// 一个文件用一个线程去处理
 						fileNumber++;
 						Set<String> acccountSet = enterpriseFlagAccountMap.get(enterpriseFlag);
-						MRWorker worker = new AccountAlarm().new MRWorker(file, lineTime, acccountSet);
+						AccountAlarm.MRWorker worker = new AccountAlarm().new MRWorker(file, lineTime, acccountSet);
 						Future<Integer> call = threadPoolExecutor.submit(worker);
 						calls.add(call);
 					}

@@ -74,7 +74,7 @@ public class MessageWebTaskInfo {
 				fileNumber = fileList.length;
 				for (File file : fileList) {
 
-					worker worker = new MessageWebTaskInfo().new worker(file, lineTime);
+					MessageWebTaskInfo.worker worker = new MessageWebTaskInfo().new worker(file, lineTime);
 					Future<Integer> call = threadPoolExecutor.submit(worker);
 					calls.add(call);
 				}

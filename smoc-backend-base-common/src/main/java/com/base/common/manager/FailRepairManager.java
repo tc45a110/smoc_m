@@ -49,7 +49,7 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 	 * @return
 	 */
 	public ArrayList<String> getChannelRepairID(String accountID,String businessCarrier,String statusCode,String channelID) {
-		String key = new StringBuffer().append(accountID).append(FixedConstant.SPLICER).append(RepairBusinessType.ACCOUNT.name())
+		String key = new StringBuffer().append(accountID).append(FixedConstant.SPLICER).append(FixedConstant.RepairBusinessType.ACCOUNT.name())
 														 .append(FixedConstant.SPLICER).append(businessCarrier).toString();
 		
 		String accountRepairStatus = getAccountRepairStatus(accountID, channelID, businessCarrier);
@@ -65,7 +65,7 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 			}
 		}else if(FixedConstant.RepairStatus.CHANNEL_REPAIR.name().equals(accountRepairStatus)) {
 			//通道补发
-			key = new StringBuffer().append(channelID).append(FixedConstant.SPLICER).append(RepairBusinessType.CHANNEL.name())
+			key = new StringBuffer().append(channelID).append(FixedConstant.SPLICER).append(FixedConstant.RepairBusinessType.CHANNEL.name())
 					  								  .append(FixedConstant.SPLICER).append(businessCarrier).toString();
 			list = get(key);
 			if(list != null && list.size() > 0) {
@@ -116,7 +116,7 @@ public class FailRepairManager extends SuperMapWorker<String, ArrayList<String>>
 			}
 			
 			//判断通道是否进行补发
-			key = new StringBuffer().append(channelID).append(FixedConstant.SPLICER).append(RepairBusinessType.CHANNEL.name())
+			key = new StringBuffer().append(channelID).append(FixedConstant.SPLICER).append(FixedConstant.RepairBusinessType.CHANNEL.name())
 					  .append(FixedConstant.SPLICER).append(businessCarrier).toString();
 			list = get(key);
 			if(list != null && list.size() > 0) {

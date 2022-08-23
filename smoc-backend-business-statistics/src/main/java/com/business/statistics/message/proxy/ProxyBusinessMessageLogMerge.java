@@ -167,7 +167,7 @@ public class ProxyBusinessMessageLogMerge {
 		for(File file : fileList) {
 			CategoryLog.proxyLogger.info("启动加载文件={}线程",file.getAbsolutePath());
 			//一个文件启动一个线程进行处理
-			MtWorker worker = new ProxyBusinessMessageLogMerge().new MtWorker(file, lineTime);
+			ProxyBusinessMessageLogMerge.MtWorker worker = new ProxyBusinessMessageLogMerge().new MtWorker(file, lineTime);
 			Future<Integer> call = threadPoolExecutor.submit(worker);
 			calls.add(call);
 		}
@@ -218,7 +218,7 @@ public class ProxyBusinessMessageLogMerge {
 		for(File file : fileList) {
 			CategoryLog.proxyLogger.info("启动加载文件={}线程",file.getAbsolutePath());
 			//一个文件启动一个线程进行处理
-			MrWorker worker = new ProxyBusinessMessageLogMerge().new MrWorker(file, lineTime);
+			ProxyBusinessMessageLogMerge.MrWorker worker = new ProxyBusinessMessageLogMerge().new MrWorker(file, lineTime);
 			Future<Integer> call = threadPoolExecutor.submit(worker);
 			calls.add(call);
 		}

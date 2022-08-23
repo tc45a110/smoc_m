@@ -23,7 +23,7 @@ public class ChannelRepairWorkerManager{
 	
 	private static ChannelRepairWorkerManager manager = new ChannelRepairWorkerManager();
 	
-	private Map<String, Worker> workerMap = new HashMap<String, Worker>();
+	private Map<String,ChannelRepairWorkerManager.Worker> workerMap = new HashMap<String, ChannelRepairWorkerManager.Worker>();
 	
 	private ChannelRepairWorkerManager(){
 	}

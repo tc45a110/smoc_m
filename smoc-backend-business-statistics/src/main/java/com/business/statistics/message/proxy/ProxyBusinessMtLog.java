@@ -76,7 +76,7 @@ public class ProxyBusinessMtLog {
 				fileNumber = fileList.length;
 				for(File file : fileList) {
 					//一个文件启动一个线程进行处理
-					Worker worker = new ProxyBusinessMtLog().new Worker(file, lineTime);
+					ProxyBusinessMtLog.Worker worker = new ProxyBusinessMtLog().new Worker(file, lineTime);
 					Future<Integer> call = threadPoolExecutor.submit(worker);
 					calls.add(call);
 				}

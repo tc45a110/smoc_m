@@ -22,7 +22,7 @@ public class AccessBusinessLogManager extends SuperQueueWorker<LogValue>{
 	/**
 	 * Worker集合:企业标识-Worker
 	 */
-	Map<String,Worker> workerMap = new HashMap<String, Worker>();
+	Map<String,Worker> workerMap = new HashMap<String, AccessBusinessLogManager.Worker>();
 	
 	private AccessBusinessLogManager(){
 		this.start();
