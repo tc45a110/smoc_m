@@ -1,6 +1,7 @@
 package com.smoc.cloud.iot.carrier.controller;
 
 
+import com.smoc.cloud.common.iot.validator.IotCardImportModel;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
@@ -14,8 +15,6 @@ import com.smoc.cloud.iot.carrier.service.IotFlowCardsPrimaryInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -69,6 +68,19 @@ public class IotFlowCardsPrimaryInfoController {
         //保存操作
         ResponseData data = iotFlowCardsPrimaryInfoService.save(iotFlowCardsPrimaryInfoValidator, op);
 
+        return data;
+    }
+
+    /**
+     * 批量导入物联网卡
+     *
+     * @return
+     */
+    @RequestMapping(value = "/saveBatch", method = RequestMethod.POST)
+    public ResponseData saveBatch(@RequestBody IotCardImportModel iotCardImportModel) {
+
+        //保存操作
+        ResponseData data = iotFlowCardsPrimaryInfoService.saveBatch(iotCardImportModel.getIotFlowCardsPrimaryInfoValidator(), iotCardImportModel.getCards());
         return data;
     }
 

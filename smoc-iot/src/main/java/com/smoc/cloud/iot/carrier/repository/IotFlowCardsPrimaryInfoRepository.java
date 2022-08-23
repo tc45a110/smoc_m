@@ -1,6 +1,7 @@
 package com.smoc.cloud.iot.carrier.repository;
 
 import com.smoc.cloud.api.response.info.SimBaseInfoResponse;
+import com.smoc.cloud.common.iot.validator.IotCardsImport;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -43,4 +44,12 @@ public interface IotFlowCardsPrimaryInfoRepository extends JpaRepository<IotFlow
     @Modifying
     @Query(value = "update iot_flow_cards_primary_info set CARD_STATUS=:status where ID = :id ", nativeQuery = true)
     void forbidden(@Param("id") String id, @Param("status") String status);
+
+    /**
+     * 批量导入物联网卡
+     *
+     * @param iotFlowCardsPrimaryInfoValidator
+     * @param cards
+     */
+    void saveBatch(IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, List<IotCardsImport> cards) ;
 }

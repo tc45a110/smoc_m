@@ -2,20 +2,30 @@ package com.smoc.cloud.iot.carrier.repository;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.api.response.info.SimBaseInfoResponse;
+import com.smoc.cloud.common.iot.validator.IotCardsImport;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.iot.carrier.rowmapper.IotFlowCardsPrimaryInfoRowMapper;
 import com.smoc.cloud.iot.common.BasePageRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.util.StringUtils;
 
-import java.lang.management.GarbageCollectorMXBean;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+
 @Slf4j
 public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
+
+
+    @Autowired
+    public DataSource dataSource;
 
     public PageList<IotFlowCardsPrimaryInfoValidator> page(PageParams<IotFlowCardsPrimaryInfoValidator> pageParams) {
 
@@ -112,7 +122,7 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getCardStatus().trim());
         }
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by t.ICCID desc,t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -125,6 +135,7 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
 
     /**
      * 根据账号及msisdn 查询物联网卡基本信息
+     *
      * @param account
      * @param msisdn
      * @return
@@ -149,6 +160,7 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
 
     /**
      * 码号信息批量查询
+     *
      * @param account
      * @param msisdns
      * @return
@@ -156,12 +168,12 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
     public List<SimBaseInfoResponse> queryBatchSimBaseInfo(String account, List<String> msisdns) {
 
         StringBuffer msisdnBuffer = new StringBuffer();
-        for(String msisdn:msisdns){
-           if(msisdnBuffer.length()<1){
-               msisdnBuffer.append("'"+msisdn+"'");
-           }else {
-               msisdnBuffer.append(",'"+msisdn+"'");
-           }
+        for (String msisdn : msisdns) {
+            if (msisdnBuffer.length() < 1) {
+                msisdnBuffer.append("'" + msisdn + "'");
+            } else {
+                msisdnBuffer.append(",'" + msisdn + "'");
+            }
         }
 
         //查询sql
@@ -171,12 +183,93 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(",t.ICCID");
         sqlBuffer.append(",t.ACTIVE_DATE");
         sqlBuffer.append(",t.OPEN_DATE");
-        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_account_package_items a,iot_package_cards pc where pc.PACKAGE_ID=a.PACKAGE_ID and pc.CARD_ID=t.ID and a.ACCOUNT_ID=? and t.MSISDN in ("+msisdnBuffer+") ");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_account_package_items a,iot_package_cards pc where pc.PACKAGE_ID=a.PACKAGE_ID and pc.CARD_ID=t.ID and a.ACCOUNT_ID=? and t.MSISDN in (" + msisdnBuffer + ") ");
 
         Object[] params = new Object[1];
         params[0] = account;
-        log.info("[sql]:{}",sqlBuffer);
+        log.info("[sql]:{}", sqlBuffer);
         List<SimBaseInfoResponse> list = this.jdbcTemplate.query(sqlBuffer.toString(), new BeanPropertyRowMapper<SimBaseInfoResponse>(SimBaseInfoResponse.class), params);
         return list;
+    }
+
+    /**
+     * 批量导入物联网卡
+     *
+     * @param iotFlowCardsPrimaryInfoValidator
+     * @param cards
+     */
+    public void saveBatch(IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, List<IotCardsImport> cards) {
+        log.info("[iotFlowCardsPrimaryInfoValidator]:{}", new Gson().toJson(iotFlowCardsPrimaryInfoValidator));
+        List<IotFlowCardsPrimaryInfoValidator> second = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            //批量导入物联网卡
+            StringBuffer insertSql = new StringBuffer("insert IGNORE into iot_flow_cards_primary_info(ID,CARRIER,CARD_TYPE,ICCID,MSISDN,IMSI,CHARGE_CYCLE,CHARGE_TYPE,FLOW_POOL_ID,CYCLE_QUOTA,OPEN_CARD_FEE,CYCLE_FUNCTION_FEE,ACTIVE_DATE,OPEN_DATE,USE_STATUS,CARD_STATUS,CREATED_BY,PROVINCE,CREATED_TIME) ");
+            insertSql.append("values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now())");
+            stmt = conn.prepareStatement(insertSql.toString());
+            for (IotCardsImport card : cards) {
+                IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
+                validator.setId(UUID.uuid32());
+                validator.setIccid(card.getIccid().replace("\t", ""));
+                stmt.setString(1, validator.getId());
+                stmt.setString(2, iotFlowCardsPrimaryInfoValidator.getCarrier());
+                stmt.setString(3, iotFlowCardsPrimaryInfoValidator.getCardType());
+                stmt.setString(4, card.getIccid().replace("\t", ""));
+                stmt.setString(5, card.getMsisdn().replace("\t", ""));
+                stmt.setString(6, card.getImsi().replace("\t", ""));
+                stmt.setString(7, iotFlowCardsPrimaryInfoValidator.getChargeCycle());
+                stmt.setString(8, iotFlowCardsPrimaryInfoValidator.getCardType());
+                stmt.setString(9, iotFlowCardsPrimaryInfoValidator.getFlowPoolId());
+                stmt.setBigDecimal(10, iotFlowCardsPrimaryInfoValidator.getCycleQuota());
+                stmt.setBigDecimal(11, iotFlowCardsPrimaryInfoValidator.getOpenCardFee());
+                stmt.setBigDecimal(12, iotFlowCardsPrimaryInfoValidator.getCycleFunctionFee());
+                stmt.setString(13, card.getActiveDate().replace("\t", ""));
+                stmt.setString(14, card.getOpenDate().replace("\t", ""));
+                stmt.setString(15, "0");
+                stmt.setString(16, card.getCardStatus().replace("\t", ""));
+                stmt.setString(17, iotFlowCardsPrimaryInfoValidator.getCreatedBy());
+                stmt.setString(18, card.getProvince().replace("\t", ""));
+                second.add(validator);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+            stmt.clearBatch();
+            stmt.clearParameters();
+            //插入辅助表
+            if (second.size() > 0) {
+                StringBuffer secondSql = new StringBuffer("insert IGNORE into iot_flow_cards_secondary_info(ID,CARD_ID,ICCID) ");
+                secondSql.append("values(?,?,?)");
+                stmt = conn.prepareStatement(secondSql.toString());
+                for (IotFlowCardsPrimaryInfoValidator validator : second) {
+                    stmt.setString(1, validator.getId());
+                    stmt.setString(2, validator.getId());
+                    stmt.setString(3, validator.getIccid());
+                    stmt.addBatch();
+                }
+            }
+
+            stmt.executeBatch();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != conn) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+                if (null != stmt) {
+                    stmt.clearBatch();
+                    stmt.clearParameters();
+                    stmt.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

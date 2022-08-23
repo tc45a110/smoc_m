@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.carrier.remote;
 
+import com.smoc.cloud.common.iot.validator.IotCardImportModel;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
@@ -54,4 +55,12 @@ public interface IotFlowCardsPrimaryInfoFeignClient {
      */
     @RequestMapping(value = "/iot/carrier/cards/forbidden/{id}", method = RequestMethod.GET)
     ResponseData forbidden(@PathVariable String id) throws Exception;
+
+    /**
+     * 批量导入物联网卡
+     *
+     * @return
+     */
+    @RequestMapping(value = "/iot/carrier/cards/saveBatch", method = RequestMethod.POST)
+    ResponseData saveBatch(@RequestBody IotCardImportModel iotCardImportModel) throws Exception;
 }
