@@ -4,11 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.smoc.backend</groupId>
     <artifactId>com.smoc.backend.smoc-backend-proxy-smpp</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <properties>
-        <project.projectName>proxy-smpp</project.projectName>
+        <!--编译编码-->
+        <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
+        <project.common.version>4.0.2</project.common.version>
+        <project.packageName>proxy-smpp</project.packageName>
     </properties>
 
     <build>
@@ -27,7 +31,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <finalName>${project.projectName}</finalName>   <!-- 配置打包后的文件前缀名 -->
+                    <finalName>${project.packageName}</finalName>   <!-- 配置打包后的文件前缀名 -->
                     <descriptors>
                         <descriptor>${project.basedir}/src/main/resources/assembly/package.xml</descriptor>   <!-- 配置文件路径 -->
                     </descriptors>
@@ -42,15 +46,14 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
     <dependencies>
         <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>com.smoc.backend.smoc-backend-base-common</artifactId>
-            <version>4.0.0</version>
+            <groupId>com.smoc.backend</groupId>
+            <artifactId>${project.common.artifactId}</artifactId>
+            <version>${project.common.version}</version>
         </dependency>
     </dependencies>
 </project>

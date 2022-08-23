@@ -5,6 +5,7 @@
 package com.huawei.smproxy;
 
 import com.huawei.insa2.comm.smpp.message.SMPPMessage;
+import com.protocol.proxy.worker.ReportWorker;
 
 public abstract class Proxy {
 	private int base = 100000000;

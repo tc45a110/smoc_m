@@ -13,6 +13,7 @@ import com.huawei.insa2.comm.smpp.message.SMPPDeliverRespMessage;
 import com.huawei.insa2.comm.smpp.message.SMPPEnquireLinkMessage;
 import com.huawei.insa2.comm.smpp.message.SMPPEnquireLinkRespMessage;
 import com.huawei.insa2.comm.smpp.message.SMPPMessage;
+import com.protocol.proxy.worker.ReportWorker;
 
 /**
  * 对外提供的API接口。
