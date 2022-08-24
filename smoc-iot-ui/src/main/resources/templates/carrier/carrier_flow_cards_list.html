@@ -124,7 +124,8 @@
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
                                            style="margin-right:5px"></i>新增物联网卡</a>
-                                    <a sec:authorize-url="/iot/carrier/cards/import"
+                                    <a sec:authorize-url="/iot/carrier/cards/toImport"
+                                       th:href="@{/iot/carrier/cards/toImport}"
                                        class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-import"></i> 导入
                                     </a>
@@ -155,8 +156,8 @@
                                 <tr>
                                     <th>运营商名称/订单号</th>
                                     <th>流量类型</th>
-                                    <th>MSISDN</th>
-                                    <th>IMSI/ICCID</th>
+                                    <th>ICCID</th>
+                                    <th>MSISDN/IMSI</th>
                                     <th>运营商流量池</th>
                                     <th>标准限额（G）</th>
                                     <th>计费周期</th>
@@ -180,12 +181,12 @@
                                                  class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.msisdn}]]
+                                         [[${info.iccid}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.imsi}]]
+                                        [[${info.msisdn}]]
                                         <br>
-                                        [[${info.iccid}]]
+                                        [[${info.imsi}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${poolMap[info.flowPoolId]}]]

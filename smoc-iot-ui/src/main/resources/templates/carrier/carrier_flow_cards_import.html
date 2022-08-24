@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">物联网卡信息导入</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            资源接入
+                        </li>
+                        <li>
+                            物联网卡管理
+                        </li>
+                        <li>
+                            物联网卡信息导入
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/iot/carrier/cards/import}"
+                          method="post" data-parsley-validate="" enctype="multipart/form-data" th:object="${validator}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label>运营商<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('carrier')}"
+                                                        th:errors="*{carrier}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <select data-style="btn-default" name="carrier" data-live-search="true"
+                                                        id="carrier" class="selectpicker" >
+                                                    <option value="" data-icon="mdi mdi-cellphone-android">--请选择运营商--</option>
+                                                    <option th:each="carrier:${carriers}"
+                                                            th:selected="${carrier.id == validator.carrier}"
+                                                            th:value="${carrier.id}"
+                                                            data-icon="mdi mdi-cellphone-android"
+                                                            th:text="${carrier.carrierName}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>运营商流量池<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('flowPoolId')}"
+                                                        th:errors="*{flowPoolId}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <select data-style="btn-default" name="flowPoolId" data-live-search="true"
+                                                        id="flowPoolId" class="selectpicker" >
+                                                    <option value="" data-icon="mdi mdi-package-variant">--请选择运营商流量池--</option>
+                                                    <option th:each="pool:${pools}"
+                                                            th:selected="${pool.id == validator.flowPoolId}"
+                                                            th:value="${pool.id}"
+                                                            data-icon="mdi mdi-package-variant"
+                                                            th:text="${pool.poolName}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>流量类型<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('cardType')}"
+                                                        th:errors="*{cardType}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <mpm:tag id="cardType" identity="poolType"
+                                                         name="cardType" show-type="select" key="code"
+                                                         style="margin-top:0px"
+                                                         th:value="${validator.cardType}"
+                                                         title="流量类型"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>计费周期<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('chargeCycle')}"
+                                                        th:errors="*{chargeCycle}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <select class="selectpicker" name="chargeCycle" required>
+                                                    <option value="">--请选择计费周期--</option>
+                                                    <option th:selected="${validator.chargeCycle == '01'}" value="01">自然月</option>
+                                                    <option th:selected="${validator.chargeCycle == '02'}" value="02">年</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>标准限额（G）<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('cycleQuota')}"
+                                                        th:errors="*{cycleQuota}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{cycleQuota}"
+                                                       min="0" placeholder="标准限额（G）0表示不限制"  data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不限制">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>开卡费 <span class="text-danger">*</span><span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('openCardFee')}"
+                                                        th:errors="*{openCardFee}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text"  class="form-control"
+                                                       autocomplete="off" th:field="*{openCardFee}" required=""
+                                                       min="0.00" placeholder="开卡费" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不收开卡费">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>周期功能费（元/卡月） <span class="text-danger">*</span><span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('cycleFunctionFee')}"
+                                                        th:errors="*{cycleFunctionFee}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text"  class="form-control"
+                                                       autocomplete="off" th:field="*{cycleFunctionFee}" required=""
+                                                       min="0.00" placeholder="周期功能费（元/卡月）" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不收费用">
+                                            </div>
+
+                                            <div class="col-md-6 form-group">
+                                                <label>物联网卡csv文件</span>
+                                                </label>
+                                                <input name="iotFile" type="file" class="filestyle"
+                                                       data-buttonname="btn-primary" required="">
+                                            </div>
+
+
+                                            <div class="col-md-12 text-center" style="margin-top:20px">
+                                                <button sec:authorize-url="/iot/carrier/cards/import" type="submit"
+                                                        class="btn btn-teal waves-effect waves-light">提交
+                                                </button>
+                                                <a sec:authorize-url="/iot/carrier/cards/list"
+                                                   th:href="@{/iot/carrier/cards/list}" style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- end class p-20 -->
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,13 +1,12 @@
 package com.smoc.cloud.iot.carrier.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
+import com.opencsv.bean.ColumnPositionMappingStrategy;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.iot.validator.IotCarrierFlowPoolValidator;
-import com.smoc.cloud.common.iot.validator.IotCarrierInfoValidator;
-import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
-import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
+import com.smoc.cloud.common.iot.validator.*;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -24,16 +23,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -206,6 +206,7 @@ public class CarrierFlowCardsController {
         validator.setId(UUID.uuid32());
         validator.setCardStatus("0");
         validator.setUseStatus("0");
+        validator.setChargeCycle("01");
         validator.setOpenCardFee(new BigDecimal("0"));
         validator.setCycleFunctionFee(new BigDecimal("0"));
 
@@ -385,6 +386,118 @@ public class CarrierFlowCardsController {
         view.addObject("carrierMap", carrierMap);
         view.addObject("primary", infoResponseData.getData().getIotFlowCardsPrimaryInfoValidator());
         view.addObject("secondary", infoResponseData.getData().getIotFlowCardsSecondaryInfoValidator());
+        return view;
+    }
+
+    /**
+     * 进入物联网卡导入页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/toImport", method = RequestMethod.GET)
+    public ModelAndView toImport() {
+        ModelAndView view = new ModelAndView("carrier/carrier_flow_cards_import");
+        //初始化数据
+        PageParams<IotCarrierInfoValidator> paramsCarrier = new PageParams<>();
+        paramsCarrier.setPageSize(100);
+        paramsCarrier.setCurrentPage(1);
+        IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
+        paramsCarrier.setParams(validatorCarrier);
+        //查询
+        ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
+        if (!ResponseCode.SUCCESS.getCode().equals(dataCarrier.getCode())) {
+            view.addObject("error", dataCarrier.getCode() + ":" + dataCarrier.getMessage());
+            return view;
+        }
+
+        //初始化数据
+        PageParams<IotCarrierFlowPoolValidator> paramsPoos = new PageParams<>();
+        paramsPoos.setPageSize(100);
+        paramsPoos.setCurrentPage(1);
+        IotCarrierFlowPoolValidator validatorPool = new IotCarrierFlowPoolValidator();
+        paramsPoos.setParams(validatorPool);
+        //查询
+        ResponseData<PageList<IotCarrierFlowPoolValidator>> dataPool = iotCarrierFlowPoolService.page(paramsPoos);
+        if (!ResponseCode.SUCCESS.getCode().equals(dataPool.getCode())) {
+            view.addObject("error", dataPool.getCode() + ":" + dataPool.getMessage());
+            return view;
+        }
+
+
+        IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
+        validator.setId(UUID.uuid32());
+        validator.setCardStatus("0");
+        validator.setUseStatus("0");
+        validator.setChargeCycle("01");
+        validator.setOpenCardFee(new BigDecimal("0"));
+        validator.setCycleFunctionFee(new BigDecimal("0"));
+
+        view.addObject("pools", dataPool.getData().getList());
+        view.addObject("carriers", dataCarrier.getData().getList());
+        view.addObject("validator", validator);
+        view.addObject("op", "add");
+        return view;
+    }
+
+    /**
+     * 物联网卡信息导入
+     *
+     * @return
+     */
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public ModelAndView importCards(@ModelAttribute IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, @RequestPart("iotFile") MultipartFile iotFile, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("carrier/carrier_flow_cards_import");
+        String fileType = iotFile.getOriginalFilename().substring(iotFile.getOriginalFilename().lastIndexOf("."));
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+        iotFlowCardsPrimaryInfoValidator.setCreatedBy(user.getRealName());
+
+        if (!".csv".equals(fileType.toLowerCase())) {
+            view.addObject("error", "文件格式错误");
+            return view;
+        }
+
+        List<IotCardsImport> cards = new ArrayList<>();
+        try {
+            InputStreamReader inputStream = new InputStreamReader(iotFile.getInputStream(), "utf-8");
+            // 设置解析策略，使用@CsvBindByPosition注解可以指定字段在csv文件头中的位置，从0开始
+            ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
+            strategy.setType(IotCardsImport.class);
+
+            CsvToBean csvToBean = new CsvToBeanBuilder(inputStream)
+                    .withSkipLines(1) // 跳过行数
+                    .withSeparator(',') // 分隔符
+                    .withThrowExceptions(false) // 如果有必输项没有，则不抛异常忽略此行
+                    .withMappingStrategy(strategy)
+                    .build();
+            cards = csvToBean.parse();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (null == cards || cards.size() < 1) {
+            view.addObject("error", "导入数据不能为空");
+            return view;
+        }
+
+        IotCardImportModel iotCardImportModel = new IotCardImportModel();
+        iotCardImportModel.setCards(cards);
+        iotCardImportModel.setIotFlowCardsPrimaryInfoValidator(iotFlowCardsPrimaryInfoValidator);
+        //查询
+        ResponseData responseData = iotFlowCardsPrimaryInfoService.saveBatch(iotCardImportModel);
+        if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+            view.addObject("error", responseData.getCode() + ":" + responseData.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        systemUserLogService.logsAsync("CARRIER_CARDS", "CARRIER_CARDS", iotFlowCardsPrimaryInfoValidator.getCreatedBy(), "import","物联网卡信息导入", JSON.toJSONString(iotCardImportModel));
+
+        //记录日志
+        log.info("[物联网卡信息导入][{}][{}]数据:{}", "import", user.getUserName(), JSON.toJSONString(iotCardImportModel));
+
+        view.setView(new RedirectView("/iot/carrier/cards/list", true, false));
         return view;
     }
 }

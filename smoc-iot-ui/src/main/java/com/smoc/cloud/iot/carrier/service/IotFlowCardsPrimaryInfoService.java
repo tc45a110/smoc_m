@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.carrier.service;
 
+import com.smoc.cloud.common.iot.validator.IotCardImportModel;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -61,6 +61,21 @@ public class IotFlowCardsPrimaryInfoService {
     public ResponseData save(IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, String op) {
         try {
             ResponseData data = this.iotFlowCardsPrimaryInfoFeignClient.save(iotFlowCardsPrimaryInfoValidator, op);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 批量导入物联网卡
+     *
+     * @return
+     */
+    public ResponseData saveBatch(IotCardImportModel iotCardImportModel) {
+        try {
+            ResponseData data = this.iotFlowCardsPrimaryInfoFeignClient.saveBatch(iotCardImportModel);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

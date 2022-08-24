@@ -1,6 +1,7 @@
 package com.smoc.cloud.iot.carrier.service;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.common.iot.validator.IotCardsImport;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsSecondaryInfoValidator;
@@ -10,7 +11,6 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.iot.carrier.entity.IotCarrierFlowPool;
 import com.smoc.cloud.iot.carrier.entity.IotFlowCardsPrimaryInfo;
 import com.smoc.cloud.iot.carrier.entity.IotFlowCardsSecondaryInfo;
 import com.smoc.cloud.iot.carrier.repository.IotFlowCardsPrimaryInfoRepository;
@@ -21,9 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -133,6 +132,17 @@ public class IotFlowCardsPrimaryInfoService {
     }
 
     /**
+     * 批量导入物联网卡
+     *
+     * @param iotFlowCardsPrimaryInfoValidator
+     * @param cards
+     */
+    public ResponseData saveBatch(IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, List<IotCardsImport> cards){
+        iotFlowCardsPrimaryInfoRepository.saveBatch(iotFlowCardsPrimaryInfoValidator,cards);
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
      * 禁用
      *
      * @param id
@@ -141,4 +151,6 @@ public class IotFlowCardsPrimaryInfoService {
         this.iotFlowCardsPrimaryInfoRepository.forbidden(id, "0");
         return ResponseDataUtil.buildSuccess();
     }
+
+
 }

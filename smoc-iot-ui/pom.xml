@@ -23,6 +23,12 @@
             <artifactId>com.smoc.cloud.smoc-parent-ui</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- csv文件解析依赖 -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.4</version>
+        </dependency>
     </dependencies>
 
 </project>
