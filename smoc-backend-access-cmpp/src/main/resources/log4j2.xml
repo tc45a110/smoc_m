@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO" monitorInterval="180">
     <properties>
-        <property name="Log_Home">/smoc/logs/protocol-access-cmpp</property>
+<!--        <property name="Log_Home">/smoc/logs/protocol-access-cmpp</property>-->
+        <property name="Log_Home">/alidata/test/access-cmpp/logs</property>
     </properties>
 
     <Appenders>
-
         <RollingRandomAccessFile name="RollingFileInfo" fileName="${Log_Home}/log4jauth2.log" immediateFlush="true"
                                  filePattern="${Log_Home}/log4jauth2.log.%d{yyyy-MM-dd-HH}.log">
             <PatternLayout pattern="[%d{yyyy.MM.dd HH:mm:ss,SSS}][%t][%c][%M](%L)[%p] - %m%n"/>
