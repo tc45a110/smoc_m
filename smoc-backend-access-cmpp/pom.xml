@@ -14,7 +14,7 @@
         <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
         <project.packageName>access-cmpp</project.packageName>
-        <project.absolute.path>F:/ideaproject/smoc_cloud/smoc-backend-base-common</project.absolute.path>
+        <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
     </properties>
 
     <build>
