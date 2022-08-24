@@ -10,9 +10,11 @@
 
     <properties>
         <!--编译编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
         <project.packageName>proxy-smpp</project.packageName>
+        <project.absolute.path>F:/ideaproject/smoc_cloud/smoc-backend-base-common</project.absolute.path>
     </properties>
 
     <build>
@@ -23,7 +25,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <encoding>UTF-8</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -46,6 +48,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 

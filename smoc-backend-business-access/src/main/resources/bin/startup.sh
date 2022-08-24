@@ -1,1 +1,1 @@
-nohup /apps/smoc-business-access/bin/_startup.sh > /alidata/smoc-business-access/logs/system.log &
+nohup /apps/test/business-access/bin/_startup.sh > /alidata/test/business-access/logs/system.log &

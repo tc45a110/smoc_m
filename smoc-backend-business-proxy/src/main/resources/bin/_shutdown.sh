@@ -1,4 +1,4 @@
-export _HOME=/apps/smoc-business-proxy
+export _HOME=/apps/test/business-proxy
 export _LIB=$_HOME/lib
 export _CONFIG=$_HOME/config
 
@@ -7,3 +7,4 @@ cd $_HOME
 echo `pwd`
 
 java -classpath $_CONFIG:$_LIB/* -server -Dfile.encoding=UTF-8 com.business.proxy.server.AdminClient
+

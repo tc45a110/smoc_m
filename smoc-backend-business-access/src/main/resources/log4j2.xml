@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO" monitorInterval="180">
     <properties>
-        <property name="Log_Home">/smoc/logs/business-access</property>
+<!--        <property name="Log_Home">/smoc/logs/business-access</property>-->
+        <property name="Log_Home">/alidata/test/business-access/logs</property>
     </properties>
 
     <Appenders>

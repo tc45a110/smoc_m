@@ -26,6 +26,8 @@
                 <exclude>com.squareup.*:*</exclude>
                 <!--  spring  -->
                 <exclude>org.springframework:*</exclude>
+                <!-- 排除项目本身生成的jar包 使用自定义名称的jar包  -->
+                <exclude>com.smoc.backend:*</exclude>
             </excludes>
             <!-- 第三方jar不要解压 -->
             <unpack>false</unpack>
@@ -44,6 +46,7 @@
                 <!-- 可以直接指定所有文件 -->
                 <include>*.sh</include>
             </includes>
+            <fileMode>0777</fileMode>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
 
@@ -55,7 +58,8 @@
                 <include>*.xml</include>
                 <include>*.txt</include>
             </includes>
-            <outputDirectory>conf</outputDirectory>
+            <fileMode>0777</fileMode>
+            <outputDirectory>config</outputDirectory>
         </fileSet>
 
         <!-- 把项目自己编译出来的jar文件夹下的jar文件，去除第三方jar，打包进zip文件的根目录 -->
@@ -70,4 +74,15 @@
 <!--            </includes>-->
 <!--        </fileSet>-->
     </fileSets>
+
+    <files>
+        <file>
+            <source>target/${project.artifactId}-${project.version}.jar</source>
+            <destName>lib/${project.packageName}-${project.version}.jar</destName>
+        </file>
+        <file>
+            <source>${project.absolute.path}/target/base-common-${project.common.version}.jar</source>
+            <destName>lib/base-common-${project.common.version}.jar</destName>
+        </file>
+    </files>
 </assembly>

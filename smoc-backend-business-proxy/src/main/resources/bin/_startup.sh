@@ -1,4 +1,4 @@
-export _HOME=/apps/smoc-business-proxy
+export _HOME=/apps/test/business-proxy
 export _LIB=$_HOME/lib
 export _CONFIG=$_HOME/config
 
@@ -6,4 +6,5 @@ export _CONFIG=$_HOME/config
 cd $_HOME
 echo `pwd`
 
-java -classpath $_CONFIG:$_LIB/* -server -Xmx1024m -Xms1024m -Dsun.net.client.defaultConnectTimeout=60000 -Dsun.net.client.defaultReadTimeout=180000 -Dfile.encoding=UTF-8 com.business.proxy.server.ProxyServer
+java -classpath $_CONFIG:$_LIB/* -server -Xmx2048m -Xms1024m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/alidata/test/business-proxy/logs -Ddruid.mysql.usePingMethod=false -Dfile.encoding=UTF-8 com.business.proxy.server.ProxyServer
+

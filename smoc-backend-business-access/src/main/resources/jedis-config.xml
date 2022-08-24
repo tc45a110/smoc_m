@@ -26,12 +26,12 @@
 	</bean>
 	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
+		<constructor-arg name="host" value="r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com"/>
 		<constructor-arg name="port" value="6379"/>
-		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="timeout" value="3000"/>
+		<constructor-arg name="password" value="Tsmoc40#RedistEst"/>
 	</bean>
 	<!-- mnp redis -->
 	<bean id="jedisClientPool_mnp" class="com.base.common.cache.jedis.JedisClientPool">
@@ -39,12 +39,12 @@
 	</bean>
 	<bean id="jedisPool_mnp" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
-		<constructor-arg name="port" value="6379"/>
+		<constructor-arg name="host" value="172.28.235.188"/>
+		<constructor-arg name="port" value="6555"/>
 		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="password" value="Dj!bm%Mk8DyP"/>
 	</bean>
 	<!-- access redis -->
 	<bean id="jedisClientPool_access" class="com.base.common.cache.jedis.JedisClientPool">
@@ -52,12 +52,12 @@
 	</bean>
 	<bean id="jedisPool_access" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
+		<constructor-arg name="host" value="r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com"/>
 		<constructor-arg name="port" value="6379"/>
-		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="timeout" value="3000"/>
+		<constructor-arg name="password" value="Tsmoc40#RedistEst"/>
 	</bean>
 	<!-- account redis -->
 	<bean id="jedisClientPool_account" class="com.base.common.cache.jedis.JedisClientPool">
@@ -65,12 +65,12 @@
 	</bean>
 	<bean id="jedisPool_account" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
+		<constructor-arg name="host" value="r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com"/>
 		<constructor-arg name="port" value="6379"/>
-		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="timeout" value="3000"/>
+		<constructor-arg name="password" value="Tsmoc40#RedistEst"/>
 	</bean>
 	<!-- submit redis -->
 	<bean id="jedisClientPool_submit" class="com.base.common.cache.jedis.JedisClientPool">
@@ -78,12 +78,12 @@
 	</bean>
 	<bean id="jedisPool_submit" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
+		<constructor-arg name="host" value="r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com"/>
 		<constructor-arg name="port" value="6379"/>
-		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="timeout" value="3000"/>
+		<constructor-arg name="password" value="Tsmoc40#RedistEst"/>
 	</bean>
 	<!-- response redis -->
 	<bean id="jedisClientPool_response" class="com.base.common.cache.jedis.JedisClientPool">
@@ -91,12 +91,12 @@
 	</bean>
 	<bean id="jedisPool_response" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
+		<constructor-arg name="host" value="r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com"/>
 		<constructor-arg name="port" value="6379"/>
-		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="timeout" value="3000"/>
+		<constructor-arg name="password" value="Tsmoc40#RedistEst"/>
 	</bean>
 	<!-- proxy redis -->
 	<bean id="jedisClientPool_proxy" class="com.base.common.cache.jedis.JedisClientPool">
@@ -104,11 +104,11 @@
 	</bean>
 	<bean id="jedisPool_proxy" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig">
-			<ref bean="poolconfig" />
+			<ref bean="poolconfig"/>
 		</constructor-arg>
-		<constructor-arg name="host" value="192.168.0.156"/>
+		<constructor-arg name="host" value="r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com"/>
 		<constructor-arg name="port" value="6379"/>
-		<constructor-arg name="timeout" value="10000"/>
-		<constructor-arg name="password" value="J40mBngK"/>
+		<constructor-arg name="timeout" value="3000"/>
+		<constructor-arg name="password" value="Tsmoc40#RedistEst"/>
 	</bean>
 </beans>

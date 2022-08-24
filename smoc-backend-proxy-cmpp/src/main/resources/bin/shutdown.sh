@@ -1,1 +1,1 @@
-nohup /smoc/apps/protocol-proxy-cmpp/bin/_shutdown.sh > /smoc/logs/protocol-proxy-cmpp/system.log &
+nohup /apps/test/proxy-cmpp/bin/_shutdown.sh > /alidata/test/proxy-cmpp/logs/system.log &

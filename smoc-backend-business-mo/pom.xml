@@ -10,7 +10,11 @@
 
     <properties>
         <!--编译编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
+        <project.packageName>business-mo</project.packageName>
+        <project.absolute.path>F:/ideaproject/smoc_cloud/smoc-backend-base-common</project.absolute.path>
     </properties>
 
     <build>
@@ -21,7 +25,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <encoding>UTF-8</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -29,7 +33,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <finalName>${project.artifactId}</finalName>   <!-- 配置打包后的文件前缀名 -->
+                    <finalName>${project.packageName}</finalName>   <!-- 配置打包后的文件前缀名 -->
                     <descriptors>
                         <descriptor>${project.basedir}/src/main/resources/assembly/package.xml</descriptor>   <!-- 配置文件路径 -->
                     </descriptors>
@@ -51,9 +55,8 @@
     <dependencies>
         <dependency>
             <groupId>com.smoc.backend</groupId>
-            <artifactId>com.smoc.backend.smoc-backend-base-common</artifactId>
+            <artifactId>${project.common.artifactId}</artifactId>
             <version>${project.common.version}</version>
         </dependency>
     </dependencies>
-
 </project>
