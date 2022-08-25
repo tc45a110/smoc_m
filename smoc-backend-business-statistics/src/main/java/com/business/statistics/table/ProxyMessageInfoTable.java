@@ -4,26 +4,26 @@
  */
 package com.business.statistics.table;
 
+import com.base.common.constant.TableNameConstant;
+import com.base.common.dao.LavenderDBSingleton;
+import com.base.common.log.CategoryLog;
+import com.base.common.manager.ResourceManager;
+import com.base.common.util.DateUtil;
+import com.base.common.vo.AlarmMessage;
+import com.business.statistics.util.AlarmUtil;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
-import com.base.common.constant.TableNameConstant;
-import com.base.common.dao.LavenderDBSingleton;
-import com.base.common.log.CategoryLog;
-import com.base.common.manager.AlarmManager;
-import com.base.common.manager.ResourceManager;
-import com.base.common.util.DateUtil;
-import com.base.common.vo.AlarmMessage;
-
 public class ProxyMessageInfoTable {
 	
 	//代理业务层按条记录表前缀
-	private static String TABLENAME_PREFIX = "proxy_message_info_";
+	private final static String TABLENAME_PREFIX = "proxy_message_info_";
 	//告警信息
-	private static String ALARM_VALUE = "ProxyMessageInfoTable";
+	private final static String ALARM_VALUE = "ProxyMessageInfoTable";
 	//获取60分钟之后的时间
-	private static int afterMinute = 60;
+	private final static int afterMinute = 60;
 	
 	public static void main(String[] args) {
 		try {
@@ -46,7 +46,7 @@ public class ProxyMessageInfoTable {
 			dropTable(tableName.toString());
 		} catch (Exception e) {
 			CategoryLog.proxyLogger.error(e.getMessage(),e);
-			AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.BusinessStatistics, 
+			AlarmUtil.process(new AlarmMessage(AlarmMessage.AlarmKey.BusinessStatistics,
 					new StringBuilder(ALARM_VALUE).append(":").append(e.getMessage()).toString()));
 		}
 		CategoryLog.proxyLogger.info("程序正常退出");
@@ -59,7 +59,7 @@ public class ProxyMessageInfoTable {
 	 * @param tableName
 	 */
 	private static void createTable(String tableName) throws Exception{
-		StringBuffer sql = new StringBuffer();
+		StringBuilder sql = new StringBuilder();
 		Connection conn = null;
 		CallableStatement pstmt = null;
 		ResultSet rs = null;
@@ -88,7 +88,7 @@ public class ProxyMessageInfoTable {
 	 * @param tableName
 	 */
 	private static void dropTable(String tableName) throws Exception{
-		StringBuffer sql = new StringBuffer();
+		StringBuilder sql = new StringBuilder();
 		Connection conn = null;
 		CallableStatement pstmt = null;
 		ResultSet rs = null;
