@@ -1,1 +1,0 @@
-nohup /apps/test/access-cmpp/bin/_startup.sh > /alidata/test/access-cmpp/logs/system.log &

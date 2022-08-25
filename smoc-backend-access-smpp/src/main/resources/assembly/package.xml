@@ -24,6 +24,8 @@
                 <!--  okhttp请求  -->
                 <exclude>org.jetbrains*:*</exclude>
                 <exclude>com.squareup.*:*</exclude>
+                <exclude>*:protobuf*</exclude>
+                <exclude>*:json*</exclude>
                 <!--  spring  -->
                 <exclude>org.springframework:spring-aop</exclude>
                 <exclude>org.springframework:spring-jcl</exclude>
@@ -40,7 +42,7 @@
         <!-- 把项目的配置文件，打包进zip包的config目录下    -->
         <fileSet>
             <!-- 配置项目中需要被打包的文件的存储路径 -->
-            <directory>target/classes/bin/</directory>
+            <directory>target/classes/${project.resources.fileName}/bin/</directory>
             <includes>
                 <!-- 可以指定单个文件 -->
                 <!--<include>project.config</include>-->
@@ -53,7 +55,7 @@
 
         <!-- 把项目的配置文件，打包进zip包的根目录下    -->
         <fileSet>
-            <directory>target/classes/</directory>
+            <directory>target/classes/${project.resources.fileName}/</directory>
             <includes>
                 <include>*.properties</include>
                 <include>*.xml</include>
@@ -62,28 +64,16 @@
             <fileMode>0777</fileMode>
             <outputDirectory>config</outputDirectory>
         </fileSet>
-
-        <!-- 把项目自己编译出来的jar文件夹下的jar文件，去除第三方jar，打包进zip文件的根目录 -->
-        <!--  <fileSet>-->
-        <!--      <directory>${project.build.directory}/jar</directory>-->
-        <!--      <outputDirectory></outputDirectory>-->
-        <!--      <excludes>-->
-        <!--          <exclude>lib/*.jar</exclude>-->
-        <!--      </excludes>-->
-        <!--      <includes>-->
-        <!--          <include>*.jar</include>-->
-        <!--      </includes>-->
-        <!--  </fileSet>-->
     </fileSets>
 
     <files>
         <file>
-            <source>target/${project.artifactId}-${project.version}.jar</source>
-            <destName>lib/${project.packageName}.jar</destName>
+            <source>target/${project.build.finalName}.jar</source>
+            <destName>lib/${project.build.finalName}.jar</destName>
         </file>
         <file>
-            <source>${project.absolute.path}/target/base-common-${project.common.version}.jar</source>
-            <destName>lib/base-common-${project.common.version}.jar</destName>
+            <source>${project.absolute.path}/target/base-common.${project.common.version}.jar</source>
+            <destName>lib/base-common.${project.common.version}.jar</destName>
         </file>
     </files>
 </assembly>

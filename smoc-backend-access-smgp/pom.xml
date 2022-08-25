@@ -15,9 +15,11 @@
         <project.common.version>4.0.2</project.common.version>
         <project.packageName>access-smgp</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
+        <project.resources.fileName>xingyu</project.resources.fileName>
     </properties>
 
     <build>
+        <finalName>${project.packageName}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>

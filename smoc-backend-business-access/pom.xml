@@ -6,7 +6,7 @@
 
     <groupId>com.smoc.backend</groupId>
     <artifactId>com.smoc.backend.smoc-backend-business-access</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>4.0.2</version>
 
     <properties>
         <!--编译编码-->
@@ -15,9 +15,11 @@
         <project.common.version>4.0.2</project.common.version>
         <project.packageName>business-access</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
+        <project.resources.fileName>xingyu</project.resources.fileName>
     </properties>
 
     <build>
+        <finalName>${project.packageName}.${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
