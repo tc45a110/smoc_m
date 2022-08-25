@@ -114,6 +114,9 @@ public class TemplateService {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR);
         }
 
+        //变量模板：FrameTxt变量文件个数
+        int a = 0;
+
         for (MultimediaTemplateModel model : items) {
             if (!ValidatorUtil.validate(model)) {
                 return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(model));
@@ -136,9 +139,17 @@ public class TemplateService {
                 Matcher matcher = ipPattern.matcher(model.getFrameTxt());
                 boolean status = matcher.find();
                 //log.info("[matcher.find()]:{}",status);
-                if (!status) {
-                    return ResponseDataUtil.buildError(ResponseCode.PARAM_TEMPLATE_VARIABLE_ERROR.getCode(), ResponseCode.PARAM_TEMPLATE_VARIABLE_ERROR.getMessage());
+                if (status) {
+                    a++;
                 }
+            }
+        }
+
+        //变量模版模版
+        if ("2".equals(params.getTemplateType())) {
+            //等于0说明没有变量字符
+            if(a == 0){
+                return ResponseDataUtil.buildError(ResponseCode.PARAM_TEMPLATE_VARIABLE_ERROR.getCode(), ResponseCode.PARAM_TEMPLATE_VARIABLE_ERROR.getMessage());
             }
         }
 
