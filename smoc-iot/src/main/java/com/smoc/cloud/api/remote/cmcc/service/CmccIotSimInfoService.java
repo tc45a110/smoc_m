@@ -25,124 +25,124 @@ import java.util.List;
 public class CmccIotSimInfoService extends CmccIotSimBaseService {
 
 
-    /**
-     * 单卡操作订单处理情况查询
-     * 订单保存60天
-     *
-     * @return
-     */
-    public ResponseData<OrderHandleResponse> queryOrderHandle(String orderNum) {
+//    /**
+//     * 单卡操作订单处理情况查询
+//     * 订单保存60天
+//     *
+//     * @return
+//     */
+//    public ResponseData<OrderHandleResponse> queryOrderHandle(String orderNum) {
+//
+//        /**
+//         * 获取token
+//         */
+//        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+//        if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
+//            return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
+//        }
+//        String token = cmccTokenResponseData.getData().getToken();
+//
+//        /**
+//         * 组织请求参数
+//         */
+//       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/order-info?transid=" + this.getTransId() + "&token=" + token + "&orderNum=" + orderNum;
+//
+//        /**
+//         * 向移动发送请求
+//         */
+//        CmccResponseData<List<CmccOrderInfoResponse>> orderResponseData = new CmccResponseData<>();
+//        try {
+//            String response = Okhttp3Utils.get(requestUrl);
+//            Type type = new TypeToken<CmccResponseData<List<CmccOrderInfoResponse>>>() {
+//            }.getType();
+//            orderResponseData = new Gson().fromJson(response, type);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
+//        }
+//
+//        /**
+//         * 请求获取非正常数据
+//         */
+//        if (!"0".equals(orderResponseData.getStatus())) {
+//            return ResponseDataUtil.buildError(orderResponseData.getStatus(), orderResponseData.getMessage());
+//        }
+//
+//        /**
+//         * 返回执行结果，各个运营商，映射成统一响应格式
+//         */
+//        CmccOrderInfoResponse cmccOrderInfo = orderResponseData.getResult().get(0);
+//        //对外api统一数据结构
+//        OrderHandleResponse orderHandleResponse = new OrderHandleResponse();
+//        orderHandleResponse.setOrderNum(cmccOrderInfo.getOrderNum());
+//        orderHandleResponse.setOrderStatus(cmccOrderInfo.getStatus());
+//        orderHandleResponse.setHandleDate(cmccOrderInfo.getStatusDate());
+//        orderHandleResponse.setCreateDate(cmccOrderInfo.getCreateDate());
+//
+//        return ResponseDataUtil.buildSuccess(orderHandleResponse);
+//    }
 
-        /**
-         * 获取token
-         */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
-        if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
-            return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
-        }
-        String token = cmccTokenResponseData.getData().getToken();
-
-        /**
-         * 组织请求参数
-         */
-       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/order-info?transid=" + this.getTransId() + "&token=" + token + "&orderNum=" + orderNum;
-
-        /**
-         * 向移动发送请求
-         */
-        CmccResponseData<List<CmccOrderInfoResponse>> orderResponseData = new CmccResponseData<>();
-        try {
-            String response = Okhttp3Utils.get(requestUrl);
-            Type type = new TypeToken<CmccResponseData<List<CmccOrderInfoResponse>>>() {
-            }.getType();
-            orderResponseData = new Gson().fromJson(response, type);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
-        }
-
-        /**
-         * 请求获取非正常数据
-         */
-        if (!"0".equals(orderResponseData.getStatus())) {
-            return ResponseDataUtil.buildError(orderResponseData.getStatus(), orderResponseData.getMessage());
-        }
-
-        /**
-         * 返回执行结果，各个运营商，映射成统一响应格式
-         */
-        CmccOrderInfoResponse cmccOrderInfo = orderResponseData.getResult().get(0);
-        //对外api统一数据结构
-        OrderHandleResponse orderHandleResponse = new OrderHandleResponse();
-        orderHandleResponse.setOrderNum(cmccOrderInfo.getOrderNum());
-        orderHandleResponse.setOrderStatus(cmccOrderInfo.getStatus());
-        orderHandleResponse.setHandleDate(cmccOrderInfo.getStatusDate());
-        orderHandleResponse.setCreateDate(cmccOrderInfo.getCreateDate());
-
-        return ResponseDataUtil.buildSuccess(orderHandleResponse);
-    }
-
-    /**
-     * 物联网卡批量办理结果查询
-     *
-     * @param batchId 批次id
-     * @return
-     */
-    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(String batchId) {
-
-        /**
-         * 获取token
-         */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
-        if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
-            return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
-        }
-        String token = cmccTokenResponseData.getData().getToken();
-
-        /**
-         * 组织请求参数
-         */
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-batch-result?transid=" + this.getTransId() + "&token=" + token + "&jobId=" + batchId;
-
-        /**
-         * 向移动发送请求
-         */
-        CmccResponseData<List<CmccBatchSimResponse>> cmccResponseData = new CmccResponseData<>();
-        try {
-            String response = Okhttp3Utils.get(requestUrl);
-            Type type = new TypeToken<CmccResponseData<List<CmccBatchSimResponse>>>() {
-            }.getType();
-            cmccResponseData = new Gson().fromJson(response, type);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
-        }
-
-        /**
-         * 请求获取非正常数据
-         */
-        if (!"0".equals(cmccResponseData.getStatus())) {
-            return ResponseDataUtil.buildError(cmccResponseData.getStatus(), cmccResponseData.getMessage());
-        }
-
-        /**
-         * 返回执行结果，各个运营商，映射成统一响应格式
-         */
-        CmccBatchSimResponse cmccBatchSimResponse = cmccResponseData.getResult().get(0);
-        //对外api统一数据结构
-        BatchSimHandleResponse batchSimHandleResponse = new BatchSimHandleResponse();
-        batchSimHandleResponse.setBatchStatus(cmccBatchSimResponse.getJobStatus());
-        batchSimHandleResponse.setBatchType(cmccBatchSimResponse.getResultType());
-        batchSimHandleResponse.setBatchId(cmccBatchSimResponse.getResultId());
-        batchSimHandleResponse.setQueryStatus(cmccBatchSimResponse.getStatus());
-        batchSimHandleResponse.setMessage(cmccBatchSimResponse.getMessage());
-        Type type = new TypeToken<List<BatchSimHandleItemResponse>>() {
-        }.getType();
-        List<BatchSimHandleItemResponse> batchList = new Gson().fromJson(new Gson().toJson(cmccBatchSimResponse.getResultList()), type);
-        batchSimHandleResponse.setBatchList(batchList);
-
-        return ResponseDataUtil.buildSuccess(batchSimHandleResponse);
-    }
+//    /**
+//     * 物联网卡批量办理结果查询
+//     *
+//     * @param batchId 批次id
+//     * @return
+//     */
+//    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(String batchId) {
+//
+//        /**
+//         * 获取token
+//         */
+//        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+//        if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
+//            return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
+//        }
+//        String token = cmccTokenResponseData.getData().getToken();
+//
+//        /**
+//         * 组织请求参数
+//         */
+//        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-batch-result?transid=" + this.getTransId() + "&token=" + token + "&jobId=" + batchId;
+//
+//        /**
+//         * 向移动发送请求
+//         */
+//        CmccResponseData<List<CmccBatchSimResponse>> cmccResponseData = new CmccResponseData<>();
+//        try {
+//            String response = Okhttp3Utils.get(requestUrl);
+//            Type type = new TypeToken<CmccResponseData<List<CmccBatchSimResponse>>>() {
+//            }.getType();
+//            cmccResponseData = new Gson().fromJson(response, type);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
+//        }
+//
+//        /**
+//         * 请求获取非正常数据
+//         */
+//        if (!"0".equals(cmccResponseData.getStatus())) {
+//            return ResponseDataUtil.buildError(cmccResponseData.getStatus(), cmccResponseData.getMessage());
+//        }
+//
+//        /**
+//         * 返回执行结果，各个运营商，映射成统一响应格式
+//         */
+//        CmccBatchSimResponse cmccBatchSimResponse = cmccResponseData.getResult().get(0);
+//        //对外api统一数据结构
+//        BatchSimHandleResponse batchSimHandleResponse = new BatchSimHandleResponse();
+//        batchSimHandleResponse.setBatchStatus(cmccBatchSimResponse.getJobStatus());
+//        batchSimHandleResponse.setBatchType(cmccBatchSimResponse.getResultType());
+//        batchSimHandleResponse.setBatchId(cmccBatchSimResponse.getResultId());
+//        batchSimHandleResponse.setQueryStatus(cmccBatchSimResponse.getStatus());
+//        batchSimHandleResponse.setMessage(cmccBatchSimResponse.getMessage());
+//        Type type = new TypeToken<List<BatchSimHandleItemResponse>>() {
+//        }.getType();
+//        List<BatchSimHandleItemResponse> batchList = new Gson().fromJson(new Gson().toJson(cmccBatchSimResponse.getResultList()), type);
+//        batchSimHandleResponse.setBatchList(batchList);
+//
+//        return ResponseDataUtil.buildSuccess(batchSimHandleResponse);
+//    }
 
     /**
      * 单卡基本信息查询
@@ -150,12 +150,12 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
      * @param msisdn
      * @return
      */
-    public ResponseData<SimBaseInfoResponse> querySimBaseInfo(String msisdn, String iccid, String imsi) {
+    public ResponseData<SimBaseInfoResponse> querySimBaseInfo(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -164,8 +164,8 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-basic-info?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
-
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-basic-info?transid=" + this.getTransId() + "&token=" + token + "&iccid=" + iccid;
+         log.info("[requestUrl]:{}",requestUrl);
         /**
          * 向移动发送请求
          */
@@ -175,6 +175,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
             Type type = new TypeToken<CmccResponseData<List<CmccSimBaseInfoResponse>>>() {
             }.getType();
             cmccResponseData = new Gson().fromJson(response, type);
+            log.info("[cmccResponseData]:{}",new Gson().toJson(cmccResponseData));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
@@ -196,9 +197,8 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         simBaseInfoResponse.setMsisdn(cmccSimBaseInfoResponse.getMsisdn());
         simBaseInfoResponse.setIccid(cmccSimBaseInfoResponse.getIccid());
         simBaseInfoResponse.setImsi(cmccSimBaseInfoResponse.getImsi());
-//        simBaseInfoResponse.setActiveDate(cmccSimBaseInfoResponse.getActiveDate());
-//        simBaseInfoResponse.setOpenDate(cmccSimBaseInfoResponse.getOpenDate());
-        //simBaseInfoResponse.setRemark(cmccSimBaseInfoResponse.getRemark());
+        simBaseInfoResponse.setDateActivated(cmccSimBaseInfoResponse.getActiveDate());
+        simBaseInfoResponse.setDateOpen(cmccSimBaseInfoResponse.getOpenDate());
 
         return ResponseDataUtil.buildSuccess(simBaseInfoResponse);
     }
@@ -210,12 +210,12 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
      * @param imsis
      * @return
      */
-    public ResponseData<List<BatchSimBaseInfoResponse>> queryBatchSimBaseInfo(List<String> msisdns, List<String> iccids, List<String> imsis) {
+    public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(List<String> msisdns, List<String> iccids, List<String> imsis,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -224,19 +224,19 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        if (msisdns.size() > 100) {
+        if (iccids.size() > 100) {
             return ResponseDataUtil.buildError(ResponseCode.SIM_TOO_MUCH_QUERY_ERROR);
         }
-        String msisdnsParams = "";
-        for (String mds : msisdns) {
-            if (StringUtils.isEmpty(msisdnsParams)) {
-                msisdnsParams = mds;
+        String iccidsParams = "";
+        for (String mds : iccids) {
+            if (StringUtils.isEmpty(iccidsParams)) {
+                iccidsParams = mds;
             } else {
-                msisdnsParams = "_" + mds;
+                iccidsParams =iccidsParams+ "_" + mds;
             }
         }
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-card-info/batch?transid=" + this.getTransId() + "&token=" + token + "&msisdns=" + msisdnsParams;
-
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-card-info/batch?transid=" + this.getTransId() + "&token=" + token + "&iccids=" + iccidsParams;
+        log.info("[requestUrl]:{}",requestUrl);
         /**
          * 向移动发送请求
          */
@@ -263,9 +263,9 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
          */
         List<CmccBatchSimBaseInfoResponse> cmccBatchSimBaseInfoList = cmccResponseData.getResult();
         //对外api统一数据结构
-        Type type = new TypeToken<List<BatchSimBaseInfoResponse>>() {
+        Type type = new TypeToken<List<SimBaseInfoResponse>>() {
         }.getType();
-        List<BatchSimBaseInfoResponse> list = new Gson().fromJson(new Gson().toJson(cmccBatchSimBaseInfoList), type);
+        List<SimBaseInfoResponse> list = new Gson().fromJson(new Gson().toJson(cmccBatchSimBaseInfoList), type);
 
         return ResponseDataUtil.buildSuccess(list);
     }
@@ -276,12 +276,12 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
      * @param msisdn
      * @return
      */
-    public ResponseData<List<SimChangeHistoryResponse>> querySimChangeHistory(String msisdn, String iccid, String imsi) {
+    public ResponseData<List<SimChangeHistoryResponse>> querySimChangeHistory(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -290,8 +290,8 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-change-history?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
-
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-change-history?transid=" + this.getTransId() + "&token=" + token + "&iccid=" + iccid;
+        log.info("[requestUrl]:{}",requestUrl);
         /**
          * 向移动发送请求
          */
@@ -331,12 +331,12 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
      * @param msisdn
      * @return
      */
-    public ResponseData<SimStartStatusResponse> querySimStartStatus(String msisdn, String iccid, String imsi) {
+    public ResponseData<SimStartStatusResponse> querySimStartStatus(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -387,12 +387,12 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
      * @param msisdn
      * @return
      */
-    public ResponseData<SimStatusResponse> querySimStatus(String msisdn, String iccid, String imsi) {
+    public ResponseData<SimStatusResponse> querySimStatus(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -401,7 +401,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-status?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-status?transid=" + this.getTransId() + "&token=" + token + "&iccid=" + iccid;
 
         /**
          * 向移动发送请求
@@ -437,17 +437,17 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
     }
 
     /**
-     * 单卡停机原因查询
+     * 实时经纬度查询
      *
-     * @param msisdn
+     * @param iccid
      * @return
      */
-    public ResponseData<SimStopReasonResponse> querySimStopReason(String msisdn, String iccid, String imsi) {
+    public ResponseData<SimLocationsResponse> querySimLocations(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -456,7 +456,65 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-stop-reason?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/position-location-message?transid=" + this.getTransId() + "&token=" + token + "&iccid=" + iccid;
+
+        /**
+         * 向移动发送请求
+         */
+        CmccResponseData<List<SimLocations>> cmccResponseData = new CmccResponseData<>();
+        try {
+            String response = Okhttp3Utils.get(requestUrl);
+            Type type = new TypeToken<CmccResponseData<List<SimLocations>>>() {
+            }.getType();
+            cmccResponseData = new Gson().fromJson(response, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
+        }
+
+        log.info("[token]:{}",new Gson().toJson(cmccResponseData));
+
+        /**
+         * 请求获取非正常数据
+         */
+        if (!"0".equals(cmccResponseData.getStatus())) {
+            return ResponseDataUtil.buildError(cmccResponseData.getStatus(), cmccResponseData.getMessage());
+        }
+
+        /**
+         * 返回执行结果，各个运营商，映射成统一响应格式
+         */
+        SimLocations simLocations = cmccResponseData.getResult().get(0);
+        //对外api统一数据结构
+        SimLocationsResponse simLocationsResponse = new SimLocationsResponse();
+        simLocationsResponse.setLatitude(simLocations.getLat());
+        simLocationsResponse.setLongitude(simLocations.getLon());
+        simLocationsResponse.setIccid(iccid);
+
+        return ResponseDataUtil.buildSuccess(simLocationsResponse);
+    }
+
+    /**
+     * 单卡停机原因查询
+     *
+     * @param msisdn
+     * @return
+     */
+    public ResponseData<SimStopReasonResponse> querySimStopReason(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
+
+        /**
+         * 获取token
+         */
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
+        if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
+            return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
+        }
+        String token = cmccTokenResponseData.getData().getToken();
+
+        /**
+         * 组织请求参数
+         */
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-stop-reason?transid=" + this.getTransId() + "&token=" + token + "&iccid=" + iccid;
 
         /**
          * 向移动发送请求
@@ -471,6 +529,8 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
             e.printStackTrace();
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_DATA_GET_ERROR);
         }
+
+        log.info("[token]:{}",new Gson().toJson(cmccResponseData));
 
         /**
          * 请求获取非正常数据

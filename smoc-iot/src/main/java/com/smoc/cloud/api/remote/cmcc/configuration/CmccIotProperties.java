@@ -17,9 +17,9 @@ public class CmccIotProperties {
 
     private String url = "https://api.iot.10086.cn";
 
-    private String appId = "100059999270000006";
+    private String appId = "C5010551AIOT2022081911060939437";
 
-    private String password = "Ak29eGaddQ$";
+    private String password = "Zr0*XCTFoDoq";
 
 
 }

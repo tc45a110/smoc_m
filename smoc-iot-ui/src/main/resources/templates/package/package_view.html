@@ -168,9 +168,9 @@
                                         <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span><br>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.changingType == '01'}"
+                                        <a th:if="${package.chargingCycle == '01'}"
                                            class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
-                                        <a th:if="${info.changingType == '02'}"
+                                        <a th:if="${package.chargingCycle == '02'}"
                                            class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">年</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">

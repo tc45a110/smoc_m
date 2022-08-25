@@ -21,8 +21,8 @@ public class CmccRedisCacheUtils {
      *
      * @return
      */
-    public String getLocalToken() {
-        String token = (String) redisTemplate.opsForValue().get("iot:remote:api:cmcc:token");
+    public String getLocalToken(String carrierIdentifying) {
+        String token = (String) redisTemplate.opsForValue().get("iot:remote:api:cmcc:token:"+carrierIdentifying);
         return token;
     }
 
@@ -31,8 +31,8 @@ public class CmccRedisCacheUtils {
      *
      * @param token
      */
-    public void saveLocalToken(String token, Long seconds, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set("iot:remote:api:cmcc:token", token, seconds, timeUnit);
+    public void saveLocalToken(String carrierIdentifying,String token, Long seconds, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set("iot:remote:api:cmcc:token:"+carrierIdentifying, token, seconds, timeUnit);
     }
 
 

@@ -34,7 +34,7 @@ public class QuerySimChangeHistory extends Base{
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp",timestamp);
 
-        requestDataMap.put("iccid","898600D6991330004149");
+        requestDataMap.put("iccid","89860453121981109974");
 
         //组织签名字符串
         StringBuffer signData = new StringBuffer();

@@ -229,7 +229,9 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
                 stmt.setString(13, card.getActiveDate().replace("\t", ""));
                 stmt.setString(14, card.getOpenDate().replace("\t", ""));
                 stmt.setString(15, "0");
-                stmt.setString(16, card.getCardStatus().replace("\t", ""));
+                String status = card.getCardStatus().replace("\t", "");
+                String cardStatus = status.equals("待激活")?"1":(status.equals("已激活")?"2":(status.equals("停机")?"4":(status.equals("可测试 ")?"6":(status.equals("库存 ")?"7":"8"))));
+                stmt.setString(16, cardStatus);
                 stmt.setString(17, iotFlowCardsPrimaryInfoValidator.getCreatedBy());
                 stmt.setString(18, card.getProvince().replace("\t", ""));
                 second.add(validator);

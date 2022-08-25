@@ -33,8 +33,8 @@ public class QueryBatchSimBaseInfo extends Base{
         requestDataMap.put("timestamp",timestamp);
 
         List<String> iccids = new ArrayList<>();
-        iccids.add("898600D6991330004149");
-        iccids.add("898600D6991330004146");
+        iccids.add("89860466122080402094");
+        iccids.add("89860466122080402099");
         requestDataMap.put("iccids",iccids);
 
         //组织签名字符串

@@ -31,9 +31,9 @@ public class QuerySimFlowUsedMonthly extends Base{
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp",timestamp);
 
-        requestDataMap.put("iccid","898600D6991330004149");
+        requestDataMap.put("iccid","89860453121981109974");
 
-        requestDataMap.put("queryMonth","202206");
+        requestDataMap.put("queryMonth","202208");
 
         requestDataMap.put("currentPage", "1");
 
