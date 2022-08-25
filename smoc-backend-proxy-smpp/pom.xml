@@ -13,11 +13,25 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
-        <project.packageName>proxy-smpp</project.packageName>
+        <project.packageName>protocol-proxy-smpp</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
+        <!--    星语    -->
+        <project.resources.fileName>xingyu</project.resources.fileName>
     </properties>
 
     <build>
+        <finalName>${project.packageName}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

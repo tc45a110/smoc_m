@@ -181,7 +181,7 @@ public class Client extends Thread{
 				ConnectionTask task = new ConnectionTask(key,connect);
 				taskMap.put(key,task);
 				logger.info("sequence={},task={}",key,task);
-				//建立客户端连接等待连接响应时�?
+				//建立客户端连接等待连接响应时间
 				long taskScheduleInterval = ResourceManager.getInstance().getIntValue("sgip.client.task.delay");
 				timer.schedule(task, taskScheduleInterval);
 				send(connect);

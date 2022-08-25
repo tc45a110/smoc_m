@@ -2,11 +2,9 @@ package com.protocol.access.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
-import com.base.common.manager.ResourceManager;
 import com.protocol.access.smgp.util.SequenceUtil;
 
 
@@ -17,14 +15,6 @@ public class Tools {
 	private static int msgi = 1000;
 	private static Object obj = new Object();
 	private static Object obj2 = new Object();
-	private static int gateway = 10 + (int)(Math.random()*90);
-	static{
-		//指定网关ID，避免多节点msgid重复
-		if(ResourceManager.getInstance().getIntValue("gateway.id") > 0){
-			gateway = ResourceManager.getInstance().getIntValue("gateway.id");
-		}
-	}
-	private static int sequence = 1;
 
 	public static byte[] GetMsgid() {
 		String s_msg = "";
@@ -106,7 +96,7 @@ public class Tools {
 		}
 		return sb.toString();
 	}
-	
+
 
 	public static byte[] int2byte(int res) {
 		byte[] targets = new byte[4];
@@ -125,9 +115,9 @@ public class Tools {
 				| ((res[2] << 24) >>> 8) | (res[3] << 24);
 		return targets;
 	}
-	
-	public static byte[] getMsgId(String client) {		
-		try {	
+
+	public static byte[] getMsgId(String client) {
+		try {
 			StringBuffer sb = new StringBuffer();
 			sb.append(client).append(parseDateToString(new Date(), "MMddHHmm")).append(SequenceUtil.getSequence());
 			return Hex.decodeHex(sb.toString().toCharArray());
@@ -137,10 +127,10 @@ public class Tools {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 日期转字符串
-	 * 
+	 *
 	 * @return String
 	 * @author kevin
 	 */
@@ -148,36 +138,4 @@ public class Tools {
 		DateFormat df = new SimpleDateFormat(format);
 		return df.format(thedate.getTime());
 	}
-
-	public static byte[] getStandardMsgID() {
-		Calendar current = Calendar.getInstance();
-		int month = current.get(Calendar.MONTH) + 1;
-		int day = current.get(Calendar.DATE);
-		int hour = current.get(Calendar.HOUR_OF_DAY);
-		int minute = current.get(Calendar.MINUTE);
-		int second = current.get(Calendar.SECOND);
-		byte[] bs = new byte[8];
-		bs[0] |= month << 4;
-		bs[0] |= day >> 1;
-		bs[1] |= day << 7;
-		bs[1] |= hour << 2;
-		bs[1] |= (minute << 2) >> 6;
-		bs[2] |= minute << 4;
-		bs[2] |= second >> 2;
-		//bs[3] |= second << 4;
-		bs[3] |= (gateway >> 16) & 0x3f;
-		bs[4] |= gateway >> 8;
-		bs[5] |= gateway;
-    	synchronized (obj) {
-			bs[6] |= sequence >> 8;
-			bs[7] |= sequence;
-			sequence++;
-		}
-		if (sequence == 65535)
-			sequence = 1;
-		return bs;
-	}
-
-
-
 }

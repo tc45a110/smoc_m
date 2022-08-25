@@ -6,18 +6,21 @@
 
     <groupId>com.smoc.backend</groupId>
     <artifactId>com.smoc.backend.smoc-backend-access-cmpp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>4.0.0</version>
 
     <properties>
         <!--编译编码-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
-        <project.packageName>access-cmpp</project.packageName>
+        <!--  包名和压缩包里面的文件名  -->
+        <project.packageName>protocol-access-cmpp</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
+        <project.resources.fileName>xingyu</project.resources.fileName>
     </properties>
 
     <build>
+        <finalName>${project.packageName}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
