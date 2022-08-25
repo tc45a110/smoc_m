@@ -1,35 +1,24 @@
 package com.business.statistics.message.proxy;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.Vector;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang3.StringUtils;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.LogPathConstant;
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.log.CategoryLog;
-import com.base.common.manager.AlarmManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.util.DateUtil;
 import com.base.common.vo.AlarmMessage;
 import com.base.common.vo.BusinessRouteValue;
+import com.business.statistics.util.AlarmUtil;
 import com.business.statistics.util.FileFilterUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * business/proxy/mt business/proxy/mr
@@ -43,9 +32,9 @@ public class ProxyBusinessMessageLogMerge {
 	private static final int BUSINESS_PROXY_MR_MESSAGE_LOG_LENGTH = ResourceManager.getInstance().getIntValue("business.proxy.mr.message.log.length");
 	
 	//告警信息
-	private static String ALARM_VALUE = "ProxyBusinessMessageLogMerge";
+	private static final String ALARM_VALUE = "ProxyBusinessMessageLogMerge";
 	//代理业务层按条记录表前缀
-	private static String TABLENAME_PREFIX = "proxy_message_info_";
+	private static final String TABLENAME_PREFIX = "proxy_message_info_";
 	
 	//线程池核心线程数占CPU核数的倍数
 	private static int WORKER_MULTIPLE = ResourceManager.getInstance().getIntValue("worker.multiple");
@@ -64,7 +53,7 @@ public class ProxyBusinessMessageLogMerge {
 	}
 
 	//线程池
-	private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER*WORKER_MULTIPLE,
+	private final  static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER*WORKER_MULTIPLE,
 			FixedConstant.CPU_NUMBER*WORKER_MULTIPLE*2, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	static{
 		threadPoolExecutor.prestartAllCoreThreads();
@@ -113,7 +102,7 @@ public class ProxyBusinessMessageLogMerge {
 			
 		} catch (Exception e) {
 			CategoryLog.proxyLogger.error(e.getMessage(),e);
-			AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.BusinessStatistics, 
+			AlarmUtil.process(new AlarmMessage(AlarmMessage.AlarmKey.BusinessStatistics,
 					new StringBuilder(ALARM_VALUE).append(":").append(e.getMessage()).toString()));
 		}
 
@@ -122,18 +111,20 @@ public class ProxyBusinessMessageLogMerge {
 		
 		//应该在指定时间内完成
 		if( elapsedTime > ELAPSED_TIME_THRESHOLD ){
-			AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.BusinessStatistics, 
+			AlarmUtil.process(new AlarmMessage(AlarmMessage.AlarmKey.BusinessStatistics,
 					new StringBuilder(ALARM_VALUE).append(":耗时").append(elapsedTime).append("毫秒").toString()));
 		}
 		
 		CategoryLog.proxyLogger.info("程序正常退出");
 		System.exit(0);
 	}
-	
+
 	/**
 	 * 加载下行日志
 	 * @param lineTime
-	 * @param afterMinute
+	 * @param date
+	 * @param mtFilePath
+	 * @throws Exception
 	 */
 	static private void mergeMessageMtLog(String lineTime,String date,String mtFilePath) throws Exception{
 		long start = System.currentTimeMillis();
@@ -180,11 +171,13 @@ public class ProxyBusinessMessageLogMerge {
 		
 		CategoryLog.proxyLogger.info("下行时间段={},文件数={},总条数={},总耗时={}",lineTime,fileNumber,rowNumber,(System.currentTimeMillis() - start));
 	}
-	
+
 	/**
 	 * 加载状态报告文件
 	 * @param lineTime
-	 * @param afterMinute
+	 * @param date
+	 * @param mrFilePath
+	 * @throws Exception
 	 */
 	static private void mergeMessageMrLog(String lineTime,String date,String mrFilePath) throws Exception{
 		long start = System.currentTimeMillis();
