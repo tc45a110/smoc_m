@@ -4,15 +4,15 @@
  */
 package com.business.proxy.manager;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ResourceManager;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperMapWorker;
 import com.business.proxy.worker.ReportProcessWorker;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ReportProcessWorkerManager extends SuperMapWorker<Integer, ReportProcessWorker>{
 	
@@ -28,7 +28,7 @@ public class ReportProcessWorkerManager extends SuperMapWorker<Integer, ReportPr
 		}
 		threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER,FixedConstant.CPU_NUMBER*2, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 		//启动cpu的数量*8的系数 按手机号尾号后3位平均分配
-		for(int i=0;i<100;i++){
+		for(int i=0;i<reportProcessWorkerNumber;i++){
 			ReportProcessWorker reportProcessWorker = new ReportProcessWorker(threadPoolExecutor);
 			reportProcessWorker.setName(new StringBuilder("ReportProcessWorker-").append(i+1).toString());
 			reportProcessWorker.start();

@@ -6,6 +6,7 @@ package com.base.common.manager;
 
 import java.util.regex.Pattern;
 
+import com.base.common.constant.InsideStatusCodeConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class BusinessDictionaryManager {
 	
 	/**
 	 * 根据国家名称获取国家编码
-	 * @param provinceName
+	 * @param internationalAreaName
 	 * @return
 	 */
 	public String getInternationalAreaCode(String internationalAreaName){
@@ -49,7 +50,7 @@ public class BusinessDictionaryManager {
 	
 	/**
 	 * 根据手机号获取国家编码
-	 * @param internationalAreaName
+	 * @param phoneNumber
 	 * @return
 	 */
 	public String getInternationalAreaCodeByPhoneNumber(String phoneNumber){
@@ -76,7 +77,11 @@ public class BusinessDictionaryManager {
 	 * @return
 	 */
 	public String getFilterStatusCode(String filterResponseCode){
-		return DictionaryDataManager.getInstance().getDictionariesCode(DictionariesTypeConstant.HTTP_FILTER_STATUS_CODE, filterResponseCode);
+		String responseCode = DictionaryDataManager.getInstance().getDictionariesCode(DictionariesTypeConstant.HTTP_FILTER_STATUS_CODE, filterResponseCode);
+		if(StringUtils.isEmpty(responseCode)){
+			responseCode = InsideStatusCodeConstant.StatusCode.UNKNOWN.name();
+		}
+		return responseCode;
 	}
 	
 	/**
@@ -103,7 +108,7 @@ public class BusinessDictionaryManager {
 	/**
      * 匹配函数
      * @param regex
-     * @param tel
+     * @param phoneNumber
      * @return
      */
     private boolean match(String regex, String phoneNumber) {

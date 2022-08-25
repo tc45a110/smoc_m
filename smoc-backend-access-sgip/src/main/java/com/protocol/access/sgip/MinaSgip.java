@@ -44,7 +44,7 @@ public class MinaSgip extends IoHandlerAdapter {
 			.getLogger(MinaSgip.class);
 	
 	//服务监听端口
-	private static int PORT = 7892;
+	private static int PORT = 8801;
 	private static final int BUFFER_SIZE = 8192;
 
 	public static final String OPEN = "open";

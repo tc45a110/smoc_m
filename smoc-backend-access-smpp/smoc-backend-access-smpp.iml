@@ -48,11 +48,11 @@
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2-extension:2.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:carrier:1.175" level="project" />
-    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:libphonenumber:8.12.49" level="project" />
-    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:prefixmapper:2.185" level="project" />
-    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:geocoder:2.185" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:carrier:1.164" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:libphonenumber:8.12.38" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:prefixmapper:2.174" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.libphonenumber:geocoder:2.174" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.2" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.29" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.19.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.mina:mina-core:2.1.6" level="project" />

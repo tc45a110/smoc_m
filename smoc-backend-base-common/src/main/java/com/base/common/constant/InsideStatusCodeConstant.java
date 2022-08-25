@@ -48,7 +48,7 @@ public class InsideStatusCodeConstant {
 		TBLACK,//第三方黑名单
 		UNMATCH,//模板不匹配
 		UNSIGNA,//没有签名
-
+		UNKNOWN,//未知
 	}
 	
 }

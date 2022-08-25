@@ -149,7 +149,7 @@ public class ReportPullWorker extends SuperCacheWorker{
 				.append(FixedConstant.LOG_SEPARATOR)
 				.append(businessRouteValue.getStatusCodeSource())
 				.append(FixedConstant.LOG_SEPARATOR)
-				.append(DateUtil.getIntervalTime(businessRouteValue.getChannelReportTime(), nowTime))//29-间隔时间
+				.append(DateUtil.getIntervalTime(businessRouteValue.getAccountSubmitTime(), nowTime))//29-间隔时间
 				.append(FixedConstant.LOG_SEPARATOR)
 				.append(businessRouteValue.getChannelID())
 				.append(FixedConstant.LOG_SEPARATOR)

@@ -1,32 +1,24 @@
 package com.business.statistics.message.alarm;
 
+import com.base.common.constant.FixedConstant;
+import com.base.common.constant.LogPathConstant;
+import com.base.common.log.CategoryLog;
+import com.base.common.manager.AccountInfoManager;
+import com.base.common.manager.ResourceManager;
+import com.base.common.util.DateUtil;
+import com.base.common.vo.AlarmMessage;
+import com.business.statistics.util.AlarmUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang3.StringUtils;
-import com.base.common.constant.FixedConstant;
-import com.base.common.constant.LogPathConstant;
-import com.base.common.log.CategoryLog;
-import com.base.common.manager.AccountInfoManager;
-import com.base.common.manager.AlarmManager;
-import com.base.common.manager.ResourceManager;
-import com.base.common.util.DateUtil;
-import com.base.common.vo.AlarmMessage;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class AccountAlarm {
 	// 接入业务层一条mt日志字符串个数
@@ -165,7 +157,7 @@ public class AccountAlarm {
 
 						if (successRates < successRatesAlarm) {
 
-							AlarmManager.getInstance()
+							AlarmUtil
 									.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
 											new StringBuilder(accountID).append("的成功率为").append(successRates)
 													.append("%").toString()));
@@ -174,7 +166,7 @@ public class AccountAlarm {
 						if (delayRates > delayRatesAlarm) {
 
 							timeElapsed = ResourceManager.getInstance().getIntValue(accountID + ".timeElapsed");
-							AlarmManager.getInstance()
+							AlarmUtil
 									.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountDelayRate,
 											new StringBuilder(accountID).append("延迟超过").append(timeElapsed)
 													.append("秒的比列为").append(delayRates).append("%").toString()));
@@ -184,7 +176,7 @@ public class AccountAlarm {
 					} else if (mtAccountMessageMap.get(accountID) != null
 							&& mrAccountMessageMap.get(accountID) == null) {
 						mtNumber = mtAccountMessageMap.get(accountID).getMtNumber();
-						AlarmManager.getInstance()
+						AlarmUtil
 								.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
 										new StringBuilder(accountID).append(lineTime).append("提交条数为：").append(mtNumber)
 												.append("该时间段无状态报告返回").toString()));
@@ -194,12 +186,10 @@ public class AccountAlarm {
 			} 
 			}
 
-			Thread.sleep(FixedConstant.COMMON_MONITOR_INTERVAL_TIME);
-			CategoryLog.accessLogger.info("程序正常退出");
-
 		} catch (Exception e) {
 			CategoryLog.accessLogger.error(e.getMessage(), e);
 		}
+		CategoryLog.accessLogger.info("程序正常退出");
 		System.exit(0);
 
 	}
