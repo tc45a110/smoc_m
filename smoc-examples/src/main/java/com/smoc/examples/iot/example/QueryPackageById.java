@@ -31,7 +31,7 @@ public class QueryPackageById extends Base {
         requestDataMap.put("account", "IOT100001618");
 
         //套餐id
-        requestDataMap.put("packageId", "68431b97d812475ea2f7ae1d17b2e82b");
+        requestDataMap.put("packageId", "0b87bf9dcd7746009bc60223ceb7c6dc");
         //时间戳
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp", timestamp);

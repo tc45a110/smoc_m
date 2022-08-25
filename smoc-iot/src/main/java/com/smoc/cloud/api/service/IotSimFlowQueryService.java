@@ -1,6 +1,8 @@
 package com.smoc.cloud.api.service;
 
 
+import com.google.gson.Gson;
+import com.smoc.cloud.api.remote.cmcc.response.info.CarrierInfo;
 import com.smoc.cloud.api.remote.cmcc.service.CmccIotSimFlowService;
 import com.smoc.cloud.api.request.SimBaseRequest;
 import com.smoc.cloud.api.request.SimsFlowMonthlyRequest;
@@ -48,26 +50,20 @@ public class IotSimFlowQueryService {
         /**
          * 验证物联网卡是否存在
          */
-//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-//        if (!isExist) {
-//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-//        }
-
         /**
-         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
+         * 验证物联网卡是否存在
          */
-
+        CarrierInfo carrierInfo = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getIccid());
+        if (null == carrierInfo) {
+            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+        }
 
         /**
          * 查询，暂时只支持移动API
          */
-        //ResponseData<SimFlowUsedThisMonthResponse> responseData = cmccIotSimFlowService.querySimFlowUsedThisMonth(simBaseRequest.getMsisdn(), "", "");
-        SimFlowUsedThisMonthResponse simFlowUsedThisMonthResponse = new SimFlowUsedThisMonthResponse();
-        simFlowUsedThisMonthResponse.setIccid("898600D6991330004149");
-        simFlowUsedThisMonthResponse.setUseAmount("15186.00");
-        simFlowUsedThisMonthResponse.setTotalAmount("102400.00");
-        simFlowUsedThisMonthResponse.setRemainAmount("87214.00");
-        return ResponseDataUtil.buildSuccess(simFlowUsedThisMonthResponse);
+        ResponseData<SimFlowUsedThisMonthResponse> responseData = cmccIotSimFlowService.querySimFlowUsedThisMonth("", simBaseRequest.getIccid(), "",carrierInfo);
+        log.info("[responseData]:{}",new Gson().toJson(responseData));
+        return  responseData;
     }
 
     /**
@@ -163,33 +159,25 @@ public class IotSimFlowQueryService {
 
     /**
      * 物联卡单月 GPRS 流量使用量批量查询
-     * 验证物联网卡是否存在
-     * 如果存在根据订单号，分辨出那个运营商
-     * 判断运营商是否支持订单接口查询
-     * 根据运营商，路由到对应运营商接口
-     * 运营商订单查询
-     * 是否查询结果本地持久化?
-     * 把运营商查询结果映射为最终结果
      */
     public  ResponseData<PageList<SimFlowUsedMonthlyResponse>> querySimFlowUsedMonthly(SimsFlowMonthlyRequest simsFlowMonthlyRequest, PageParams pageParams) {
 
         /**
          * 验证物联网卡是否存在
          */
-//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-//        if (!isExist) {
-//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-//        }
-
-        /**
-         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
-         */
+        CarrierInfo carrierInfo = apiRepository.isExistAccountSim(simsFlowMonthlyRequest.getAccount(), simsFlowMonthlyRequest.getIccid());
+        if (null == carrierInfo) {
+            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+        }
 
 
         /**
          * 查询，暂时只支持移动API
          */
-        //ResponseData<List<SimGprsFlowUsedMonthlyBatch>> responseData = cmccIotSimFlowService.querySimGprsFlowUsedMonthlyBatch(simsGprsFlowMonthlyRequest.getMsisdns(), simsGprsFlowMonthlyRequest.getIccids(), simsGprsFlowMonthlyRequest.getImsis(),simsGprsFlowMonthlyRequest.getQueryDate());
+//        List<String> iccids = new ArrayList<>();
+//        iccids.add(simsFlowMonthlyRequest.getIccid());
+        //ResponseData<List<SimGprsFlowUsedMonthlyBatch>> responseData = cmccIotSimFlowService.querySimGprsFlowUsedMonthlyBatch(null, iccids, null,simsFlowMonthlyRequest.getQueryMonth());
+        //log.info("[responseData]:{}",new Gson().toJson(responseData));
         PageList<SimFlowUsedMonthlyResponse> page = this.iotFlowCardsFlowMonthlyRepository.page(simsFlowMonthlyRequest.getAccount(),simsFlowMonthlyRequest.getIccid(),simsFlowMonthlyRequest.getQueryMonth(),pageParams);
         return ResponseDataUtil.buildSuccess(page);
     }

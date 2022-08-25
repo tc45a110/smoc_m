@@ -159,7 +159,7 @@
                                     <th>ICCID</th>
                                     <th>MSISDN/IMSI</th>
                                     <th>运营商流量池</th>
-                                    <th>标准限额（G）</th>
+                                    <th>标准限额（K）</th>
                                     <th>计费周期</th>
                                     <th>激活日期(首次)/开卡时间</th>
                                     <th>卡使用状态/卡状态</th>
@@ -193,7 +193,8 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span style="color:#188ae2" th:if="${info.cycleQuota == 0}">不限</span>
-                                        <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span>
+                                        <span th:if="${info.cycleQuota != 0}">
+                                              [[${#numbers.formatDecimal(info.cycleQuota,1,'COMMA',2,'POINT')}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a th:if="${info.chargeCycle == '01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>

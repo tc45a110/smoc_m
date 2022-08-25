@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 public class SimGprsFlowUsedMonthlyBatch{
 
-    private String  msisdn;
-
-    private String imsi;
+//    private String  msisdn;
+//
+//    private String imsi;
 
     private String iccid;
 
@@ -22,9 +22,9 @@ public class SimGprsFlowUsedMonthlyBatch{
      */
     private String dataAmount;
 
-    /**
-     * 分 APN 的数据使用情况
-     * 列表；dataAmount 为 0 则 不返回
-     */
-    private List<SimGprsFlowUsedMonthlyBatchItem> apnDataAmountList;
+//    /**
+//     * 分 APN 的数据使用情况
+//     * 列表；dataAmount 为 0 则 不返回
+//     */
+//    private List<SimGprsFlowUsedMonthlyBatchItem> apnDataAmountList;
 }

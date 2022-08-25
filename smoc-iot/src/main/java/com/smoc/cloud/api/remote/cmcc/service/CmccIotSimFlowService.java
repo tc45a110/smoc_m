@@ -9,6 +9,7 @@ import com.smoc.cloud.api.remote.cmcc.response.flow.CmccSimFlowUsedPoolResponse;
 import com.smoc.cloud.api.remote.cmcc.response.flow.CmccSimFlowUsedThisMonthResponse;
 import com.smoc.cloud.api.remote.cmcc.response.flow.CmccSimFlowUsedThisMonthTotalResponse;
 import com.smoc.cloud.api.remote.cmcc.response.flow.CmccSimGprsFlowUsedMonthlyBatch;
+import com.smoc.cloud.api.remote.cmcc.response.info.CarrierInfo;
 import com.smoc.cloud.api.response.flow.*;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
@@ -35,12 +36,12 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
      * @param msisdn
      * @return
      */
-    public ResponseData<SimFlowUsedThisMonthResponse> querySimFlowUsedThisMonth(String msisdn, String iccid, String imsi) {
+    public ResponseData<SimFlowUsedThisMonthResponse> querySimFlowUsedThisMonth(String msisdn, String iccid, String imsi, CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -49,7 +50,7 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-margin?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-margin?transid=" + this.getTransId() + "&token=" + token + "&iccid=" + iccid;
 
         /**
          * 向移动发送请求
@@ -76,6 +77,7 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
          * 返回执行结果，各个运营商，映射成统一响应格式
          */
         CmccSimFlowUsedThisMonthResponse cmccSimFlowUsedThisMonthResponse = cmccResponseData.getResult().get(0);
+        log.info("[cmccSimFlowUsedThisMonthResponse]:{}",new Gson().toJson(cmccSimFlowUsedThisMonthResponse));
         //对外api统一数据结构
         Type type = new TypeToken<SimFlowUsedThisMonthResponse>() {
         }.getType();
@@ -92,12 +94,12 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
      * @param imsi
      * @return
      */
-    public ResponseData<SimFlowUsedThisMonthTotalResponse> querySimFlowUsedThisMonthTotal(String msisdn, String iccid, String imsi) {
+    public ResponseData<SimFlowUsedThisMonthTotalResponse> querySimFlowUsedThisMonthTotal(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -152,12 +154,12 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
      * @param imsi
      * @return
      */
-    public ResponseData<List<SimFlowUsedPoolResponse>> querySimFlowUsedPool(String msisdn, String iccid, String imsi) {
+    public ResponseData<List<SimFlowUsedPoolResponse>> querySimFlowUsedPool(String msisdn, String iccid, String imsi,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -210,12 +212,12 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
      * @param queryDate
      * @return
      */
-    public ResponseData<List<SimGprsFlowUsedMonthlyBatch>> querySimGprsFlowUsedMonthlyBatch(List<String> msisdns, List<String> iccids, List<String> imsis, String queryDate) {
+    public ResponseData<List<SimGprsFlowUsedMonthlyBatch>> querySimGprsFlowUsedMonthlyBatch(List<String> msisdns, List<String> iccids, List<String> imsis, String queryDate,CarrierInfo carrierInfo) {
 
         /**
          * 获取token
          */
-        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken();
+        ResponseData<CmccTokenResponse> cmccTokenResponseData = this.getToken(carrierInfo);
         if (!ResponseCode.SUCCESS.getCode().equals(cmccTokenResponseData.getCode())) {
             return ResponseDataUtil.buildError(ResponseCode.CARRIER_TOKEN_GET_ERROR);
         }
@@ -224,18 +226,18 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        if (msisdns.size() > 100) {
+        if (iccids.size() > 100) {
             return ResponseDataUtil.buildError(ResponseCode.SIM_TOO_MUCH_QUERY_ERROR);
         }
-        String msisdnsParams = "";
-        for (String mds : msisdns) {
-            if (StringUtils.isEmpty(msisdnsParams)) {
-                msisdnsParams = mds;
+        String iccidsParams = "";
+        for (String mds : iccids) {
+            if (StringUtils.isEmpty(iccidsParams)) {
+                iccidsParams = mds;
             } else {
-                msisdnsParams = "_" + mds;
+                iccidsParams = iccidsParams+"_" + mds;
             }
         }
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-usage-monthly/batch?transid=" + this.getTransId() + "&token=" + token + "&msisdns=" + msisdnsParams + "&queryDate=" + queryDate;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-usage-monthly/batch?transid=" + this.getTransId() + "&token=" + token + "&iccids=" + iccidsParams + "&queryDate=" + queryDate;
 
         /**
          * 向移动发送请求

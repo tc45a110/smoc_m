@@ -55,32 +55,40 @@
                                     <label style="margin-right:10px">运营商流量池:</label>[[${poolMap[primary.flowPoolId]}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">标准限额（G）:</label>
+                                    <label style="margin-right:10px">标准限额（K）:</label>
                                     <span style="color:#188ae2" th:if="${primary.cycleQuota == 0}">不限</span>
-                                    <span th:if="${primary.cycleQuota != 0}">[[${primary.cycleQuota}]]G</span>
+                                    <span th:if="${primary.cycleQuota != 0}">[[${#numbers.formatDecimal(primary.cycleQuota,1,'COMMA',2,'POINT')}]]K</span>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label style="margin-right:10px">计费周期:</label> 月周期
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">激活日期(首次):</label> 2022-07-12 11:28:10 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
+                                    <label style="margin-right:10px">激活日期(首次):</label> [[${primary.activeDate}]] <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">开卡时间:</label> 2022-07-12 11:28:10 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
+                                    <label style="margin-right:10px">开卡时间:</label> [[${primary.openDate}]] <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">卡使用状态:</label> <label style="margin-right:10px">卡类型:</label>
-                                    <a
-                                            class="btn btn-warning btn-rounded  waves-effect waves-light btn-xs">未分配</a>
+                                    <label style="margin-right:10px">卡使用状态:</label>
+                                    <a th:if="${primary.useStatus == '0'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-xs">未使用</a>
+                                    <a th:if="${primary.useStatus == '1'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-xs">已使用</a>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">卡状态:</label> 已激活 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
+                                    <label style="margin-right:10px">卡状态:</label>
+
+                                    <a th:if="${primary.cardStatus == '0'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-xs">待同步</a>
+                                    <a th:if="${primary.cardStatus == '1'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-xs">待激活</a>
+                                    <a th:if="${primary.cardStatus == '2'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-xs">已激活</a>
+                                    <a th:if="${primary.cardStatus == '4'}" class="btn btn-danger btn-rounded  waves-effect waves-light btn-xs">停机</a>
+                                    <a th:if="${primary.cardStatus == '6'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-xs">可测试</a>
+                                    <a th:if="${primary.cardStatus == '7'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-xs">库存</a>
+                                    <a th:if="${primary.cardStatus == '8'}" class="btn btn-danger btn-rounded  waves-effect waves-light btn-xs">预销户</a> <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">创建人:</label> 贾明
+                                    <label style="margin-right:10px">创建人:</label> [[${primary.createdBy}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">创建时间:</label> 2022-07-12 11:28:10
+                                    <label style="margin-right:10px">创建时间:</label>  [[${primary.createdTime}]]
                                 </div>
                             </div>
                         </div>
@@ -93,43 +101,43 @@
                         <h3 class="panel-title">其他信息</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">IMEI:</label>202205171348528 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">是否迁移的卡:</label> 否
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">停机原因:</label> <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">物联网卡使用城市:</label>北京 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">使用经度:</label>106.49910
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">使用纬度:</label> 29.61648
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">经纬度最后更新时间:</label>  2022-07-12 11:28:10
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">流量数据月同步时间:</label>  2022-07-12 11:28:10
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">流量数据日同步时间:</label>  2022-07-12 11:28:10
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">当前周期结算时间:</label>  2022-07-12 11:28:10
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">开卡备注:</label> <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-12">-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">IMEI:</label>202205171348528 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">是否迁移的卡:</label> 否-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">停机原因:</label> <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">物联网卡使用城市:</label>北京 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">使用经度:</label>106.49910-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">使用纬度:</label> 29.61648-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">经纬度最后更新时间:</label>  2022-07-12 11:28:10-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">流量数据月同步时间:</label>  2022-07-12 11:28:10-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">流量数据日同步时间:</label>  2022-07-12 11:28:10-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">当前周期结算时间:</label>  2022-07-12 11:28:10-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 form-group">-->
+<!--                                    <label style="margin-right:10px">开卡备注:</label> <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>

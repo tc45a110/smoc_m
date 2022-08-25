@@ -115,12 +115,12 @@ public class IotGatewayFilter {
 
                 //组织签名数据
                 String md5HmacKey = redisModel.getMd5HmacKey();
-                log.info("md5HmacKey：{}",md5HmacKey);
+                //log.info("md5HmacKey：{}",md5HmacKey);
                 StringBuffer signData = new StringBuffer();
                 signData.append(requestHeaderData.getSignatureNonce().trim());
                 signData.append(model.getAccount());
                 signData.append(model.getTimestamp().trim());
-                log.info("签名数据：{}",signData);
+                //log.info("签名数据：{}",signData);
 
                 //校验签名
                 boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());

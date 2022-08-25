@@ -31,7 +31,7 @@ public class QueryCardsByPackageId extends Base {
         requestDataMap.put("account", "IOT100001618");
 
         //套餐id
-        requestDataMap.put("packageId", "5a5a4914fa95426894ada84288cba287");
+        requestDataMap.put("packageId", "0b87bf9dcd7746009bc60223ceb7c6dc");
 
         //套餐id
         requestDataMap.put("currentPage", "1");

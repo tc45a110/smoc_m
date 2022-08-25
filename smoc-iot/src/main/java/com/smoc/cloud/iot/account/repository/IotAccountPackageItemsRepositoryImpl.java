@@ -163,8 +163,12 @@ public class IotAccountPackageItemsRepositoryImpl extends BasePageRepository {
         Object[] params = new Object[2];
         params[0] = account;
         params[1] = iccid;
-        SimBaseInfoResponse simBaseInfoResponse = this.jdbcTemplate.queryForObject(sqlBuffer.toString(), new SimBaseInfoResponseRowMapper(), params);
-        return simBaseInfoResponse;
+        log.info("[sql]:{}",sqlBuffer);
+        List<SimBaseInfoResponse> list = this.queryForObjectList(sqlBuffer.toString(), params, new SimBaseInfoResponseRowMapper());
+        if(null!= list && list.size()>0 ){
+            return  list.get(0);
+        }
+        return null;
     }
 
     /**
@@ -182,7 +186,6 @@ public class IotAccountPackageItemsRepositoryImpl extends BasePageRepository {
                 iccidBuffer.append(",'" + iccid + "'");
             }
         }
-
 
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append(" t.CARD_TYPE");

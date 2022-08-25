@@ -33,7 +33,7 @@ public class QueryPackagesByMonth extends Base{
         //月份
         requestDataMap.put("queryMonth", "202207");
 
-        requestDataMap.put("packageId", "5a5a4914fa95426894ada84288cba287");
+        requestDataMap.put("packageId", "0b87bf9dcd7746009bc60223ceb7c6dc");
 
         requestDataMap.put("currentPage", "1");
 
