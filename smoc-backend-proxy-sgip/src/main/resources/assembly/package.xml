@@ -24,6 +24,8 @@
                 <!--  okhttp请求  -->
                 <exclude>org.jetbrains*:*</exclude>
                 <exclude>com.squareup.*:*</exclude>
+                <exclude>*:protobuf*</exclude>
+                <exclude>*:json*</exclude>
                 <!--  spring  -->
                 <exclude>org.springframework:spring-aop</exclude>
                 <exclude>org.springframework:spring-jcl</exclude>

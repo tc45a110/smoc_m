@@ -24,6 +24,8 @@
                 <!--  okhttp请求  -->
                 <exclude>org.jetbrains*:*</exclude>
                 <exclude>com.squareup.*:*</exclude>
+                <exclude>*:protobuf*</exclude>
+                <exclude>*:json*</exclude>
                 <!--  spring  -->
                 <exclude>org.springframework:*</exclude>
                 <!-- 排除项目本身生成的jar包 使用自定义名称的jar包  -->
