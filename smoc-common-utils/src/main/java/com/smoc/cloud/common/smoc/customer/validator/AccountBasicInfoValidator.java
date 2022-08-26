@@ -26,8 +26,6 @@ public class AccountBasicInfoValidator {
     @Length(min = 2, max = 64, message = "业务账号名称长度不符合规则！")
     private String accountName;
 
-    @NotNull(message = "账号扩展吗不能为空！")
-    @Pattern(regexp = "^[0-9]{6}", message = "账号扩展吗不符合规则！")
     private String extendNumber;
 
     private String accountPassword;
