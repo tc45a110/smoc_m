@@ -122,9 +122,7 @@ public class SubmitPullWorker extends SuperQueueWorker<CMPPMessage>{
 		//维护通道运行状态
 		ChannelRunStatusManager.getInstance().process(channelID, String.valueOf(FixedConstant.ChannelRunStatus.ABNORMAL.ordinal()));
 		responseWorker.exit();
-		responseWorker.interrupt();
 		reportWorker.exit();
-		reportWorker.interrupt();
 	}
 	
 }
