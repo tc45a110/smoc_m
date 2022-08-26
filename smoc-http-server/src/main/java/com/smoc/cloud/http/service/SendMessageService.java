@@ -5,6 +5,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
+import com.smoc.cloud.http.redis.IdGeneratorFactory;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.repository.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class SendMessageService {
+
+    @Autowired
+    private IdGeneratorFactory idGeneratorFactory;
 
     @Autowired
     private AccountRateLimiter accountRateLimiter;
@@ -118,10 +124,13 @@ public class SendMessageService {
         }
 
         AccountTemplateInfo accountTemplateInfo = optional.get();
-        sendMessageAsyncService.sendMultimediaMessageByTemplate(length, params, accountTemplateInfo);
+        //msgId
+        String messageId = idGeneratorFactory.getTaskId();
+        sendMessageAsyncService.sendMultimediaMessageByTemplate(length, params, accountTemplateInfo,messageId);
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
-        result.put("template", params.getTemplateId());
+        result.put("templateId", params.getTemplateId());
+        result.put("msgId", messageId);
         result.put("mobiles", length + "");
         return ResponseDataUtil.buildSuccess(result);
     }
