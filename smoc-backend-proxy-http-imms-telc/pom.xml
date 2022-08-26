@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.smoc.backend</groupId>
-    <artifactId>com.smoc.backend.smoc-backend-proxy-imms-telc</artifactId>
+    <artifactId>com.smoc.backend.smoc-backend-proxy-http-imms-telc</artifactId>
     <version>4.0.0</version>
 
     <properties>
@@ -13,10 +13,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
-        <project.packageName>protocol-proxy-cmpp</project.packageName>
+        <project.packageName>protocol-proxy-http-imms-telc</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
-        <!--<project.resources.fileName>xingyu</project.resources.fileName>--><!--星语-->
-        <project.resources.fileName>example</project.resources.fileName><!--开发环境-->
+        <!--星语-->
+        <project.resources.fileName>xingyu</project.resources.fileName>
+        <!--        <project.resources.fileName>example</project.resources.fileName>&lt;!&ndash;开发环境&ndash;&gt;-->
     </properties>
 
     <build>
@@ -49,7 +50,8 @@
                 <configuration>
                     <finalName>${project.packageName}</finalName>   <!-- 配置打包后的文件前缀名 -->
                     <descriptors>
-                        <descriptor>${project.basedir}/src/main/resources/assembly/package.xml</descriptor>   <!-- 配置文件路径 -->
+                        <descriptor>${project.basedir}/src/main/resources/assembly/package.xml
+                        </descriptor>   <!-- 配置文件路径 -->
                     </descriptors>
                 </configuration>
                 <executions> <!-- 配置assembly goals -->

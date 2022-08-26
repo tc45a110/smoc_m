@@ -5,6 +5,7 @@
 package com.inse.worker;
 import java.util.concurrent.BlockingQueue;
 import com.base.common.cache.CacheBaseService;
+import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.manager.ChannelInfoManager;
@@ -31,18 +32,18 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 			logger.info("响应信息为空");
 			return;
 		}
-		if ("1000".equals(businessRouteValue.getNextNodeCode())) {
+		if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);
-
 		} else {
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.FAIL_CODE);
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);
-
 		}
+
 		businessRouteValue.setChannelSRCID(ChannelInfoManager.getInstance().getChannelSRCID(channelID));
+		CacheBaseService.saveResponseToMiddlewareCache(businessRouteValue);
 		logger.info(new StringBuilder().append("响应信息")      
 			      .append("{}phoneNumber={}")
 			      .append("{}messageContent={}")
@@ -55,7 +56,6 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 			      FixedConstant.SPLICER,businessRouteValue.getNextNodeCode(),
 			      FixedConstant.SPLICER,businessRouteValue.getChannelID(),
 			      FixedConstant.SPLICER,businessRouteValue.getChannelMessageID());                  
-			      CacheBaseService.saveResponseToMiddlewareCache(businessRouteValue);
 	}
 
 	public void exit() {
