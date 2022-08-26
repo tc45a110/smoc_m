@@ -47,7 +47,7 @@ public class SendMessageAsyncService {
      * @param accountTemplateInfo
      */
     @Async("threadPoolTaskExecutor")
-    public void sendMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo) {
+    public void sendMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo,String messageId) {
         List<MessageFormat> messages = new ArrayList<>();
         //模版内容
         String templateContent = accountTemplateInfo.getTemplateContent();
@@ -59,8 +59,6 @@ public class SendMessageAsyncService {
         Integer phoneCount = 0;
 //
 //        log.info("[组织短信]1：{}", System.currentTimeMillis());
-        //获取模板ID
-        String messageId = idGeneratorFactory.getTaskId();
         //log.info("[组织短信]2：{}", System.currentTimeMillis());
         for (int i = 0; i < length; i++) {
 
@@ -200,7 +198,7 @@ public class SendMessageAsyncService {
      * @param accountTemplateInfo
      */
     @Async("threadPoolTaskExecutor")
-    public void sendInterMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo) {
+    public void sendInterMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo,String messageId) {
         List<MessageFormat> messages = new ArrayList<>();
         //模版内容
         String templateContent = accountTemplateInfo.getTemplateContent();
@@ -211,8 +209,6 @@ public class SendMessageAsyncService {
         //该批次手机号总量
         Integer phoneCount = 0;
 //        log.info("[组织短信]1：{}", System.currentTimeMillis());
-        //获取模板ID
-        String messageId = idGeneratorFactory.getTaskId();
 
         for (int i = 0; i < length; i++) {
 

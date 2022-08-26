@@ -78,11 +78,14 @@ public class SendMessageService {
         }
 
         AccountTemplateInfo accountTemplateInfo = optional.get();
-        sendMessageAsyncService.sendMessageByTemplate(length, params, accountTemplateInfo);
+        //msgId
+        String messageId = idGeneratorFactory.getTaskId();
+        sendMessageAsyncService.sendMessageByTemplate(length, params, accountTemplateInfo,messageId);
 //        log.info("[普通短信]:{}", new Gson().toJson(accountTemplateInfo));
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
         result.put("templateId", params.getTemplateId());
+        result.put("msgId", messageId);
         result.put("mobiles", length + "");
         return ResponseDataUtil.buildSuccess(result);
     }
@@ -174,11 +177,14 @@ public class SendMessageService {
         }
 
         AccountTemplateInfo accountTemplateInfo = optional.get();
-        sendMessageAsyncService.sendInterMessageByTemplate(length, params, accountTemplateInfo);
+        //msgId
+        String messageId = idGeneratorFactory.getTaskId();
+        sendMessageAsyncService.sendInterMessageByTemplate(length, params, accountTemplateInfo,messageId);
 //        log.info("[普通短信]:{}", new Gson().toJson(accountTemplateInfo));
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
-        result.put("template", params.getTemplateId());
+        result.put("templateId", params.getTemplateId());
+        result.put("msgId", messageId);
         result.put("mobiles", length + "");
         return ResponseDataUtil.buildSuccess(result);
     }
