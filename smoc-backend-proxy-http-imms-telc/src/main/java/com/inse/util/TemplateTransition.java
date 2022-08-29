@@ -23,7 +23,7 @@ public class TemplateTransition {
 				"\\$" + (index - 1) + "\\$");
 	}
 
-	public static Map<String, String> getTemplate(String MmAttchnent,String channelID,String TemplateTitle){//String channelID
+	public static Map<String, String> getTemplate(String MmAttchnent,String channelID,String TemplateTitle,String extend){
 	
 		
 		// 获取通道接口扩展参数
@@ -34,12 +34,13 @@ public class TemplateTransition {
 		
 	    String data=DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_SECONDE);
 	    String authenticator=DigestUtils.md5Hex(loginname+data+loginpass).toUpperCase();
-	    String ExtNum="";
+
 	   
 	    
 		Map<String, String> map = new HashMap<String, String>();
 		JSONObject jsonobject = new JSONObject();
 		List<String> list = new ArrayList<String>();
+		List<String> urlList = new ArrayList<>();
 		try {
 			JSONArray array = JSONObject.parseArray(MmAttchnent);
 			for (int i = 0; i < array.size(); i++) {
@@ -84,7 +85,7 @@ public class TemplateTransition {
 				
 				String resUrl = object.getString("resUrl");
 				if(StringUtils.isNotEmpty(resUrl)) {
-					
+					urlList.add(resUrl);
 				JSONObject frameJsonObject = new JSONObject();
 				frameJsonObject.put("Frame",tindex+"-"+s);
 				frameJsonObject.put("FileName",resUrl.substring(resUrl.lastIndexOf("/")+1));
@@ -97,12 +98,13 @@ public class TemplateTransition {
 			jsonobject.put("Authenticator",authenticator);
 			jsonobject.put("Date", data);
 			jsonobject.put("Method","material");
-			jsonobject.put("ExtNum", ExtNum);
+			jsonobject.put("ExtNum", extend);
 			jsonobject.put("Subject", TemplateTitle);
 			jsonobject.put("Content",contentList.toString());
 			
 			map.put("mmdl", jsonobject.toString());
 			map.put("options", list.toString());
+			map.put("urlpath", String.join(",", urlList));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

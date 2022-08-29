@@ -1,10 +1,22 @@
 package com.inse.worker;
+import java.io.File;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.base.common.manager.AccountInfoManager;
+import com.base.common.manager.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.CharsetUtils;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.ChannelInfoManager;
@@ -20,6 +32,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 	private static Logger logger = Logger.getLogger(MateriaMessageWorker.class);
 	private String channelID;
 	private ChannelRunStatusWorker channelRunStatusWorker;
+	public static String MMS_PATH = ResourceManager.getInstance().getValue("mms.resource.path");
 
 	public MateriaMessageWorker(String channelID) {
 		this.channelID = channelID;
@@ -46,13 +59,15 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 					// 根据账号获取配置的通道是否包含该通道
 					Set<String> channelIDs = DAO.getChannels(businessAccount);
 					if (channelIDs.contains(channelID)) {
+						//获取账号的扩展码
+						String extend = AccountInfoManager.getInstance().getAccountExtendCode(businessAccount);
 
 						// 按照通道模板规范提交模板信息
 						Map<String, String> resultMap = TemplateTransition.getTemplate(
 								accounttemplateinfo.getMmAttchnent(), channelID,
-								accounttemplateinfo.getTemplateTitle());
+								accounttemplateinfo.getTemplateTitle(),extend);
 
-						String response = submitTemplate(resultMap.get("mmdl"), channelID);
+						String response = submitTemplate(resultMap.get("mmdl"),resultMap.get("urlpath"), channelID);
 						logger.info("响应消息："+response);
 						channelRunStatusWorker.process(channelID,response);
 						String options = resultMap.get("options");
@@ -73,15 +88,15 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 								responsemessage.setMsgId(object.getString("MsgID"));
 
 								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "1",
-										channelID, options);
+										channelID, options,extend);
 								logger.info("保存模板" + accounttemplateinfo.getTemplateId() + ",通道模板"
 										+ responsemessage.getMsgId());
-							} else if (object.containsKey("ResCode") && object.containsKey("ResMsg")) {
+							} else {
 								ResponseMessage responsemessage = new ResponseMessage();
 								responsemessage.setCode(object.getString("ResCode"));
 								responsemessage.setMessage(object.getString("ResMsg"));
 								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "8",
-										channelID, options);
+										channelID, options,extend);
 								logger.info("保存未通过模板" + accounttemplateinfo.getTemplateId() + ",通道模板"
 										+ responsemessage.getMsgId());
 							}
@@ -99,26 +114,79 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 		}
 	}
 
+
 	/**
 	 * 按照通道规范提交多媒体素材
-	 * @param jsonReqElements
-	 * @param channelID
+	 * @param
 	 * @return
 	 */
-	private static String submitTemplate(String jsoninformation, String channelID) {
-		// 获取通道接口参数
-		Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("Content-Type", "multipart/form-data");
-		// 连接超时时间
-		int Timeout = (int) ChannelInfoManager.getInstance().getSubmitInterval(channelID);
-		// 提交响应超时时间
-		int reponseTimeout = (int) ChannelInfoManager.getInstance().getResponseTimeout(channelID);
-		String url=resultMap.get("url")+"/sapi/material";
+	private String submitTemplate(String json,String urlpath,String channelID) {
 
-		return HttpClientUtil.doRequest(url, map, jsoninformation, Timeout, reponseTimeout);
+		CloseableHttpClient httpclient = null;
+		CloseableHttpResponse response = null;
+		String result = null;
+		try {
+			//获取通道接口参数
+			Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
+			// 连接超时时间
+			int Timeout = (int) ChannelInfoManager.getInstance().getSubmitInterval(channelID);
+			// 提交响应超时时间
+			int reponseTimeout = (int) ChannelInfoManager.getInstance().getResponseTimeout(channelID);
+			String urls=resultMap.get("url")+"/sapi/material";
 
+			httpclient = HttpClients.createDefault();
+			HttpPost httppost = new HttpPost(urls);
+			httppost.setConfig(RequestConfig.custom().setConnectTimeout(Timeout).setSocketTimeout(reponseTimeout).build());
+			// 将字符串转换成集合
+			List<String> urlList = Arrays.asList(urlpath.split(","));
+
+			StringBody data = new StringBody(json, ContentType.APPLICATION_JSON);
+
+			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+			builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//设置浏览器兼容模式
+			builder.setContentType(ContentType.MULTIPART_FORM_DATA);
+			builder.addPart("Data", data);
+			int count=0;
+			for (String url:urlList) {
+				builder.addBinaryBody("file"+count, new File(MMS_PATH+url));
+				count++;
+			}
+			//设置请求的编码格式
+			builder.setCharset(CharsetUtils.get("UTF-8"));
+			// 生成 HTTP POST 实体
+			HttpEntity reqEntity = builder.build();
+			httppost.setEntity(reqEntity);
+
+			response = httpclient.execute(httppost);
+			HttpEntity resEntity = response.getEntity();
+			if (resEntity != null) {
+				result = EntityUtils.toString(resEntity);
+			}
+			EntityUtils.consume(resEntity);
+
+		} catch (Exception e) {
+			logger.error("提交彩信素材异常：", e);
+		} finally {
+
+			try {
+				if (response != null) {
+					response.close();
+				}
+			} catch (Exception e) {
+				logger.error(e);
+			}
+
+			try {
+				if (httpclient != null) {
+					httpclient.close();
+				}
+			} catch (Exception e) {
+				logger.error(e);
+			}
+		}
+		return result;
 	}
+
 
 	public void exit() {
 		// 停止线程

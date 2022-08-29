@@ -97,12 +97,12 @@ public class DAO {
 	 * @param channel
 	 * @param ID
 	 */
-	public static void insertAccountChannelTemplateInfo(ResponseMessage response,AccountTemplateInfo template,String templateStatus,String channelID,String options) {
+	public static void insertAccountChannelTemplateInfo(ResponseMessage response,AccountTemplateInfo template,String templateStatus,String channelID,String options,String extend) {
 		StringBuffer sql = new StringBuffer();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
-		sql.append("insert into smoc.account_channel_template_info(ID,TEMPLATE_ID,BUSINESS_ACCOUNT,TEMPLATE_STATUS,CHANNEL_ID,CHANNEL_TEMPLATE__ID,CHECK_OPINIONS,TEMPLATE_FLAG,CHANNEL_TEMPLATE_VARIABLE_FORMAT,CREATED_TIME)values(?,?,?,?,?,?,?,?,?,now())");
+		sql.append("insert into smoc.account_channel_template_info(ID,TEMPLATE_ID,BUSINESS_ACCOUNT,TEMPLATE_STATUS,CHANNEL_ID,CHANNEL_TEMPLATE_ID,CHECK_OPINIONS,TEMPLATE_FLAG,CHANNEL_TEMPLATE_VARIABLE_FORMAT,ACCOUNT_EXTEND_CODE,CREATED_TIME)values(?,?,?,?,?,?,?,?,?,?,now())");
 
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
@@ -114,9 +114,10 @@ public class DAO {
 			pstmt.setString(4, templateStatus);
 			pstmt.setString(5, channelID);			
 			pstmt.setString(6,response.getMsgId());
-			pstmt.setString(6,response.getMessage());
+			pstmt.setString(7,response.getMessage());
 			pstmt.setString(8,template.getTemplateFlag());	
-			pstmt.setString(9,options);		
+			pstmt.setString(9,options);
+			pstmt.setString(10,extend);
 			pstmt.execute();
 			conn.commit();
 		} catch (Exception e) {
@@ -132,12 +133,12 @@ public class DAO {
 	 * @param message
 	 * @param status
 	 */
-	public static void updateAccountChannelTemplateInfo(StatusMessage message, String status,String channelID) {
+	public static void updateAccountChannelTemplateInfo(StatusMessage message, String status) {
 		StringBuffer sql = new StringBuffer();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		sql.append("update smoc.account_channel_template_info set TEMPLATE_STATUS=?,CHANNEL_TEMPLATE__STATUS=?,CHECK_DATE=now(),CHECK_OPINIONS=? where CHANNEL_ID=? and CHANNEL_TEMPLATE__ID=?");
+		sql.append("update smoc.account_channel_template_info set TEMPLATE_STATUS=?,CHANNEL_TEMPLATE_STATUS=?,CHECK_DATE=now(),CHECK_OPINIONS=? where CHANNEL_ID=? and CHANNEL_TEMPLATE__ID=?");
 		
 		logger.info("updateTempldateStatus sql:" + sql.toString());
 		try {
@@ -147,7 +148,7 @@ public class DAO {
 			pstmt.setString(1, status);
 			pstmt.setString(2, message.getCheckState());						
 			pstmt.setString(3, message.getReason());
-			pstmt.setString(4, channelID);
+			pstmt.setString(4,message.getChannelID());
 			pstmt.setString(5, message.getTemplateId());
 			pstmt.executeUpdate();
 			conn.commit();

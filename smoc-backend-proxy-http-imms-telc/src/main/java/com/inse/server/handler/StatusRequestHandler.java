@@ -21,11 +21,13 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class StatusRequestHandler implements HttpHandler {
 	private static final Logger logger = LoggerFactory.getLogger(StatusRequestHandler.class);
-
+	private String channelID;
 	StatusMessageWorker statusMessageWorker;
 
 	public StatusRequestHandler(String channel) {
-		statusMessageWorker = new StatusMessageWorker(channel);
+		statusMessageWorker = new StatusMessageWorker();
+		statusMessageWorker.start();
+		this.channelID=channelID;
 		
 	}
 
@@ -89,6 +91,7 @@ public class StatusRequestHandler implements HttpHandler {
 			message.setCheckState(checkState);
 			message.setReason(reason);
 			message.setDate(date);
+			message.setChannelID(channelID);
 
 			statusMessageWorker.add(message);
 		}

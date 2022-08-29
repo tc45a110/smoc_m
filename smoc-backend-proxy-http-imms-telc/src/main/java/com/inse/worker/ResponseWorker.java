@@ -4,6 +4,7 @@
  */
 package com.inse.worker;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
@@ -27,9 +28,8 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 	@Override
 	protected void doRun() throws Exception {
 		// 取出响应消息
-		BusinessRouteValue businessRouteValue = responseQueue.take();
+		BusinessRouteValue businessRouteValue = responseQueue.poll(FixedConstant.COMMON_POLL_INTERVAL_TIME, TimeUnit.SECONDS);
 		if (businessRouteValue == null) {
-			logger.info("响应信息为空");
 			return;
 		}
 		if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {

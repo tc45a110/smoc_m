@@ -5,7 +5,14 @@ public class StatusMessage {
 	private String reason;
 	private String date;
 	private String templateId;
+	private String channelID;
 
+	public String getChannelID() {
+		return channelID;
+	}
+	public void setChannelID(String channelID) {
+		this.channelID = channelID;
+	}
 	public String getCheckState() {
 		return checkState;
 	}

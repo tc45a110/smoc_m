@@ -2,7 +2,6 @@
  * @desc 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
  */
 package com.inse.worker;
-
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
@@ -13,24 +12,22 @@ import com.base.common.worker.SuperQueueWorker;
 
 
 public class ReportWorker extends SuperQueueWorker<BusinessRouteValue> {
-    private String channelID;
+    private static ReportWorker manager = new ReportWorker();
 
-    public ReportWorker(String channelID) {
-        this.channelID = channelID;
-        this.start();
+
+    public static ReportWorker getInstance() {
+        return manager;
     }
 
     @Override
     protected void doRun() throws Exception {
         //取出状态报告
-        BusinessRouteValue businessRouteValue = take();
+        BusinessRouteValue businessRouteValue=poll();
         if (businessRouteValue == null) {
             logger.info("状态报告为空");
             return;
         }
-        if("RECEIVD".equals(businessRouteValue.getStatusCode())){
-            return;
-        }
+
         if (DynamicConstant.REPORT_SUCCESS_CODE.equals(businessRouteValue.getStatusCode())) {
             businessRouteValue.setSuccessCode(InsideStatusCodeConstant.SUCCESS_CODE);
         } else {
@@ -48,7 +45,7 @@ public class ReportWorker extends SuperQueueWorker<BusinessRouteValue> {
                 FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
                 FixedConstant.SPLICER, businessRouteValue.getChannelMessageID(),
                 FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
-                FixedConstant.SPLICER, channelID,
+                FixedConstant.SPLICER, businessRouteValue.getAccountID(),
                 FixedConstant.SPLICER, businessRouteValue.getChannelReportTime());
 
 
@@ -58,7 +55,6 @@ public class ReportWorker extends SuperQueueWorker<BusinessRouteValue> {
         //停止线程
         super.exit();
     }
-
 }
 
 

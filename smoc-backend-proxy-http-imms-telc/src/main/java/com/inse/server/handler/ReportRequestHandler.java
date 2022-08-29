@@ -21,10 +21,13 @@ import com.sun.net.httpserver.HttpHandler;
 public class ReportRequestHandler implements HttpHandler {
 	private static final Logger logger = LoggerFactory.getLogger(ReportRequestHandler.class);
 	ReportWorker reportWorker;
+	private String channelID;
 	
 
 	public ReportRequestHandler(String channelID) {	
 		reportWorker = new ReportWorker(channelID);
+		reportWorker.start();
+		this.channelID=channelID;
 	}
 
 	@Override
@@ -89,7 +92,7 @@ public class ReportRequestHandler implements HttpHandler {
 				newBusinessRouteValue.setChannelMessageID(transId);
 				newBusinessRouteValue.setPhoneNumber(phone);
 				newBusinessRouteValue.setStatusCode(state);
-				
+				newBusinessRouteValue.setAccountID(channelID);
 				reportWorker.add(newBusinessRouteValue);
 			}
 
