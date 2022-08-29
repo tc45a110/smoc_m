@@ -4,17 +4,16 @@
  */
 package com.base.common.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.dao.AccountInfoDAO;
 import com.base.common.log.CategoryLog;
 import com.base.common.manager.AccountInfoManager.AccountInfo;
 import com.base.common.worker.SuperMapWorker;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 
@@ -102,6 +101,26 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 				accountExtendCode = accountExtendCode + randomExtendCode;		
 			}
 			return accountSubmitSRCID.replaceFirst(accountInfo.getAccountSRCID(), accountExtendCode);
+		}
+		return "";
+	}
+
+	/**
+	 * 获取账号平台扩展码
+	 * @param accountID
+	 * @return
+	 */
+	public String getAccountExtendCode(String accountID) {
+		AccountInfo accountInfo = get(accountID);
+		if (accountInfo != null) {
+			int accountRandomExtendCodeLength = accountInfo.getAccountRandomExtendCodeLength();
+			String accountExtendCode = accountInfo.getAccountExtendCode();
+
+			if(accountExtendCode.length() < accountRandomExtendCodeLength){
+				String randomExtendCode = RandomStringUtils.random(accountRandomExtendCodeLength - accountExtendCode.length(), false, true);
+				accountExtendCode = accountExtendCode + randomExtendCode;
+			}
+			return accountExtendCode;
 		}
 		return "";
 	}
