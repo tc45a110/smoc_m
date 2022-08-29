@@ -18,14 +18,14 @@ public class AddMultimediaTemplate {
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-        header.put("account", "YQT113");
+        header.put("account", "YQT119");
 
         //请求的数据
         Map<String, Object> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "YQT113");
+        requestDataMap.put("account", "YQT119");
         //模板类型 1 表示普通模板 2 表示变量模板
         requestDataMap.put("templateType", "2");
         //模板内容
@@ -35,24 +35,26 @@ public class AddMultimediaTemplate {
 
         requestDataMap.put("templateTitle", "多媒体变量模板");
 
-        List<Map<String,Object>> mediaItems = new ArrayList<>();
-        Map<String,Object> param = new HashMap<>();
-        param.put("subject","图片");
-        param.put("mediaType","PIC");
-        param.put("fileType","jpg");
-        param.put("stayTimes",2);
-        param.put("frameTxt","多媒体文件API测试,${1}");
-        param.put("mediaFile", FileBASE64Utils.getFileToBase64("F:\\pic.jpg"));
+        List<Map<String, Object>> mediaItems = new ArrayList<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("subject", "图片");
+        param.put("mediaType", "PIC");
+        param.put("fileType", "jpg");
+        param.put("stayTimes", 2);
+        param.put("frameTxt", "多媒体文件API测试,${1}");
+        param.put("mediaFile", FileBASE64Utils.getFileToBase64("F:\\a.jpg"));
         mediaItems.add(param);
+        //System.out.println("[接口请求][param]数据:" + new Gson().toJson(param));
 
-        Map<String,Object> param1 = new HashMap<>();
-        param1.put("subject","图片");
-        param1.put("mediaType","PIC");
-        param1.put("fileType","jpg");
-        param1.put("stayTimes",2);
-        param1.put("frameTxt","多媒体文件API测试,${1}");
-        param1.put("mediaFile", FileBASE64Utils.getFileToBase64("F:\\pic.jpg"));
+        Map<String, Object> param1 = new HashMap<>();
+        param1.put("subject", "图片");
+        param1.put("mediaType", "PIC");
+        param1.put("fileType", "jpg");
+        param1.put("stayTimes", 2);
+        param1.put("frameTxt", "多媒体文件API测试,${1}");
+        param1.put("mediaFile", FileBASE64Utils.getFileToBase64("F:\\a.jpg"));
         mediaItems.add(param1);
+        //System.out.println("[接口请求][param]数据:" + new Gson().toJson(param));
 
         requestDataMap.put("items", mediaItems);
         //转JSON请求数据
@@ -69,7 +71,7 @@ public class AddMultimediaTemplate {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "LJ9u!X7di");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "nr?FNIM8D");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 

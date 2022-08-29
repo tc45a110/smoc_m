@@ -30,7 +30,7 @@ public class MoRepository extends BasePageRepository {
         sqlBuffer.append("  from account_interface_info t  ");
         sqlBuffer.append("  where PROTOCOL='HTTPS' ");
 
-        //log.info("[获取开通 https服务的 业务账号]:{}", sqlBuffer);
+        log.info("[获取开通 https服务的 业务账号]:{}", sqlBuffer);
 
         PageList<MobileOriginalAccount> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), null, 0, 1000, new MobileOriginalAccountRowMapper());
         return pageList.getList();
