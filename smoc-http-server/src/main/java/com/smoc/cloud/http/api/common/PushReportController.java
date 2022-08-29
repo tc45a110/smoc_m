@@ -27,7 +27,7 @@ public class PushReportController {
     @RequestMapping(value = "/pushReport", method = RequestMethod.POST)
     public String pushReport(@RequestBody PushReportParams params) {
 
-        log.info("[推送过来的状态报告]：{}", new Gson().toJson(params));
+        //log.info("[推送过来的状态报告]：{}", new Gson().toJson(params));
         return "0000";
     }
 }

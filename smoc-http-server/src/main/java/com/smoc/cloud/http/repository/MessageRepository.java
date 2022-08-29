@@ -75,20 +75,37 @@ public class MessageRepository extends BasePageRepository {
      * @param params
      */
     public void batchDelete(final List<MobileOriginalResponseParams> params) {
-        final String sql = "delete from smoc_route.route_message_mo_info where id=? ";
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            public int getBatchSize() {
-                return params.size();
+        log.info("[delete][reports]:{}",new Gson().toJson(params));
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            String sql = "delete from smoc_route.route_message_mo_info where id=? ";
+            stmt = conn.prepareStatement(sql);
+            for (MobileOriginalResponseParams param : params) {
+                stmt.setString(1, param.getId());
+                stmt.addBatch();
             }
-
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                MobileOriginalResponseParams responseParams = params.get(i);
-                ps.setString(1, responseParams.getId());
-
+            stmt.executeBatch();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != conn) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+                if (null != stmt) {
+                    stmt.clearBatch();
+                    stmt.clearParameters();
+                    stmt.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        });
+        }
     }
 
     /**
@@ -193,20 +210,38 @@ public class MessageRepository extends BasePageRepository {
      * @param reports
      */
     public void batchDeleteReports(final List<ReportResponseParams> reports) {
-        final String sql = "delete from smoc_route.route_message_mr_info where id=? ";
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            public int getBatchSize() {
-                return reports.size();
+        //log.info("[delete][reports]:{}",new Gson().toJson(reports));
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            String sql = "delete from smoc_route.route_message_mr_info where id=? ";
+            stmt = conn.prepareStatement(sql);
+            for (ReportResponseParams report : reports) {
+                stmt.setString(1, report.getId());
+                stmt.addBatch();
             }
-
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ReportResponseParams responseParams = reports.get(i);
-                ps.setString(1, responseParams.getId());
-
+            stmt.executeBatch();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != conn) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+                if (null != stmt) {
+                    stmt.clearBatch();
+                    stmt.clearParameters();
+                    stmt.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
 
-        });
     }
 
     /**

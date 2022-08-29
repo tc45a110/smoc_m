@@ -14,7 +14,7 @@ public class PushMoSchedule {
     @Autowired
     private PushMoService pushMoService;
 
-    @Scheduled(cron = "* */30 * * * ?")
+    @Scheduled(cron = "* */15 * * * ?")
     public void scheduleMoService() {
         pushMoService.pushMo();
     }
