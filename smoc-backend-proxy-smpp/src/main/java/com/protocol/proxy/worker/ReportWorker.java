@@ -4,28 +4,27 @@ d * @desc
  */
 package com.protocol.proxy.worker;
 
-import java.util.HashMap;
-import java.util.Map;
+ import com.alibaba.druid.util.Base64;
+ import com.base.common.cache.CacheBaseService;
+ import com.base.common.constant.DynamicConstant;
+ import com.base.common.constant.FixedConstant;
+ import com.base.common.constant.InsideStatusCodeConstant;
+ import com.base.common.log.CategoryLog;
+ import com.base.common.manager.ChannelInfoManager;
+ import com.base.common.manager.ChannelMOManager;
+ import com.base.common.manager.LongSMSMOManager;
+ import com.base.common.util.ChannelMOUtil;
+ import com.base.common.util.DateUtil;
+ import com.base.common.vo.BusinessRouteValue;
+ import com.base.common.vo.ChannelMO;
+ import com.base.common.worker.SuperQueueWorker;
+ import com.huawei.insa2.comm.smpp.message.SMPPDeliverMessage;
+ import com.huawei.insa2.comm.smpp.message.SMPPMessage;
+ import com.protocol.proxy.util.HexUtil;
+ import org.apache.commons.lang3.StringUtils;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.druid.util.Base64;
-import com.base.common.cache.CacheBaseService;
-import com.base.common.constant.DynamicConstant;
-import com.base.common.constant.FixedConstant;
-import com.base.common.constant.InsideStatusCodeConstant;
-import com.base.common.log.CategoryLog;
-import com.base.common.manager.ChannelInfoManager;
-import com.base.common.manager.ChannelMOManager;
-import com.base.common.manager.LongSMSMOManager;
-import com.base.common.util.ChannelMOUtil;
-import com.base.common.util.DateUtil;
-import com.base.common.vo.BusinessRouteValue;
-import com.base.common.vo.ChannelMO;
-import com.base.common.worker.SuperQueueWorker;
-import com.huawei.insa2.comm.smpp.message.SMPPDeliverMessage;
-import com.huawei.insa2.comm.smpp.message.SMPPMessage;
-import com.protocol.proxy.util.HexUtil;
+ import java.util.HashMap;
+ import java.util.Map;
 
 public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 	private String channelID;
@@ -75,14 +74,18 @@ public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 		logger.info("处理状态报告：{}",deliverMessage.toString());
 		isDeliver = deliverMessage.getEsmClass();
 		messageContent = deliverMessage.getShortMessage();
-		
+
+		//上行和状态报告SourceAddr为手机号,信息源由手机终端发起
+		phoneNumber = deliverMessage.getSourceAddr();
+		//去除加号
+		if(phoneNumber.contains("+")){
+			phoneNumber = phoneNumber.substring(1,phoneNumber.length());
+		}
+		channelReportSRCID = deliverMessage.getDestinationAddr();
+		messageFormat =  deliverMessage.getDataCoding();
+
 		//状态报告
 		if(isDeliver == 4){
-			messageFormat =  deliverMessage.getDataCoding();
-			//状态报告 source_address为发送手机号
-			phoneNumber = deliverMessage.getSourceAddr();
-			channelReportSRCID = deliverMessage.getDestinationAddr();
-			
 			Map<String,String> deliverParamsMap = getDeliverParams(messageContent);
 			logger.info("deliverParamsMap={}",deliverParamsMap);
 			channelMessageID = deliverMessage.getMessageId();
@@ -90,11 +93,6 @@ public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 			subStatusCode = deliverParamsMap.get("err");
 			processChannelReport(statusCode, subStatusCode, channelReportSRCID, channelMessageID, phoneNumber,sequenceID);
 		}else if(isDeliver == 0){
-			messageFormat =  deliverMessage.getDataCoding();
-			//状态报告 destination_address为发送手机号
-			phoneNumber = deliverMessage.getDestinationAddr();
-			channelReportSRCID = deliverMessage.getSourceAddr();
-			
 			processChannelMO(tpUdhi, messageFormat, phoneNumber, channelReportSRCID, messageContent,sequenceID);
 		}
 		
@@ -105,14 +103,13 @@ public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 		if(StringUtils.isEmpty(content)) {
 			return resultMap;
 		}
-		for(String s : content.split(" ")) {
-			if(StringUtils.isNotEmpty(s)) {
-				String [] arrStr = s.split(":");
-				if(arrStr.length == 1) {
-					resultMap.put(s.split(":")[0].toLowerCase(), "");
-				}else if(arrStr.length == 2){
-					resultMap.put(s.split(":")[0].toLowerCase(), s.split(":")[1]);
-				}
+		content = content.split("text:")[0];
+		String[] array = content.split(" ");
+		for(String str : array) {
+			if(str.contains("stat:")) {
+				resultMap.put("stat",str.replaceFirst("stat:", ""));
+			}else if(str.contains("err:")) {
+				resultMap.put("err",str.replaceFirst("err:", ""));
 			}
 		}
 		return resultMap;
