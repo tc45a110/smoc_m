@@ -75,7 +75,7 @@ public class MessageRepository extends BasePageRepository {
      * @param params
      */
     public void batchDelete(final List<MobileOriginalResponseParams> params) {
-        log.info("[delete][reports]:{}",new Gson().toJson(params));
+        //log.info("[delete][reports]:{}",new Gson().toJson(params));
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
