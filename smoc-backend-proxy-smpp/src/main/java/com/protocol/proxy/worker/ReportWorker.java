@@ -115,38 +115,6 @@ public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 		return resultMap;
 	}
 	
-	public byte[] getMsgID(byte[] messageContent) {
-		byte[] msgid = new byte[9];
-		System.arraycopy(messageContent, 3, msgid, 0, msgid.length);
-		return msgid;
-	}
-	
-	public String getStat(byte[] messageContent) {
-		byte[] stat_b = new byte[7];
-		System.arraycopy(messageContent, 88, stat_b, 0, stat_b.length);
-		String stat = new String(stat_b);
-		return stat;
-	}
-	
-	public String getErr(byte[] messageContent) {
-		byte[] stat_b = new byte[3];
-		System.arraycopy(messageContent, 100, stat_b, 0, stat_b.length);
-		String stat = new String(stat_b);
-		return stat;
-	}
-	
-	public Map<String,String> getParams(String content){
-		Map<String,String> paramsMap = new HashMap<String, String>();
-		String[] array = content.split(" ");
-		for(String s : array){
-			String[] params = s.split(":");
-			if(params.length >= 2){
-				paramsMap.put(params[0], params[1]);
-			}
-		}
-		return paramsMap;
-	}
-	
 	/**
 	 * 处理状态报告
 	 * @param statusCode
