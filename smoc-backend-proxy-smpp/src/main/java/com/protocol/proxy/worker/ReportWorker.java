@@ -97,7 +97,7 @@ public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 		}
 		
 	}
-	public static Map<String,String> getDeliverParams(byte [] messageContent){
+	private static Map<String,String> getDeliverParams(byte [] messageContent){
 		String content = new String(messageContent);
 		Map<String,String> resultMap = new HashMap<String, String>();
 		if(StringUtils.isEmpty(content)) {
