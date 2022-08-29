@@ -106,9 +106,9 @@ public class ReportWorker extends SuperQueueWorker<SMPPMessage>{
 		content = content.split("text:")[0];
 		String[] array = content.split(" ");
 		for(String str : array) {
-			if(str.contains("stat:")) {
+			if(str.startsWith("stat:")) {
 				resultMap.put("stat",str.replaceFirst("stat:", ""));
-			}else if(str.contains("err:")) {
+			}else if(str.startsWith("err:")) {
 				resultMap.put("err",str.replaceFirst("err:", ""));
 			}
 		}
