@@ -3,7 +3,6 @@
  * 
  */
 package com.inse.server;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ExtendParameterManager;

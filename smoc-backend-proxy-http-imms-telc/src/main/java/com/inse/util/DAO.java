@@ -38,7 +38,7 @@ public class DAO {
 	
 		pstmt = conn.prepareStatement(sql.toString());	
 		pstmt.setString(1, channelID);
-		//logger.info("sql={}",sql.toString());
+		logger.info("sql={}",sql.toString());
 		rs = pstmt.executeQuery();		
 		while (rs.next()) {	
 			AccountTemplateInfo accounttemplateinfo=new AccountTemplateInfo();
@@ -92,10 +92,6 @@ public class DAO {
 	
 	/**
 	 * 保存运营商模板及平台模板状态信息
-	 * @param message
-	 * @param status
-	 * @param channel
-	 * @param ID
 	 */
 	public static void insertAccountChannelTemplateInfo(ResponseMessage response,AccountTemplateInfo template,String templateStatus,String channelID,String options,String extend) {
 		StringBuffer sql = new StringBuffer();
@@ -138,8 +134,7 @@ public class DAO {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		sql.append("update smoc.account_channel_template_info set TEMPLATE_STATUS=?,CHANNEL_TEMPLATE_STATUS=?,CHECK_DATE=now(),CHECK_OPINIONS=? where CHANNEL_ID=? and CHANNEL_TEMPLATE_ID=?");
-		
+		sql.append("update smoc.account_channel_template_info set TEMPLATE_STATUS=?,CHANNEL_TEMPLATE_STATUS=?,UPDATED_TIME=now(),CHECK_OPINIONS=? where CHANNEL_ID=? and CHANNEL_TEMPLATE_ID=?");
 		logger.info("updateTempldateStatus sql:" + sql.toString());
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();

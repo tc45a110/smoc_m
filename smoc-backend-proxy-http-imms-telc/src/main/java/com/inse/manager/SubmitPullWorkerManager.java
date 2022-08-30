@@ -3,7 +3,6 @@
  * 
  */
 package com.inse.manager;
-
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperMapWorker;
@@ -12,7 +11,6 @@ import com.inse.util.ChannelInterfaceUtil;
 import com.inse.worker.MateriaMessageWorker;
 import com.inse.worker.SubmitPullWorker;
 import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -80,7 +78,7 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 
 			// 获取通道接口扩展参数
 			Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-			String port = resultMap.get("localport");
+			String port = resultMap.get("localPort");
 
 			// 启动回调接收服务
 			CallbackHTTPServer callbackHTTPServer = new CallbackHTTPServer(port, channelID);

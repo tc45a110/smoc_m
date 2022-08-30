@@ -26,7 +26,7 @@ public class CallbackHTTPServer {
 			Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
 
 			InetSocketAddress addr = new InetSocketAddress(Integer.valueOf(port));
-			server = HttpServer.create(addr, Integer.valueOf(resultMap.get("maxconnect")));
+			server = HttpServer.create(addr, Integer.valueOf(resultMap.get("maxConnect")));
 
 			// 模板回执
 			String statusServiceName = resultMap.get("statusUrl");

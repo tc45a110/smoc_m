@@ -1,5 +1,4 @@
 package com.inse.worker;
-
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.AccountInfoManager;
 import com.base.common.manager.ChannelInfoManager;
@@ -16,30 +15,25 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.CharsetUtils;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
-
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 public class MateriaMessageWorker extends SuperQueueWorker<String> {
-	private static Logger logger = Logger.getLogger(MateriaMessageWorker.class);
 	private String channelID;
 	public static String MMS_PATH = ResourceManager.getInstance().getValue("mms.resource.path");
 
 	public MateriaMessageWorker(String channelID) {
 		this.channelID = channelID;
 	}
-
 	/**
 	 *
 	 */
@@ -68,7 +62,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 								accounttemplateinfo.getTemplateTitle(),extend);
 
 						String response = submitTemplate(resultMap.get("mmdl"),resultMap.get("urlpath"), channelID);
-						logger.info("响应消息："+response);
+						logger.info("响应消息={}",response);
 						com.inse.worker.ChannelInteractiveStatusManager.getInstance().process(channelID,response);
 						String options = resultMap.get("options");
 						
@@ -87,18 +81,18 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 								responsemessage.setCode(object.getString("ResCode"));
 								responsemessage.setMsgId(object.getString("MsgID"));
 
-								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "1",
+								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "3",
 										channelID, options,extend);
-								logger.info("保存模板" + accounttemplateinfo.getTemplateId() + ",通道模板"
-										+ responsemessage.getMsgId());
+								logger.info("平台模板ID={},通道模板ID={}",accounttemplateinfo.getTemplateId(),responsemessage.getMsgId());
+
 							} else {
 								ResponseMessage responsemessage = new ResponseMessage();
 								responsemessage.setCode(object.getString("ResCode"));
 								responsemessage.setMessage(object.getString("ResMsg"));
-								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "8",
+								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "0",
 										channelID, options,extend);
-								logger.info("保存未通过模板" + accounttemplateinfo.getTemplateId() + ",通道模板"
-										+ responsemessage.getMsgId());
+								logger.info("提交失败平台模板ID={},失败原因={}",accounttemplateinfo.getTemplateId(),responsemessage.getMessage());
+
 							}
 						}
 					}
@@ -120,7 +114,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 	 * @param
 	 * @return
 	 */
-	private String submitTemplate(String json,String urlpath,String channelID) {
+	private String submitTemplate(String jsonReqElements,String urlpath,String channelID) {
 
 		CloseableHttpClient httpclient = null;
 		CloseableHttpResponse response = null;
@@ -129,30 +123,32 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 			//获取通道接口参数
 			Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
 			// 连接超时时间
-			int Timeout = (int) ChannelInfoManager.getInstance().getSubmitInterval(channelID);
+			int timeOut = (int) ChannelInfoManager.getInstance().getSubmitInterval(channelID);
 			// 提交响应超时时间
 			int reponseTimeout = (int) ChannelInfoManager.getInstance().getResponseTimeout(channelID);
 			String urls=resultMap.get("url")+"/sapi/material";
 
 			httpclient = HttpClients.createDefault();
 			HttpPost httppost = new HttpPost(urls);
-			httppost.setConfig(RequestConfig.custom().setConnectTimeout(Timeout).setSocketTimeout(reponseTimeout).build());
+			httppost.setConfig(RequestConfig.custom().setConnectTimeout(timeOut).setSocketTimeout(reponseTimeout).build());
 			// 将字符串转换成集合
 			List<String> urlList = Arrays.asList(urlpath.split(","));
 
-			StringBody data = new StringBody(json, ContentType.APPLICATION_JSON);
+			StringBody stringBody = new StringBody(jsonReqElements, ContentType.APPLICATION_JSON);
 
-			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-			builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//设置浏览器兼容模式
-			builder.setContentType(ContentType.MULTIPART_FORM_DATA);
-			builder.addPart("Data", data);
-			int count=0;
+			MultipartEntityBuilder builder = MultipartEntityBuilder.create()
+			.addPart("Data", stringBody).setCharset(Charset.forName("UTF-8"));
+
 			for (String url:urlList) {
-				builder.addBinaryBody("file"+count, new File(MMS_PATH+url));
-				count++;
+				File uploadFile1 = new File(MMS_PATH+url);
+				if(! uploadFile1.exists()){
+					logger.error("文件不存在："+uploadFile1.getName());
+					continue;
+				}
+				FileBody uploadFileBody1 = new FileBody(uploadFile1);
+				builder.addPart(uploadFile1.getName(), uploadFileBody1);
 			}
-			//设置请求的编码格式
-			builder.setCharset(CharsetUtils.get("UTF-8"));
+
 			// 生成 HTTP POST 实体
 			HttpEntity reqEntity = builder.build();
 			httppost.setEntity(reqEntity);
@@ -165,7 +161,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 			EntityUtils.consume(resEntity);
 
 		} catch (Exception e) {
-			logger.error("提交彩信素材异常：", e);
+			logger.error("提交多媒体素材异常：", e);
 		} finally {
 
 			try {
@@ -173,7 +169,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 					response.close();
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(e.getMessage());
 			}
 
 			try {
@@ -181,7 +177,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 					httpclient.close();
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(e.getMessage());
 			}
 		}
 		return result;
