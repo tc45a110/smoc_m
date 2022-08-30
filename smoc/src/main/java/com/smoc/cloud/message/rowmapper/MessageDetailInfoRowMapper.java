@@ -27,12 +27,12 @@ public class MessageDetailInfoRowMapper implements RowMapper<MessageDetailInfoVa
 
         String reportTime = resultSet.getString("REPORT_TIME");
         String submitTime = resultSet.getString("SUBMIT_TIME");
-        if(!StringUtils.isEmpty(reportTime) && !StringUtils.isEmpty(submitTime)){
+        /*if(!StringUtils.isEmpty(reportTime) && !StringUtils.isEmpty(submitTime)){
             Date reportDate = DateTimeUtils.getDateTimeSSSFormat(reportTime);
             Date submitDate = DateTimeUtils.getDateTimeSSSFormat(submitTime);
             qo.setTimeElapsed(""+DateTimeUtils.getTimeInMillis(reportDate,submitDate));
-        }
-
+        }*/
+        qo.setTimeElapsed(resultSet.getString("TIME_ELAPSED"));
         qo.setReportTime(reportTime);
         qo.setSubmitTime(submitTime);
 

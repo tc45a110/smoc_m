@@ -33,7 +33,7 @@
                                         <div class="col-md-12" th:each="info :${channelMap}">
                                             <div th:class="${info.value !=null ?'card-box widget-box-two widget-two-teal':'card-box widget-box-two widget-two-pink'}">
                                                 <div class="wigdet-two-content text-white">
-                                                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
+                                                    <p class="m-0 font-600 font-secondary text-overflow">
                                                         [[${info.value!=null?info.value.channelName:'未配置通道'}]]
                                                     </p>
                                                     <p class="text-white"><b>业务类型：

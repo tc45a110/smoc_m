@@ -104,19 +104,25 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         for (int i = 0; i < list.size(); i++) {
             AccountBasicInfoValidator info = list.get(i);
             String[] carrier = {};
-            if("INTL".equals(info.getCarrier())){
-                carrier = info.getCountryCode().split(",");
-                info.setRowspan(carrier.length);
-            }else{
-                carrier = info.getCarrier().split(",");
-                info.setRowspan(carrier.length);
-            }
 
             Map<String, AccountFinanceInfoValidator> financeMap = new HashMap<>();
             Map<String, AccountChannelInfoValidator> channelMap = new HashMap<>();
-            for (int a = 0; a < carrier.length; a++) {
-                financeMap.put(carrier[a], new AccountFinanceInfoValidator());
-                channelMap.put(carrier[a], new AccountChannelInfoValidator());
+
+            if("INTL".equals(info.getCarrier())){
+                carrier = info.getCountryCode().split(",");
+                info.setRowspan(carrier.length);
+                for (int a = 0; a < carrier.length; a++) {
+                    financeMap.put(carrier[a], new AccountFinanceInfoValidator());
+                }
+                channelMap.put(info.getCarrier(), new AccountChannelInfoValidator());
+            }else{
+                carrier = info.getCarrier().split(",");
+                info.setRowspan(carrier.length);
+
+                for (int a = 0; a < carrier.length; a++) {
+                    financeMap.put(carrier[a], new AccountFinanceInfoValidator());
+                    channelMap.put(carrier[a], new AccountChannelInfoValidator());
+                }
             }
 
             //查询运营商价格
