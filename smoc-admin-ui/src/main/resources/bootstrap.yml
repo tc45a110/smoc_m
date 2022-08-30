@@ -2,7 +2,7 @@ spring:
   application: #服务应用名称
     name: smoc-admin-ui
   profiles: #指定启动模式
-    active: dev
+    active: zhou
   main:
     allow-bean-definition-overriding: true
   thymeleaf:
