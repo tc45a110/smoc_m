@@ -5,6 +5,7 @@
 package com.inse.worker;
 
 import com.base.common.cache.CacheBaseService;
+import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.manager.ChannelInfoManager;
@@ -28,7 +29,7 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 		if (businessRouteValue == null) {
 			return;
 		}
-		if ("1000".equals(businessRouteValue.getNextNodeCode())) {
+		if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);

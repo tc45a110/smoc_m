@@ -5,6 +5,7 @@
 package com.inse.manager;
 
 import com.base.common.cache.CacheBaseService;
+import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.util.DateUtil;
@@ -63,8 +64,10 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 			if (businessRouteValue == null) {
 				return;
 			}
-
-			if ("RECEIV".equals(businessRouteValue.getStatusCode())) {
+			if("RECEIVD".equals(businessRouteValue.getStatusCode())){
+				return;
+			}
+			if (DynamicConstant.REPORT_SUCCESS_CODE.equals(businessRouteValue.getStatusCode())) {
 				businessRouteValue.setSuccessCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			} else {
 				businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
