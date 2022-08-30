@@ -27,8 +27,7 @@
                 <exclude>*:protobuf*</exclude>
                 <exclude>*:json*</exclude>
                 <!--  spring  -->
-                <exclude>org.springframework:spring-aop</exclude>
-                <exclude>org.springframework:spring-jcl</exclude>
+                <exclude>org.springframework:*</exclude>
                 <!-- 排除项目本身生成的jar包 使用自定义名称的jar包  -->
                 <exclude>com.smoc.backend:*</exclude>
             </excludes>
@@ -68,8 +67,8 @@
 
     <files>
         <file>
-            <source>target/${project.packageName}.jar</source>
-            <destName>lib/${project.packageName}.jar</destName>
+            <source>target/${project.build.finalName}.jar</source>
+            <destName>lib/${project.build.finalName}.jar</destName>
         </file>
         <file>
             <source>${project.absolute.path}/target/base-common.${project.common.version}.jar</source>

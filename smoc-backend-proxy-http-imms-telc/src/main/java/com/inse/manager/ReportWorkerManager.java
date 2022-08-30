@@ -61,11 +61,10 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 			//取出状态报告
 			BusinessRouteValue businessRouteValue = poll();
 			if (businessRouteValue == null) {
-				logger.info("状态报告为空");
 				return;
 			}
 
-			if (DynamicConstant.REPORT_SUCCESS_CODE.equals(businessRouteValue.getStatusCode())) {
+			if ("RECEIV".equals(businessRouteValue.getStatusCode())) {
 				businessRouteValue.setSuccessCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			} else {
 				businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);

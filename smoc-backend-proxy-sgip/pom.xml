@@ -15,8 +15,8 @@
         <project.common.version>4.0.2</project.common.version>
         <project.packageName>protocol-proxy-sgip</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
-        <!--    星语    -->
-        <project.resources.fileName>xingyu</project.resources.fileName>
+        <!--<project.resources.fileName>xingyu</project.resources.fileName>--><!--星语-->
+        <project.resources.fileName>example</project.resources.fileName><!--开发环境-->
     </properties>
 
     <build>
