@@ -1,5 +1,6 @@
 package com.smoc.cloud.admin.security.controller;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.oauth2.service.OauthTokenService;
 import com.smoc.cloud.admin.security.properties.SystemProperties;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
@@ -59,9 +60,13 @@ public class MainController {
         String[] scopes = user.getAuthScope().split(",");
         for (int i = 0; i < scopes.length; i++) {
             if (!systemProperties.getSystemMarking().equals(scopes[i])) {
-                list.add(sysMap.get(scopes[i]));
+                SystemValidator validator = sysMap.get(scopes[i]);
+                if(null != validator) {
+                    list.add(validator);
+                }
             }
         }
+        //log.info("[list]:{}",new Gson().toJson(list));
         view.addObject("sysList", list);
 
         //引导页显示

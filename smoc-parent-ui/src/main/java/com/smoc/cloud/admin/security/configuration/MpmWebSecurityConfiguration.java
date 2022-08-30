@@ -153,7 +153,7 @@ public class MpmWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         /**
          * csrf 启用，默认就是开启的
          */
-       http.csrf().disable();
+       //http.csrf().disable();
 
     }
 
