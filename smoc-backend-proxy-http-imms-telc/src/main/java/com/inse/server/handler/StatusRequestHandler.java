@@ -1,20 +1,21 @@
 package com.inse.server.handler;
+
+import com.alibaba.fastjson.JSONObject;
+import com.inse.manager.TemplateStatusManager;
+import com.inse.message.StatusMessage;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.fastjson.JSONObject;
-import com.inse.message.StatusMessage;
-import com.inse.worker.StatusMessageWorker;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 /**
  * 模板审核回调通知接口
@@ -22,22 +23,18 @@ import com.sun.net.httpserver.HttpHandler;
 public class StatusRequestHandler implements HttpHandler {
 	private static final Logger logger = LoggerFactory.getLogger(StatusRequestHandler.class);
 	private String channelID;
-	StatusMessageWorker statusMessageWorker;
 
-	public StatusRequestHandler(String channel) {
-		statusMessageWorker = new StatusMessageWorker();
-		statusMessageWorker.start();
+	public StatusRequestHandler(String channelID) {
 		this.channelID=channelID;
-		
 	}
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		String msgid = UUID.randomUUID().toString().replaceAll("-", "");
+
 		String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
 		Map<String, String> resultMap = new HashMap<String, String>();
 
-		logger.info("{},{},msgid={},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid, ip);
+		logger.info("{},{},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), ip);
 		OutputStream responseBody = exchange.getResponseBody();
 		Headers responseHeaders = exchange.getResponseHeaders();
 		responseHeaders.set("Content-Type", "text/plain;charset=utf-8");
@@ -45,13 +42,13 @@ public class StatusRequestHandler implements HttpHandler {
 		try {
 
 			InputStream is = exchange.getRequestBody();
-			List<String> lines = IOUtils.readLines(is);
+			List<String> lines = IOUtils.readLines(is,"UTF-8");
 			StringBuffer sb = new StringBuffer();
 			for (String line : lines) {
 				sb.append(line);
 			}
 			String queryString = sb.toString();
-			logger.info("{},{},msgid={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid,
+			logger.info("{},{},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(),
 					ip, queryString);
 
 			// 请求数据转json对象
@@ -92,8 +89,7 @@ public class StatusRequestHandler implements HttpHandler {
 			message.setReason(reason);
 			message.setDate(date);
 			message.setChannelID(channelID);
-
-			statusMessageWorker.add(message);
+			TemplateStatusManager.getInstance().process(message);
 		}
 
 	}

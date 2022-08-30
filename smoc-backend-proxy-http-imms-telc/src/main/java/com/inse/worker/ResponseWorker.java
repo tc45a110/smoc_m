@@ -3,10 +3,8 @@
  * 
  */
 package com.inse.worker;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
+
 import com.base.common.cache.CacheBaseService;
-import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.manager.ChannelInfoManager;
@@ -16,10 +14,8 @@ import com.base.common.worker.SuperQueueWorker;
 
 public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 	private String channelID;
-	private BlockingQueue<BusinessRouteValue> responseQueue;
 
-	ResponseWorker(String channelID, String index, BlockingQueue<BusinessRouteValue> responseQueue) {
-		this.responseQueue = responseQueue;
+	ResponseWorker(String channelID, String index) {
 		this.channelID = channelID;
 		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
 		this.start();
@@ -28,11 +24,11 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 	@Override
 	protected void doRun() throws Exception {
 		// 取出响应消息
-		BusinessRouteValue businessRouteValue = responseQueue.poll(FixedConstant.COMMON_POLL_INTERVAL_TIME, TimeUnit.SECONDS);
+		BusinessRouteValue businessRouteValue = poll();
 		if (businessRouteValue == null) {
 			return;
 		}
-		if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
+		if ("1000".equals(businessRouteValue.getNextNodeCode())) {
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);
@@ -56,14 +52,6 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 			      FixedConstant.SPLICER,businessRouteValue.getNextNodeCode(),
 			      FixedConstant.SPLICER,businessRouteValue.getChannelID(),
 			      FixedConstant.SPLICER,businessRouteValue.getChannelMessageID());                  
-	}
-
-	public void exit() {
-		super.exit();
-	}
-
-	public void add(BusinessRouteValue e) {
-		responseQueue.add(e);
 	}
 
 }

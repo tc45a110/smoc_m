@@ -29,8 +29,6 @@
         <option value="$PROJECT_DIR$/smoc-protocol-proxy-smgp/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-business-access/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-scheduler-filters/pom.xml" />
-        <option value="$PROJECT_DIR$/smoc-iot/pom.xml" />
-        <option value="$PROJECT_DIR$/smoc-iot-ui/pom.xml" />
       </list>
     </option>
   </component>

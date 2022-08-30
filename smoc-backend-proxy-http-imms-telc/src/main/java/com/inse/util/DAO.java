@@ -138,7 +138,7 @@ public class DAO {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		sql.append("update smoc.account_channel_template_info set TEMPLATE_STATUS=?,CHANNEL_TEMPLATE_STATUS=?,CHECK_DATE=now(),CHECK_OPINIONS=? where CHANNEL_ID=? and CHANNEL_TEMPLATE__ID=?");
+		sql.append("update smoc.account_channel_template_info set TEMPLATE_STATUS=?,CHANNEL_TEMPLATE_STATUS=?,CHECK_DATE=now(),CHECK_OPINIONS=? where CHANNEL_ID=? and CHANNEL_TEMPLATE_ID=?");
 		
 		logger.info("updateTempldateStatus sql:" + sql.toString());
 		try {

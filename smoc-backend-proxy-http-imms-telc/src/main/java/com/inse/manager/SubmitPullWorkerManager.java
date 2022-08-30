@@ -4,11 +4,6 @@
  */
 package com.inse.manager;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import org.apache.commons.collections4.CollectionUtils;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperMapWorker;
@@ -16,6 +11,12 @@ import com.inse.server.handler.CallbackHTTPServer;
 import com.inse.util.ChannelInterfaceUtil;
 import com.inse.worker.MateriaMessageWorker;
 import com.inse.worker.SubmitPullWorker;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPullWorker>> {
 
@@ -83,14 +84,15 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 			// 启动回调接收服务
 			CallbackHTTPServer callbackHTTPServer = new CallbackHTTPServer(port, channelID);
 			callbackHTTPServer.start();
+			CallbackHTTPServerManager.getInstance().maintain(channelID,callbackHTTPServer);
 
 			// 启动模板推送服务
-			MateriaMessageWorker materiamessageworker = new MateriaMessageWorker(channelID);
-			materiamessageworker.start();
+			MateriaMessageWorker materiaMessageworker = new MateriaMessageWorker(channelID);
+			materiaMessageworker.start();
+			MateriaMessageWorkerManager.getInstance().maintain(channelID,materiaMessageworker);
 
 			// 获取连接数
 			int connectNumber = ChannelInfoManager.getInstance().getConnectNumber(channelID);
-
 			Set<SubmitPullWorker> submitPullWorkerSet = new HashSet<SubmitPullWorker>(connectNumber);
 
 			// 根据连接数来启动线程
@@ -127,6 +129,8 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 				submitPullWorker.exit();
 			}
 		}
+		MateriaMessageWorkerManager.getInstance().exit(channelID);
+		CallbackHTTPServerManager.getInstance().exit(channelID);
 	}
 
 }

@@ -9,7 +9,10 @@ import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
 import com.inse.manager.AccountChanelTemplateInfoManager;
+import com.inse.manager.ReportWorkerManager;
 import com.inse.manager.SubmitPullWorkerManager;
+import com.inse.manager.TemplateStatusManager;
+import com.inse.worker.ChannelInteractiveStatusManager;
 
 public class ProxyServer {
 
@@ -57,6 +60,9 @@ public class ProxyServer {
 			if (sleepTime == 0) {
 				sleepTime = 5;
 			}
+			ReportWorkerManager.getInstance().exit();
+			TemplateStatusManager.getInstance().exit();
+			ChannelInteractiveStatusManager.getInstance().exit();
 			// 默认5秒之后 关闭服务 保证足够的时间处理内存中的数据
 			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME * sleepTime);
 		} catch (Exception e) {

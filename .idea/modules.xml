@@ -12,8 +12,6 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" filepath="$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" filepath="$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-identity/smoc-identity.iml" filepath="$PROJECT_DIR$/smoc-identity/smoc-identity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-iot/smoc-iot.iml" filepath="$PROJECT_DIR$/smoc-iot/smoc-iot.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-iot-ui/smoc-iot-ui.iml" filepath="$PROJECT_DIR$/smoc-iot-ui/smoc-iot-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent/smoc-parent.iml" filepath="$PROJECT_DIR$/smoc-parent/smoc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" filepath="$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" filepath="$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" />

@@ -3,12 +3,8 @@
 * 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
 */
 package com.inse.worker;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
@@ -20,21 +16,23 @@ import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
 import com.inse.manager.AccountChanelTemplateInfoManager;
 import com.inse.util.ChannelInterfaceUtil;
-import com.alibaba.fastjson.JSONArray;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 	private ResponseWorker responseWorker;
 	private String channelID;
-	private ChannelRunStatusWorker channelRunStatusWorker;
 
 	public SubmitPullWorker(String channelID, String index) {
 		this.channelID = channelID;
-		responseWorker = new ResponseWorker(channelID, index, superQueue);
+		responseWorker = new ResponseWorker(channelID, index);
 		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
 		this.start();
-		channelRunStatusWorker=new ChannelRunStatusWorker();
-		channelRunStatusWorker.start();
-		
 	}
 
 	@Override
@@ -90,7 +88,8 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 				JSONArray array = JSONObject.parseArray(option);
 
 				for (int i = 0; i < array.size(); i++) {
-					JSONObject jsonObject_ = (JSONObject) array.get(i);
+					String str = array.get(i) + "";
+					JSONObject jsonObject_ = JSONObject.parseObject(str);
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("Frame", jsonObject_.get("Frame"));
 					Map<String, String> paramMap = new HashMap<String, String>();
@@ -119,16 +118,14 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 					reponseTimeout);
 			logger.info("响应信息：："+response);
 			//维护通道运行状态
-			channelRunStatusWorker.process(channelID,response);
+		com.inse.worker.ChannelInteractiveStatusManager.getInstance().process(channelID,response);
 			BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
 			//获取账号扩展码
 			String extend = AccountChanelTemplateInfoManager.getInstance().getAccountExtendCode(templateId);
 			//获取通道接入码
 			String channelSRCID=ChannelInfoManager.getInstance().getChannelSRCID(channelID);
 			newBusinessRouteValue.setAccountExtendCode(extend);
-			newBusinessRouteValue.setAccountSubmitSRCID(channelSRCID+extend);
-
-			newBusinessRouteValue.setAccountExtendCode(extend);
+			newBusinessRouteValue.setChannelSubmitSRCID(channelSRCID+extend);
 			
 				if (StringUtils.isNotEmpty(response) &&response.contains("ResCode")&&response.contains("TransID")) {
 					JSONObject json = JSONObject.parseObject(response);
@@ -168,9 +165,6 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 	public void exit() {
 		//停止线程
 		responseWorker.exit();
-		StatusMessageWorker.getInstance().exit();
-		ReportWorker.getInstance().exit();
-		ChannelRunStatusWorker.getInstance().exit();
 		super.exit();
 		// 维护通道运行状态
 		ChannelRunStatusManager.getInstance().process(channelID,

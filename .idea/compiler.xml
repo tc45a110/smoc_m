@@ -11,13 +11,11 @@
         <module name="smoc-identity" />
         <module name="smoc-admin-ui" />
         <module name="smoc-parent-ui" />
-        <module name="smoc-iot-ui" />
         <module name="smoc-scheduler" />
         <module name="smoc-service-ui" />
         <module name="smoc-auth" />
         <module name="smoc-common-utils" />
         <module name="smoc-gateway" />
-        <module name="smoc-iot" />
         <module name="smoc-http-server" />
         <module name="smoc" />
         <module name="smoc-saler-ui" />

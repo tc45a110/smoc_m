@@ -1,32 +1,31 @@
 package com.inse.server.handler;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.base.common.vo.BusinessRouteValue;
+import com.inse.manager.ReportWorkerManager;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.base.common.vo.BusinessRouteValue;
-import com.inse.worker.ReportWorker;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 /**
  * 状态报告回调通知接口
  */
 public class ReportRequestHandler implements HttpHandler {
 	private static final Logger logger = LoggerFactory.getLogger(ReportRequestHandler.class);
-	ReportWorker reportWorker;
 	private String channelID;
 	
 
-	public ReportRequestHandler(String channelID) {	
-		reportWorker = new ReportWorker(channelID);
-		reportWorker.start();
+	public ReportRequestHandler(String channelID) {
 		this.channelID=channelID;
 	}
 
@@ -43,8 +42,10 @@ public class ReportRequestHandler implements HttpHandler {
 		try {
 
 			InputStream is = exchange.getRequestBody();
-			List<String> lines = IOUtils.readLines(is);
-			StringBuffer sb = new StringBuffer();
+			List<String> lines = IOUtils.readLines(is,"UTF-8");
+
+			StringBuilder sb = new StringBuilder();
+
 			for (String line : lines) {
 				sb.append(line);
 			}
@@ -93,7 +94,7 @@ public class ReportRequestHandler implements HttpHandler {
 				newBusinessRouteValue.setPhoneNumber(phone);
 				newBusinessRouteValue.setStatusCode(state);
 				newBusinessRouteValue.setAccountID(channelID);
-				reportWorker.add(newBusinessRouteValue);
+				ReportWorkerManager.getInstance().process(newBusinessRouteValue);
 			}
 
 		}
