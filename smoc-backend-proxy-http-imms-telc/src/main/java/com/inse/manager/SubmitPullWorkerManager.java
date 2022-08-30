@@ -84,14 +84,15 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 			// 启动回调接收服务
 			CallbackHTTPServer callbackHTTPServer = new CallbackHTTPServer(port, channelID);
 			callbackHTTPServer.start();
+			CallbackHTTPServerManager.getInstance().maintain(channelID,callbackHTTPServer);
 
 			// 启动模板推送服务
-			MateriaMessageWorker materiamessageworker = new MateriaMessageWorker(channelID);
-			materiamessageworker.start();
+			MateriaMessageWorker materiaMessageworker = new MateriaMessageWorker(channelID);
+			materiaMessageworker.start();
+			MateriaMessageWorkerManager.getInstance().maintain(channelID,materiaMessageworker);
 
 			// 获取连接数
 			int connectNumber = ChannelInfoManager.getInstance().getConnectNumber(channelID);
-
 			Set<SubmitPullWorker> submitPullWorkerSet = new HashSet<SubmitPullWorker>(connectNumber);
 
 			// 根据连接数来启动线程
