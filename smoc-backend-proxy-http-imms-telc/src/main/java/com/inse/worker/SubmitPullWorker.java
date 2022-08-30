@@ -14,6 +14,7 @@ import com.base.common.util.HttpClientUtil;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
 import com.inse.manager.AccountChanelTemplateInfoManager;
+import com.inse.manager.ChannelInteractiveStatusManager;
 import com.inse.util.ChannelInterfaceUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -124,7 +125,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 						reponseTimeout);
 				logger.info("响应消息={}",response);
 				//维护通道运行状态
-				com.inse.worker.ChannelInteractiveStatusManager.getInstance().process(channelID, response);
+				ChannelInteractiveStatusManager.getInstance().process(channelID, response);
 				BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
 				//获取账号扩展码
 				String extend = AccountChanelTemplateInfoManager.getInstance().getAccountExtendCode(templateId);
