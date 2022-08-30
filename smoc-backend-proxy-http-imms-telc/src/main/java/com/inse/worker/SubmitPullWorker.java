@@ -3,12 +3,8 @@
 * 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
 */
 package com.inse.worker;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
@@ -20,21 +16,23 @@ import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
 import com.inse.manager.AccountChanelTemplateInfoManager;
 import com.inse.util.ChannelInterfaceUtil;
-import com.alibaba.fastjson.JSONArray;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 	private ResponseWorker responseWorker;
 	private String channelID;
-	private ChannelRunStatusWorker channelRunStatusWorker;
 
 	public SubmitPullWorker(String channelID, String index) {
 		this.channelID = channelID;
-		responseWorker = new ResponseWorker(channelID, index, superQueue);
+		responseWorker = new ResponseWorker(channelID, index);
 		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
 		this.start();
-		channelRunStatusWorker=new ChannelRunStatusWorker();
-		channelRunStatusWorker.start();
-		
 	}
 
 	@Override

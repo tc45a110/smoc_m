@@ -1,10 +1,12 @@
 package com.inse.server.handler;
+
+import com.inse.util.ChannelInterfaceUtil;
+import com.sun.net.httpserver.HttpServer;
+import org.apache.log4j.Logger;
+
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.Executors;
-import org.apache.log4j.Logger;
-import com.inse.util.ChannelInterfaceUtil;
-import com.sun.net.httpserver.HttpServer;
 
 public class CallbackHTTPServer {
 	private static Logger logger = Logger.getLogger(CallbackHTTPServer.class);
@@ -41,5 +43,9 @@ public class CallbackHTTPServer {
 			e.printStackTrace();
 			System.exit(0);
 		}
+	}
+
+	public void exit(){
+		server.stop(0);
 	}
 }

@@ -3,11 +3,7 @@
  * 
  */
 package com.inse.manager;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import org.apache.commons.collections4.CollectionUtils;
+
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperMapWorker;
@@ -15,6 +11,12 @@ import com.inse.server.handler.CallbackHTTPServer;
 import com.inse.util.ChannelInterfaceUtil;
 import com.inse.worker.MateriaMessageWorker;
 import com.inse.worker.SubmitPullWorker;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPullWorker>> {
 
@@ -126,6 +128,8 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 				submitPullWorker.exit();
 			}
 		}
+		MateriaMessageWorkerManager.getInstance().exit(channelID);
+		CallbackHTTPServerManager.getInstance().exit(channelID);
 	}
 
 }

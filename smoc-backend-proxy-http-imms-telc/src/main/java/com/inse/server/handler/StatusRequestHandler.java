@@ -1,4 +1,16 @@
 package com.inse.server.handler;
+
+import com.alibaba.fastjson.JSONObject;
+import com.inse.manager.StatusMessageWorker;
+import com.inse.manager.TemplateStatusManager;
+import com.inse.message.StatusMessage;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -6,15 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.fastjson.JSONObject;
-import com.inse.message.StatusMessage;
-import com.inse.worker.StatusMessageWorker;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 /**
  * 模板审核回调通知接口
@@ -22,10 +25,10 @@ import com.sun.net.httpserver.HttpHandler;
 public class StatusRequestHandler implements HttpHandler {
 	private static final Logger logger = LoggerFactory.getLogger(StatusRequestHandler.class);
 	private String channelID;
-	StatusMessageWorker statusMessageWorker;
+	TemplateStatusManager statusMessageWorker;
 
 	public StatusRequestHandler(String channel) {
-		statusMessageWorker = new StatusMessageWorker();
+		statusMessageWorker = new TemplateStatusManager();
 		statusMessageWorker.start();
 		this.channelID=channelID;
 		
