@@ -44,6 +44,11 @@ public class TemplateStatusManager extends SuperQueueWorker<StatusMessage> {
 		return manager;
 	}
 
+	private TemplateStatusManager(){
+		this.setName("TemplateStatusManager");
+		this.start();
+	}
+
 	@Override
 	protected void doRun() throws Exception {
 		StatusMessage message = poll();

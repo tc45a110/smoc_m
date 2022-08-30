@@ -23,6 +23,7 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 	private static SubmitPullWorkerManager manager = new SubmitPullWorkerManager();
 
 	private SubmitPullWorkerManager() {
+		this.setName("SubmitPullWorkerManager");
 		this.start();
 	}
 

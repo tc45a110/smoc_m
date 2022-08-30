@@ -15,6 +15,7 @@ public class MateriaMessageWorkerManager extends SuperMapWorker<String, MateriaM
 	private static MateriaMessageWorkerManager manager = new MateriaMessageWorkerManager();
 
 	private MateriaMessageWorkerManager() {
+		this.setName("MateriaMessageWorkerManager");
 		this.start();
 	}
 

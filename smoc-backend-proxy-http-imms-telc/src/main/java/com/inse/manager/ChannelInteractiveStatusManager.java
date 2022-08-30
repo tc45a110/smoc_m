@@ -15,6 +15,11 @@ public class ChannelInteractiveStatusManager extends SuperConcurrentMapWorker<St
 		return manager;
 	}
 
+	private ChannelInteractiveStatusManager(){
+		this.setName("ChannelInteractiveStatusManager");
+		this.start();
+	}
+
 	@Override
 	protected void doRun() throws Exception {
 		Thread.sleep(INTERVAL);

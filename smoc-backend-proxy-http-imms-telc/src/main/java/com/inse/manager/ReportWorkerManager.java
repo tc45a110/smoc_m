@@ -5,7 +5,6 @@
 package com.inse.manager;
 
 import com.base.common.cache.CacheBaseService;
-import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.util.DateUtil;
@@ -29,6 +28,7 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 			reportWorker.setName(new StringBuilder("ReportWorker-").append(i+1).toString());
 			reportWorker.start();
 		}
+		this.setName("ReportWorkerManager");
 		this.start();
 	}
 
