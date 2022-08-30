@@ -74,5 +74,12 @@
             <artifactId>${project.common.artifactId}</artifactId>
             <version>${project.common.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.5</version>
+        </dependency>
     </dependencies>
+
 </project>
