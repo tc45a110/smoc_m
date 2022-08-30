@@ -39,7 +39,7 @@ public class TemplateTransition {
 	    
 		Map<String, String> map = new HashMap<String, String>();
 		JSONObject jsonobject = new JSONObject();
-		List<String> list = new ArrayList<String>();
+		List<JSONObject> list = new ArrayList<JSONObject>();
 		List<String> urlList = new ArrayList<>();
 		try {
 			JSONArray array = JSONObject.parseArray(MmAttchnent);
@@ -74,8 +74,8 @@ public class TemplateTransition {
 					}
 					
 					optionJsonObject.put("Frame",tindex+"-"+s);
-					optionJsonObject.put("param",listflag.toString());	
-					list.add(optionJsonObject.toString());
+					optionJsonObject.put("Param",listflag.toString());
+					list.add(optionJsonObject);
 					
 					textJsonObject.put("Frame",tindex+"-"+s);
 					textJsonObject.put("Text",frameTxt);

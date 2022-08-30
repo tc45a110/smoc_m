@@ -1,7 +1,6 @@
 package com.inse.worker;
 import java.io.File;
 import java.util.*;
-
 import com.base.common.manager.AccountInfoManager;
 import com.base.common.manager.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +19,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.ChannelInfoManager;
-import com.base.common.util.HttpClientUtil;
 import com.base.common.worker.SuperQueueWorker;
 import com.inse.message.ResponseMessage;
 import com.inse.message.AccountTemplateInfo;

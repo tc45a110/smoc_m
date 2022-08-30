@@ -90,7 +90,8 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 				JSONArray array = JSONObject.parseArray(option);
 
 				for (int i = 0; i < array.size(); i++) {
-					JSONObject jsonObject_ = (JSONObject) array.get(i);
+					String str = array.get(i) + "";
+					JSONObject jsonObject_ = JSONObject.parseObject(str);
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("Frame", jsonObject_.get("Frame"));
 					Map<String, String> paramMap = new HashMap<String, String>();
@@ -128,7 +129,6 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 			newBusinessRouteValue.setAccountExtendCode(extend);
 			newBusinessRouteValue.setAccountSubmitSRCID(channelSRCID+extend);
 
-			newBusinessRouteValue.setAccountExtendCode(extend);
 			
 				if (StringUtils.isNotEmpty(response) &&response.contains("ResCode")&&response.contains("TransID")) {
 					JSONObject json = JSONObject.parseObject(response);

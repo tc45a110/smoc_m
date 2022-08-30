@@ -25,7 +25,7 @@ public class ReportRequestHandler implements HttpHandler {
 	
 
 	public ReportRequestHandler(String channelID) {	
-		reportWorker = new ReportWorker(channelID);
+		reportWorker = new ReportWorker();
 		reportWorker.start();
 		this.channelID=channelID;
 	}
