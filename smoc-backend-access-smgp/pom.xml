@@ -13,9 +13,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.common.artifactId>com.smoc.backend.smoc-backend-base-common</project.common.artifactId>
         <project.common.version>4.0.2</project.common.version>
-        <project.packageName>access-smgp</project.packageName>
+        <project.packageName>protocol-access-smgp</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
-        <project.resources.fileName>xingyu</project.resources.fileName>
+        <project.resources.fileName>example</project.resources.fileName><!--开发环境-->
     </properties>
 
     <build>
