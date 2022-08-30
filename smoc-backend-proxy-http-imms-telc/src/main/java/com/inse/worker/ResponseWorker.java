@@ -32,7 +32,7 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 		if (businessRouteValue == null) {
 			return;
 		}
-		if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
+		if ("1000".equals(businessRouteValue.getNextNodeCode())) {
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);

@@ -127,8 +127,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 			//获取通道接入码
 			String channelSRCID=ChannelInfoManager.getInstance().getChannelSRCID(channelID);
 			newBusinessRouteValue.setAccountExtendCode(extend);
-			newBusinessRouteValue.setAccountSubmitSRCID(channelSRCID+extend);
-
+			newBusinessRouteValue.setChannelSubmitSRCID(channelSRCID+extend);
 			
 				if (StringUtils.isNotEmpty(response) &&response.contains("ResCode")&&response.contains("TransID")) {
 					JSONObject json = JSONObject.parseObject(response);
@@ -168,9 +167,6 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 	public void exit() {
 		//停止线程
 		responseWorker.exit();
-		StatusMessageWorker.getInstance().exit();
-		ReportWorker.getInstance().exit();
-		ChannelRunStatusWorker.getInstance().exit();
 		super.exit();
 		// 维护通道运行状态
 		ChannelRunStatusManager.getInstance().process(channelID,

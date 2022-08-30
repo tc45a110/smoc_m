@@ -4,10 +4,6 @@ import com.inse.message.StatusMessage;
 import com.inse.util.DAO;
 
 public class StatusMessageWorker extends SuperQueueWorker<StatusMessage> {
-	private static StatusMessageWorker manager = new StatusMessageWorker();
-	public static StatusMessageWorker getInstance() {
-		return manager;
-	}
 
 	@Override
 	protected void doRun() throws Exception {
@@ -20,9 +16,4 @@ public class StatusMessageWorker extends SuperQueueWorker<StatusMessage> {
 		}
 
 	}
-
-	public void exit() {
-		super.exit();
-	}
-
 }

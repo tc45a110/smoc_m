@@ -92,7 +92,6 @@ public class StatusRequestHandler implements HttpHandler {
 			message.setReason(reason);
 			message.setDate(date);
 			message.setChannelID(channelID);
-
 			statusMessageWorker.add(message);
 		}
 

@@ -184,10 +184,4 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 		}
 		return result;
 	}
-
-
-	public void exit() {
-		// 停止线程
-		super.exit();
-	}
 }
