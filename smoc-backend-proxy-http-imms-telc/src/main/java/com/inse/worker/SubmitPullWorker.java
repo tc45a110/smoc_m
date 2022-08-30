@@ -118,7 +118,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 					reponseTimeout);
 			logger.info("响应信息：："+response);
 			//维护通道运行状态
-			channelRunStatusWorker.process(channelID,response);
+		com.inse.worker.ChannelInteractiveStatusManager.getInstance().process(channelID,response);
 			BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
 			//获取账号扩展码
 			String extend = AccountChanelTemplateInfoManager.getInstance().getAccountExtendCode(templateId);

@@ -1,23 +1,24 @@
 package com.inse.worker;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import org.apache.commons.lang3.StringUtils;
+
 import com.base.common.manager.ChannelRunStatusManager;
 import com.base.common.worker.SuperConcurrentMapWorker;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
-public class ChannelRunStatusWorker extends SuperConcurrentMapWorker<String, Set<String>> {
+public class ChannelInteractiveStatusManager extends SuperConcurrentMapWorker<String, Set<String>> {
+	private static ChannelInteractiveStatusManager manager = new ChannelInteractiveStatusManager();
 
+	public static ChannelInteractiveStatusManager getInstance(){
+		return manager;
+	}
 
 	@Override
 	protected void doRun() throws Exception {
 		Thread.sleep(INTERVAL);
-		mainTain();
-
+		maintain();
 	}
 
 	public void process(String channelID, String response) {
@@ -36,7 +37,7 @@ public class ChannelRunStatusWorker extends SuperConcurrentMapWorker<String, Set
 
 	}
 
-	public void mainTain() {
+	public void maintain() {
 		if (superMap.size() > 0) {
 			Map<String, Set<String>>  channelRunStatusMap=new ConcurrentHashMap<String, Set<String>>(superMap);
 			for (String channelID : channelRunStatusMap.keySet()) {

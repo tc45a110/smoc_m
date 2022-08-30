@@ -5,7 +5,6 @@ import com.base.common.manager.AccountInfoManager;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperQueueWorker;
-import com.inse.manager.ChannelInteractiveStatusManager;
 import com.inse.message.AccountTemplateInfo;
 import com.inse.message.ResponseMessage;
 import com.inse.util.ChannelInterfaceUtil;
@@ -70,7 +69,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 
 						String response = submitTemplate(resultMap.get("mmdl"),resultMap.get("urlpath"), channelID);
 						logger.info("响应消息："+response);
-						ChannelInteractiveStatusManager.getInstance().process(channelID,response);
+						com.inse.worker.ChannelInteractiveStatusManager.getInstance().process(channelID,response);
 						String options = resultMap.get("options");
 						
 						if (StringUtils.isNotEmpty(response)&&response.contains("ResCode")) {
@@ -188,9 +187,4 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 		return result;
 	}
 
-
-	public void exit() {
-		// 停止线程
-		super.exit();
-	}
 }
