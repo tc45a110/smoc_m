@@ -25,9 +25,6 @@
     <file url="file://$PROJECT_DIR$/smoc-http-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-http-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-identity/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/smoc-iot-ui/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/smoc-iot-ui/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/smoc-iot/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-parent-ui" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-parent-ui/src/main/java" charset="UTF-8" />
