@@ -4,13 +4,13 @@
  */
 package com.inse.server;
 
+import com.base.common.constant.DynamicConstant;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import com.base.common.constant.DynamicConstant;
 
 public class AdminClient {
 	public static void main(String[] args) {
@@ -27,6 +27,7 @@ public class AdminClient {
 			while ((msg = br.readLine()) != null) {
 				System.out.println(msg);
 			}
+			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
