@@ -3,7 +3,6 @@
  */
 package com.inse.worker;
 import com.base.common.cache.CacheBaseService;
-import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.util.DateUtil;
@@ -12,23 +11,17 @@ import com.base.common.worker.SuperQueueWorker;
 
 
 public class ReportWorker extends SuperQueueWorker<BusinessRouteValue> {
-    private static ReportWorker manager = new ReportWorker();
 
-
-    public static ReportWorker getInstance() {
-        return manager;
-    }
 
     @Override
     protected void doRun() throws Exception {
         //取出状态报告
         BusinessRouteValue businessRouteValue=poll();
         if (businessRouteValue == null) {
-            logger.info("状态报告为空");
             return;
         }
 
-        if (DynamicConstant.REPORT_SUCCESS_CODE.equals(businessRouteValue.getStatusCode())) {
+        if ("RECEIVD".equals(businessRouteValue.getStatusCode())) {
             businessRouteValue.setSuccessCode(InsideStatusCodeConstant.SUCCESS_CODE);
         } else {
             businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
@@ -51,10 +44,6 @@ public class ReportWorker extends SuperQueueWorker<BusinessRouteValue> {
 
     }
 
-    public void exit() {
-        //停止线程
-        super.exit();
-    }
 }
 
 

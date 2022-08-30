@@ -12,11 +12,7 @@ import com.base.common.worker.SuperConcurrentMapWorker;
 
 public class ChannelRunStatusWorker extends SuperConcurrentMapWorker<String, Set<String>> {
 
-	private static ChannelRunStatusWorker manager = new ChannelRunStatusWorker();
 
-	public static ChannelRunStatusWorker getInstance() {
-		return manager;
-	}
 	@Override
 	protected void doRun() throws Exception {
 		Thread.sleep(INTERVAL);
@@ -64,11 +60,4 @@ public class ChannelRunStatusWorker extends SuperConcurrentMapWorker<String, Set
 		}
 	}
 
-	public void exit() {
-		// 停止线程
-		super.exit();
-	}
-
-	
-	
 }
