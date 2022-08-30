@@ -2,14 +2,15 @@ package com.inse.server.handler;
 
 import com.inse.util.ChannelInterfaceUtil;
 import com.sun.net.httpserver.HttpServer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
 public class CallbackHTTPServer {
-	private static Logger logger = Logger.getLogger(CallbackHTTPServer.class);
+	private static final Logger logger = LoggerFactory.getLogger(CallbackHTTPServer.class);
 	HttpServer server;
 	private String port;
 	private String channelID;
@@ -36,12 +37,10 @@ public class CallbackHTTPServer {
 			server.createContext(reportServiceName, new ReportRequestHandler(channelID));
 			server.setExecutor(Executors.newCachedThreadPool());
 			server.start();
-			logger.info("HTTP Server is listening on port " + port);
+			logger.info("通道{}监听端口{},接收服务启动成功",channelID,port);
 
 		} catch (Exception e) {
-			logger.error("HTTP Server 启动失败:", e);
-			e.printStackTrace();
-			System.exit(0);
+			logger.error("通道{}监听端口{},接收服务启动失败",channelID,port,e);
 		}
 	}
 
