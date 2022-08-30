@@ -88,6 +88,7 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 
 			// 启动模板推送服务
 			MateriaMessageWorker materiaMessageworker = new MateriaMessageWorker(channelID);
+			materiaMessageworker.setName("MateriaMessageWorker-"+channelID);
 			materiaMessageworker.start();
 			MateriaMessageWorkerManager.getInstance().maintain(channelID,materiaMessageworker);
 
