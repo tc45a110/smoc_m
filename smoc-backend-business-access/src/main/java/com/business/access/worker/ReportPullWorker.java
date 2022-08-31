@@ -73,7 +73,10 @@ public class ReportPullWorker extends SuperCacheWorker{
 				}
 				
 			}else if(BusinessDataManager.getInstance().getReportStoreToDatabaseProtocol().contains(businessRouteValue.getProtocol())){
-				reportStoreWorker.put(businessRouteValue.getAccountMessageIDs(), businessRouteValue);
+				String key = new StringBuilder(businessRouteValue.getAccountMessageIDs())
+						.append(",").append(businessRouteValue.getBusinessMessageID())
+						.append(",").append(businessRouteValue.getMessageIndex()).toString();
+				reportStoreWorker.put(key, businessRouteValue);
 			}
 			logger.info(
 					new StringBuilder().append("保存回执").append("{}accountID={}").append("{}phoneNumber={}")
