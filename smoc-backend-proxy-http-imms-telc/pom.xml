@@ -16,8 +16,11 @@
         <project.packageName>protocol-proxy-http-imms-telc</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
         <!--星语-->
-        <project.resources.fileName>xingyu</project.resources.fileName>
-        <!--        <project.resources.fileName>example</project.resources.fileName>&lt;!&ndash;开发环境&ndash;&gt;-->
+        <!--<project.resources.fileName>xingyu</project.resources.fileName>-->
+        <!--开发环境-->
+        <!--<project.resources.fileName>example</project.resources.fileName>-->
+        <!--小舟-->
+        <project.resources.fileName>xiaozhou</project.resources.fileName>
     </properties>
 
     <build>

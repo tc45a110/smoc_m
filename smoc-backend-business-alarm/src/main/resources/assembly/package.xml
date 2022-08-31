@@ -27,7 +27,7 @@
                 <exclude>*:protobuf*</exclude>
                 <exclude>*:json*</exclude>
                 <!--  spring  -->
-                <exclude>org.springframework:*</exclude>
+<!--                <exclude>org.springframework:*</exclude>-->
                 <!-- 排除项目本身生成的jar包 使用自定义名称的jar包  -->
                 <exclude>com.smoc.backend:*</exclude>
             </excludes>

@@ -17,7 +17,10 @@
         <project.packageName>protocol-access-cmpp</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
         <!--<project.resources.fileName>xingyu</project.resources.fileName>--><!--星语-->
-        <project.resources.fileName>example</project.resources.fileName><!--开发环境-->
+        <!--开发环境-->
+        <project.resources.fileName>example</project.resources.fileName>
+        <!--小舟-->
+        <project.resources.fileName>xiaozhou</project.resources.fileName>
     </properties>
 
     <build>
