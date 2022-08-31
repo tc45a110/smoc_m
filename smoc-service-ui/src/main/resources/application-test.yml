@@ -60,7 +60,7 @@ com:
       security: #系统信息配置
         system-marking: smoc-service #系统标识  本系统和授权管理中心配置的系统标识对应
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
-        system-name: smoc自服务平台 #系统名称
+        system-name: 自服务平台 #系统名称
         company-name: 北京星语互联科技有限公司  #公司名称
         enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话

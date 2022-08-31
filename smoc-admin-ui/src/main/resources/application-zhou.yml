@@ -18,16 +18,18 @@ server: #服务端口
         name: OAUTH2SESSION
       timeout: 240m
   connection-timeout: 15000
+  tomcat:
+    basedir: /smoc/apps/temp
 
 spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.22.171.248:8848
   redis: #redis配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+    host: 172.22.171.219
+    port: 6379
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -41,8 +43,7 @@ spring:
     multipart:
       max-file-size: 50MB  #单个数据大小
       max-request-size: 100MB #总数据大小
-      location: F:/data/apps/temp
-
+      location: /smoc/apps/temp
 #**********************************************************
 # manpuman oauth2 token参数设置
 #**********************************************************
@@ -58,19 +59,20 @@ com:
         system-marking: smoc-admin #系统标识  本系统和授权管理中心配置的系统标识对应
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
         system-name: smoc运营中心 #系统名称
-        company-name: 小舟科技(北京)有限公司  #公司名称
+        company-name: 北京星语互联科技有限公司  #公司名称
         enable-verify-code: true #是否启用验证码
         help-mobile: 联系电话 #帮助电话
 
       smoc:
-        enterprise-file-path: F:/data/enterprise/
-        mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
-        certify-file-root-path: F:/data/certify/   #证件文件根目录
+        enterprise-file-path: /share/resourceFile/enterprise/
+        mobile-file-root-path: /share/resourceFile/message/mobile  #短信手机号文件根目录
+        web-url: http://47.93.97.218:8085/service #导出账号信息：自服务平台网址
+        certify-file-root-path: /share/resourceFile/certify/   #证件文件根目录
         certify-file-type: jpg  #证件文件允许的文件类型 多个用 “,” 隔开
-        sign-register-root-path: F:/data/register/
+        sign-register-root-path: /share/resourceFile/register/
         message-resource:
-          resource-url: http://localhost:8090/smoc/message/resource #访问资源路径
-          resource-file-root-path: F:/data/message/resource  #资源文件根目录
+          resource-url: http://47.93.97.218/smoc/message/resource #访问资源路径
+          resource-file-root-path: /share/resourceFile/message/resource  #资源文件根目录
 
         intelligence:
           account: AP0681
@@ -78,8 +80,7 @@ com:
           domain: domain
           server-address: https://tpl-aim.monyun.cn:57123
           view-address: http://localhost:8080
-          resource-file-root-path: /Users/wujihui/desktop/work/data/intelect/resource/  #资源文件根目录
-
+          resource-file-root-path: /share/resourceFile/intelect/resource/  #资源文件根目录
 
     #**********************************************************
     # 内置tomcat 配置
@@ -96,7 +97,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: E:/log/smoc-log/smoc-admin-ui-logs
+  path: /smoc/smoc-log/smoc-admin-ui-logs
   level:
     root: info
 

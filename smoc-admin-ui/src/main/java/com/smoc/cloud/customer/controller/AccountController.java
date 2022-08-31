@@ -878,13 +878,19 @@ public class AccountController {
         accountBasicInfoValidator.setAccountId(data.getData().getEnterpriseFlag()+bussinessAccountId.getMessage());
         accountBasicInfoValidator.setAccountCopyId(accountId);
 
+        if("INTL".equals(info.getData().getCarrier())){
+            //国际账号：随机生成扩展码
+            accountBasicInfoValidator.setExtendNumber(Utils.getRandom(6));
+            view.setViewName("customer/account/international/account_international_edit_base");
+        }else{
+            Integer extendNumber = sequenceService.findSequence("ACCOUNT_EXTEND_NUMBER");
+            accountBasicInfoValidator.setExtendNumber(extendNumber+"");
+        }
+
+
         view.addObject("op", "add");
         view.addObject("accountBasicInfoValidator", info.getData());
         view.addObject("enterpriseBasicInfoValidator", data.getData());
-
-        if("INTL".equals(info.getData().getCarrier())){
-            view.setViewName("customer/account/international/account_international_edit_base");
-        }
 
         return view;
 
