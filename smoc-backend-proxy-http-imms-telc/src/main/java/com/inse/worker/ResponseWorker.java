@@ -17,7 +17,7 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 
 	ResponseWorker(String channelID, String index) {
 		this.channelID = channelID;
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("ResponseWorker-").append(channelID).append("-").append(index).toString());
 		this.start();
 	}
 

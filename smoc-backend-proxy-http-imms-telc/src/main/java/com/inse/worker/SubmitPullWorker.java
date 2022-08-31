@@ -33,7 +33,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 	public SubmitPullWorker(String channelID, String index) {
 		this.channelID = channelID;
 		responseWorker = new ResponseWorker(channelID, index);
-		this.setName(new StringBuilder(channelID).append("-").append(index).toString());
+		this.setName(new StringBuilder("SubmitPullWorker-").append(channelID).append("-").append(index).toString());
 		this.start();
 	}
 
