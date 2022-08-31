@@ -23,11 +23,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.22.171.248:8848
   redis: #redis配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+    host: 172.22.171.219
+    port: 6379
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -53,7 +53,7 @@ com:
         system-marking: smoc-auth #系统标识  本系统和授权管理中心配置的系统标识对应
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
         system-name: 认证、鉴权中心 #系统名称
-        company-name: 小舟科技(北京)有限公司  #公司名称
+        company-name: 北京星语互联科技有限公司  #公司名称
         ssl: false
         enable-verify-code: true #是否启用验证码
         help-mobile: 联系电话 #帮助电话
@@ -77,6 +77,6 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: E:/log/smoc-log/smoc-auth-ui-logs
+  path: /smoc/smoc-log/smoc-auth-ui-logs
   level:
     root: info

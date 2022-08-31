@@ -1,0 +1,1 @@
+nohup /smoc/apps/business-mo/bin/_shutdown.sh > /smoc/logs/business-mo/system.log &

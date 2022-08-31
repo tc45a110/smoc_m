@@ -4,16 +4,15 @@
  */
 package com.business.access.worker;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperConcurrentMapWorker;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
 
 /**
  * 保存状态报告到数据库
@@ -24,16 +23,17 @@ public class ReportStoreWorker extends SuperConcurrentMapWorker<String,BusinessR
 	public void doRun() throws Exception {
 		if(superMap.size() > 0) {
 			long startTime = System.currentTimeMillis();
+
 			//临时数据
-			List<BusinessRouteValue> businessRouteValueList =  new ArrayList<BusinessRouteValue>(superMap.values());
-			
-			//将已经取走的数据在原始缓存中进行删除
-			for(BusinessRouteValue businessRouteValue : businessRouteValueList){
-				superMap.remove(businessRouteValue.getAccountMessageIDs());
+			Map<String,BusinessRouteValue> businessRouteValueMap = new HashMap<String,BusinessRouteValue>(superMap);
+
+			for(String key : businessRouteValueMap.keySet()){
+				superMap.remove(key);
 			}
-			saveRouteMessageMrInfo(businessRouteValueList);
+
+			saveRouteMessageMrInfo(businessRouteValueMap.values());
 			long interval = System.currentTimeMillis() - startTime;
-			logger.info("状态报告保存数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
+			logger.info("状态报告保存数据条数{},耗时{}毫秒",businessRouteValueMap.values().size(),interval);
 		}else {
 			//当没有数据时，需要暂停一会
 			long interval = BusinessDataManager.getInstance().getMessageSaveIntervalTime();
@@ -41,17 +41,16 @@ public class ReportStoreWorker extends SuperConcurrentMapWorker<String,BusinessR
 		}
 	}
 	
-	public void put(String accountMessageID, BusinessRouteValue businessRouteValue) {
-		this.add(accountMessageID,businessRouteValue);
+	public void put(String key, BusinessRouteValue businessRouteValue) {
+		this.add(key,businessRouteValue);
 	}
 	
 	/**
 	 * 保存发下数据
-	 * @param businessRouteValueList
-	 * @param tableName
+	 * @param businessRouteValueCollection
 	 */
 	private void saveRouteMessageMrInfo(
-			List<BusinessRouteValue> businessRouteValueList) {
+			Collection<BusinessRouteValue> businessRouteValueCollection) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -69,7 +68,7 @@ public class ReportStoreWorker extends SuperConcurrentMapWorker<String,BusinessR
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql.toString());
 
-			for (BusinessRouteValue businessRouteValue : businessRouteValueList) {
+			for (BusinessRouteValue businessRouteValue : businessRouteValueCollection) {
 				pstmt.setString(1, businessRouteValue.getAccountID());
 				pstmt.setString(2, businessRouteValue.getPhoneNumber());
 				pstmt.setString(3, businessRouteValue.getChannelReportTime());

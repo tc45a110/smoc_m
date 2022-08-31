@@ -6,6 +6,9 @@ import com.smoc.examples.utils.HMACUtil;
 import com.smoc.examples.utils.Okhttp3Utils;
 import com.smoc.examples.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -21,22 +24,25 @@ public class SendInterMessageByTemplate {
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-        header.put("account", "YQT118");
+        header.put("account", "AAA132");
 
         //请求的数据
         Map<String, Object> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "YQT118");
+        requestDataMap.put("account", "AAA132");
 
         //模板ID
-        requestDataMap.put("templateId", "TEMP100628");
+        requestDataMap.put("templateId", "TEMP100881");
 
+        List<String> numbers = SendInterMessageByTemplate.getNumber();
+
+        // System.out.println("[请求响应]数据:" + new Gson().toJson(numbers));
         //模板短信内容
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < 500; i++) {
-            String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
+        for (String number:numbers) {
+            String item = number+"|" + Utils.getRandom(4);
             list.add(item);
         }
         requestDataMap.put("content", list);
@@ -62,7 +68,7 @@ public class SendInterMessageByTemplate {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "m7QP8@m4@");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "s#nF4JwX");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 
@@ -70,5 +76,25 @@ public class SendInterMessageByTemplate {
 
         String result = Okhttp3Utils.postJson(url, requestJsonData, header);
         System.out.println("[请求响应]数据:" + result);
+    }
+
+    /**
+     * 读取txt文件
+     * @return
+     */
+    public static List<String> getNumber(){
+        List<String> result = new ArrayList<>();
+        //使用try-with-resouce不需要手动关闭文件流
+        try(BufferedReader br = new BufferedReader(new FileReader("F:\\asd.txt"))){
+            String tmp = null;
+            while ((tmp = br.readLine()) != null){
+                //System.out.println(tmp);
+                result.add(tmp);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

@@ -19,7 +19,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.22.171.248:8848
   data:
     jpa:
       repositories:
@@ -35,7 +35,7 @@ spring:
     hibernate:
       ddl-auto: none
     generate-ddl: false
-    show-sql: true
+    show-sql: false
     open-in-view: true
 
   # ========================================================================================
@@ -45,10 +45,10 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: MpmSpringHikariCP
-      jdbc-url: jdbc:mysql://rm-2zergmfbo0d88p44aao.mysql.rds.aliyuncs.com:3306/smoc_oauth_prod?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
+      jdbc-url: jdbc:mysql://rm-2ze9n0t02468i1ior.mysql.rds.aliyuncs.com:3306/smoc_oauth?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: yunsen_smoc
-      password: YUN%smoc9#40
+      password: A%dEjB9!h40
       auto-commit: true
       connection-timeout: 30000
       idle-timeout: 60000
@@ -65,9 +65,9 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+    host: 172.22.171.219
+    port: 6379
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -95,7 +95,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: E:/log/smoc-log/smoc-auth-logs
+  path: /smoc/smoc-log/smoc-auth-logs
   level:
     root: info
 

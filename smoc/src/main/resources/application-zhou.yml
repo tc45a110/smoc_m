@@ -19,7 +19,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.22.171.248:8848
   data:
     jpa:
       repositories:
@@ -35,7 +35,7 @@ spring:
     hibernate:
       ddl-auto: none
     generate-ddl: false
-    show-sql: true
+    show-sql: false
     open-in-view: true
 
   # ========================================================================================
@@ -45,10 +45,10 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: MpmSpringHikariCP
-      jdbc-url: jdbc:mysql://rm-2zergmfbo0d88p44aao.mysql.rds.aliyuncs.com:3306/smoc_prod?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
+      jdbc-url: jdbc:mysql://rm-2ze9n0t02468i1ior.mysql.rds.aliyuncs.com:3306/smoc?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: yunsen_smoc
-      password: YUN%smoc9#40
+      password: A%dEjB9!h40
       auto-commit: true
       connection-timeout: 30000
       idle-timeout: 60000
@@ -65,10 +65,10 @@ spring:
   #**********************************************************
   # Redis
   #**********************************************************
-  redis: #redis配置  配置了布隆过滤器、限流插件
-    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
+  redis: #redis配置
+    host: r-2zeng1oump1wb7l5tb.redis.rds.aliyuncs.com
     port: 6379
-    password: Tsmoc40#RedistEst
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -79,10 +79,10 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
-  redis2: #redis2配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+  redis2: #redis2配置 布隆过滤器、限流插件
+    host: 172.22.171.219
+    port: 6379
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -94,10 +94,10 @@ spring:
         time-between-eviction-runs: 1000
 
   redis3: #redis3配置：携号转网redis
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
-    database: 1
+    host: 172.22.171.220
+    port: 6379
+    password: J15mDngG
+    database: 0
     timeout: 3000
     jedis:
       pool:
@@ -108,7 +108,7 @@ spring:
         time-between-eviction-runs: 1000
 
 rocketmq:
-  name-server: 123.57.216.87:9876
+  name-server: 172.22.171.219:9876
   producer:
     #生产者组名，规定在一个应用里面必须唯一
     group: group-filter
@@ -140,18 +140,19 @@ com:
     cloud:
       smoc:
         message:
-          mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
+          mobile-file-root-path: /share/resourceFile/message/mobile  #短信手机号文件根目录
           mobile-count-limit: 1000 #该批次手机号总量
         tablestore:
-          end-point: https://message-log.cn-beijing.ots.aliyuncs.com #访问地址
+          end-point: https://message-log.cn-beijing.vpc.tablestore.aliyuncs.com #访问地址
           access-key-id: LTAI5tA6ZbwmPhL578Tq4w7P #AccessKey ID
           access-key-secret: R1QXpJAvrUW8rNf9Zn3zLvc81TquV9 #AccessKey Secret
           instance-name: message-log #访问实例
 
 logging:
   config: classpath:logback-spring.xml
-  path: E:/log/smoc-log/smoc-logs
   level:
     root: info
+  file:
+    path: /smoc/smoc-log/smoc-logs
 
 

@@ -112,7 +112,6 @@ public class EnterpriseSignCertifyController {
         //初始化参数
         EnterpriseSignCertifyValidator enterpriseSignCertifyValidator = new EnterpriseSignCertifyValidator();
         enterpriseSignCertifyValidator.setId(UUID.uuid32());
-        enterpriseSignCertifyValidator.setRegisterEnterpriseId(UUID.uuid32());
         enterpriseSignCertifyValidator.setCertifyStatus("1");
         enterpriseSignCertifyValidator.setAuthorizeStartDate(DateTimeUtils.getDateFormat(new Date()));
         enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 2)));
