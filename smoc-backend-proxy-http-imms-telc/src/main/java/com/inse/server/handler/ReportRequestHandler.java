@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 状态报告回调通知接口
@@ -31,10 +30,9 @@ public class ReportRequestHandler implements HttpHandler {
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		String msgid = UUID.randomUUID().toString().replaceAll("-", "");
 		String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
 		JSONObject resultject = new JSONObject();
-		logger.info("{},{},msgid={},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid, ip);
+		logger.info("{},{},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), ip);
 		OutputStream responseBody = exchange.getResponseBody();
 		Headers responseHeaders = exchange.getResponseHeaders();
 		responseHeaders.set("Content-Type", "text/plain;charset=utf-8");
@@ -50,7 +48,7 @@ public class ReportRequestHandler implements HttpHandler {
 				sb.append(line);
 			}
 			String queryString = sb.toString();
-			logger.info("{},{},msgid={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid,
+			logger.info("{},{},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(),
 					ip, queryString);
 
 			// 请求数据转json对象
@@ -93,7 +91,7 @@ public class ReportRequestHandler implements HttpHandler {
 				newBusinessRouteValue.setChannelMessageID(transId);
 				newBusinessRouteValue.setPhoneNumber(phone);
 				newBusinessRouteValue.setStatusCode(state);
-				newBusinessRouteValue.setAccountID(channelID);
+				newBusinessRouteValue.setChannelID(channelID);
 				ReportWorkerManager.getInstance().process(newBusinessRouteValue);
 			}
 

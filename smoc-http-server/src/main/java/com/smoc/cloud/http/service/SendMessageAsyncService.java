@@ -274,7 +274,7 @@ public class SendMessageAsyncService {
      */
 
     public void saveMessageBatch(String messageId, List<MessageFormat> messages, Integer messageCount, Integer phoneCount, String templateContent, String templateId, String account, String extNumber) {
-
+        log.info("[http国际短信日志]：{}",new Gson().toJson(messages));
         //发送消息
         if (phoneCount > 0) {
             messageRepository.saveMessageBatch(messages, messageCount, phoneCount);

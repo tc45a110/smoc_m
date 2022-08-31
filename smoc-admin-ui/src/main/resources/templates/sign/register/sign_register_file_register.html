@@ -43,7 +43,35 @@
 
         </div>
         <!-- start row  错误提示-->
-        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- error div start-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?all:none">
+            <div class="col-sm-12">
+                <div class="wrapper-page">
+                    <div class="m-t-40 account-pages">
+                        <div class="text-center account-logo-box">
+                            <h2 class="text-uppercase">
+                                <a href="#" class="text-success">
+                                    <span style="color:#FFFFFF">成功提示</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="account-content">
+                            <div class="text-center m-b-20">
+                                <div class="m-b-20">
+                                    <img th:src="@{/static/assets/images/users/avatar-5.jpg}"
+                                         class="img-circle img-thumbnail thumb-lg" alt="thumbnail">
+                                </div>
+                                <p class="text-muted m-b-0 font-13">成功信息：[[${error}]] </p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- end card-box-->
+                </div>
+                <!-- end wrapper -->
+            </div>
+        </div>
+        <!-- error div end-->
         <!-- end row -->
 
     </div> <!-- container -->

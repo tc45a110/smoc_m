@@ -91,7 +91,6 @@ public class StatusRequestHandler implements HttpHandler {
 			message.setChannelID(channelID);
 			TemplateStatusManager.getInstance().process(message);
 		}
-
 	}
 
 }

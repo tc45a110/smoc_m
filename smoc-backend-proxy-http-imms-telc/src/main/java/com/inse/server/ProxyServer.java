@@ -3,16 +3,12 @@
  * 
  */
 package com.inse.server;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
-import com.inse.manager.AccountChanelTemplateInfoManager;
-import com.inse.manager.ReportWorkerManager;
-import com.inse.manager.SubmitPullWorkerManager;
-import com.inse.manager.TemplateStatusManager;
-import com.inse.worker.ChannelInteractiveStatusManager;
+import com.inse.manager.*;
+
 
 public class ProxyServer {
 

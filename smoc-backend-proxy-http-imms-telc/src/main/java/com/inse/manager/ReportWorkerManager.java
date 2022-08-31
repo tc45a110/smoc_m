@@ -84,9 +84,8 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 					FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
 					FixedConstant.SPLICER, businessRouteValue.getChannelMessageID(),
 					FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
-					FixedConstant.SPLICER, businessRouteValue.getAccountID(),
+					FixedConstant.SPLICER, businessRouteValue.getChannelID(),
 					FixedConstant.SPLICER, businessRouteValue.getChannelReportTime());
-
 
 		}
 

@@ -1,10 +1,8 @@
 package com.inse.manager;
-
 import com.base.common.worker.SuperQueueWorker;
 import com.inse.message.StatusMessage;
 import com.inse.util.DAO;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,9 +56,9 @@ public class TemplateStatusManager extends SuperQueueWorker<StatusMessage> {
 			String platformTemplateStatus = CHANNEL_TEMPLATE_STATUS_MAP.get(checkState);
 			if(StringUtils.isNotEmpty(platformTemplateStatus)){
 					DAO.updateAccountChannelTemplateInfo(message, platformTemplateStatus);
-					logger.info("运营商模板ID{},运营商状态={},转换平台状态={}",message.getTemplateId(),checkState,platformTemplateStatus);
+					logger.info("运营商模板ID={},运营商状态={},转换平台状态={}",message.getTemplateId(),checkState,platformTemplateStatus);
 				}else{
-					logger.warn("运营商模板ID{},运营商状态={},转换平台状态为空",message.getTemplateId(),checkState);
+					logger.warn("运营商模板ID={},运营商状态={},转换平台状态为空",message.getTemplateId(),checkState);
 			}
 
 		}

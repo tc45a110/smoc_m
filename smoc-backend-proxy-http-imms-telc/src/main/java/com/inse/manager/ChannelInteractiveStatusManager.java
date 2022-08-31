@@ -1,4 +1,4 @@
-package com.inse.worker;
+package com.inse.manager;
 
 import com.base.common.manager.ChannelRunStatusManager;
 import com.base.common.worker.SuperConcurrentMapWorker;
