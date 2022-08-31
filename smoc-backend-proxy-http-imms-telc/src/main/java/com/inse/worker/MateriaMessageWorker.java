@@ -32,7 +32,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 	private String channelID;
 	public static String MMS_PATH = ResourceManager.getInstance().getValue("mms.resource.path");
 	private static int TIMEOUT = ResourceManager.getInstance().getIntValue("timeout");
-	private static int  REPONSETIMEOUT= ResourceManager.getInstance().getIntValue("reponsetimeout");
+	private static int RESPONSE_TIMEOUT= ResourceManager.getInstance().getIntValue("response.timeout");
 
 	public MateriaMessageWorker(String channelID) {
 		this.channelID = channelID;
@@ -130,7 +130,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 
 			httpclient = HttpClients.createDefault();
 			HttpPost httppost = new HttpPost(urls);
-			httppost.setConfig(RequestConfig.custom().setConnectTimeout(TIMEOUT).setSocketTimeout(REPONSETIMEOUT).build());
+			httppost.setConfig(RequestConfig.custom().setConnectTimeout(TIMEOUT).setSocketTimeout(RESPONSE_TIMEOUT).build());
 			// 将字符串转换成集合
 			List<String> urlList = Arrays.asList(urlpath.split(","));
 

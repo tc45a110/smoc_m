@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 	private static int TIMEOUT = ResourceManager.getInstance().getIntValue("timeout");
-	private static int  REPONSETIMEOUT= ResourceManager.getInstance().getIntValue("reponsetimeout");
+	private static int RESPONSE_TIMEOUT = ResourceManager.getInstance().getIntValue("response.timeout");
 	private ResponseWorker responseWorker;
 	private String channelID;
 
@@ -121,7 +121,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 				}
 
 				String response = HttpClientUtil.doRequest(url, jsonobject.toString(), TIMEOUT,
-						REPONSETIMEOUT);
+						RESPONSE_TIMEOUT);
 
 				//维护通道运行状态
 				ChannelInteractiveStatusManager.getInstance().process(channelID, response);
