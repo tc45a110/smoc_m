@@ -29,10 +29,13 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 			return;
 		}
 		if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
+			businessRouteValue.setNextNodeErrorCode(businessRouteValue.getNextNodeCode());
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.SUCCESS_CODE);
+
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);
 		} else {
+			businessRouteValue.setNextNodeErrorCode(businessRouteValue.getNextNodeCode());
 			businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.FAIL_CODE);
 			businessRouteValue.setChannelTotal(1);
 			businessRouteValue.setChannelIndex(1);
