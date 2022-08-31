@@ -156,12 +156,14 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 								.append("{}phoneNumber={}")
 								.append("{}messageContent={}")
 								.append("{}channelID={}")
-								.append("{}accountTemplateID={}").toString(),
+								.append("{}accountTemplateID={}")
+								.append("{}jsonobject={}").toString(),
 						FixedConstant.SPLICER, businessRouteValue.getAccountID(),
 						FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
 						FixedConstant.SPLICER, businessRouteValue.getMessageContent(),
 						FixedConstant.SPLICER, businessRouteValue.getChannelID(),
-						FixedConstant.SPLICER, businessRouteValue.getAccountTemplateID());
+						FixedConstant.SPLICER, businessRouteValue.getAccountTemplateID(),
+						FixedConstant.SPLICER, jsonobject.toString());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

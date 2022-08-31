@@ -93,7 +93,7 @@ public class ReportRequestHandler implements HttpHandler {
 				newBusinessRouteValue.setChannelMessageID(transId);
 				newBusinessRouteValue.setPhoneNumber(phone);
 				newBusinessRouteValue.setStatusCode(state);
-				newBusinessRouteValue.setAccountID(channelID);
+				newBusinessRouteValue.setChannelID(channelID);
 				ReportWorkerManager.getInstance().process(newBusinessRouteValue);
 			}
 
