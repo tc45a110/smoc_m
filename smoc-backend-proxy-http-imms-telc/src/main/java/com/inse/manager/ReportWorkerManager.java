@@ -29,6 +29,7 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 			reportWorker.setName(new StringBuilder("ReportWorker-").append(i+1).toString());
 			reportWorker.start();
 		}
+		this.setName("ReportWorkerManager");
 		this.start();
 	}
 
@@ -61,10 +62,11 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 			//取出状态报告
 			BusinessRouteValue businessRouteValue = poll();
 			if (businessRouteValue == null) {
-				logger.info("状态报告为空");
 				return;
 			}
-
+			if("RECEIVD".equals(businessRouteValue.getStatusCode())){
+				return;
+			}
 			if (DynamicConstant.REPORT_SUCCESS_CODE.equals(businessRouteValue.getStatusCode())) {
 				businessRouteValue.setSuccessCode(InsideStatusCodeConstant.SUCCESS_CODE);
 			} else {
@@ -82,9 +84,8 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 					FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
 					FixedConstant.SPLICER, businessRouteValue.getChannelMessageID(),
 					FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
-					FixedConstant.SPLICER, businessRouteValue.getAccountID(),
+					FixedConstant.SPLICER, businessRouteValue.getChannelID(),
 					FixedConstant.SPLICER, businessRouteValue.getChannelReportTime());
-
 
 		}
 

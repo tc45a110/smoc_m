@@ -16,7 +16,11 @@
         <!--  包名和压缩包里面的文件名  -->
         <project.packageName>protocol-access-cmpp</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
-        <project.resources.fileName>xingyu</project.resources.fileName>
+        <!--<project.resources.fileName>xingyu</project.resources.fileName>--><!--星语-->
+        <!--开发环境-->
+        <project.resources.fileName>example</project.resources.fileName>
+        <!--小舟-->
+        <project.resources.fileName>xiaozhou</project.resources.fileName>
     </properties>
 
     <build>
@@ -43,7 +47,8 @@
                 <configuration>
                     <finalName>${project.packageName}</finalName>   <!-- 配置打包后的文件前缀名 -->
                     <descriptors>
-                        <descriptor>${project.basedir}/src/main/resources/assembly/package.xml</descriptor>   <!-- 配置文件路径 -->
+                        <descriptor>${project.basedir}/src/main/resources/assembly/package.xml
+                        </descriptor>   <!-- 配置文件路径 -->
                     </descriptors>
                 </configuration>
                 <executions> <!-- 配置assembly goals -->

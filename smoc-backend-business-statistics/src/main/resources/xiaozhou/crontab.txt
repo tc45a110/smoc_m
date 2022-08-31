@@ -1,0 +1,27 @@
+#每天根据前一天的业务日志，根据客户提交时间统计：客户提交数、提交成功数、提交失败数、状态报告成功数和状态报告失败数
+30 0 * * * /smoc/apps/business-statistics/message.daily.statistics.service.sh
+
+#返还统计
+30 0 * * * /smoc/apps/business-statistics/finance.return.statistics.service.sh
+#未知返还
+0 2 * * * /smoc/apps/business-statistics/unknown.statistics.service.sh
+#消费统计
+30 2 * * * /smoc/apps/business-statistics/finance.consume.statistics.service.sh
+#企业级日志明细
+*/1 * * * * /smoc/apps/business-statistics/access.business.log.sh
+
+
+#记录前一分钟的下发记录 入库通道srcid临时表
+*/1 * * * * /smoc/apps/business-statistics/proxy.business.mt.log.sh
+
+#web日志
+*/1 * * * * /smoc/apps/business-statistics/message.web.task.info.sh
+
+#每分钟代理业务层 mt下发记录和mr回执记录 以客户提交时间(取天yyyyMMdd)为后缀  proxy_message_info_yyyyMMdd
+*/1 * * * * /smoc/apps/business-statistics/proxy.business.message.merge.sh
+
+#每小时proxy_message_info分天表的维护
+0 * * * * /smoc/apps/business-statistics/proxy.message.info.table.sh
+
+#账号成功率、延迟率统计
+2,12,22,32,42,52 * * * * /smoc/apps/business-statistics/account.alarm.message.sh

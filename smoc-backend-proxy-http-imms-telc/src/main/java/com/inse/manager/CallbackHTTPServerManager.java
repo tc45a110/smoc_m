@@ -15,6 +15,7 @@ public class CallbackHTTPServerManager extends SuperMapWorker<String, CallbackHT
 	private static CallbackHTTPServerManager manager = new CallbackHTTPServerManager();
 
 	private CallbackHTTPServerManager() {
+		this.setName("CallbackHTTPServerManager");
 		this.start();
 	}
 

@@ -506,10 +506,12 @@ public class BusinessAccountService {
         Map<String, Object> messageMap = new HashMap<>();
         messageMap.put("transferType",accountBasicInfoValidator.getTransferType().equals("1") ? "是" : "否");
         String value = "";
-        if(accountBasicInfoValidator.getRandomExtendCodeLength()>0){
-            value = "；随机扩展码位数："+accountBasicInfoValidator.getRandomExtendCodeLength();
+        if(!"INTL".equals(accountBasicInfoValidator.getCarrier())){
+            if(accountBasicInfoValidator.getRandomExtendCodeLength()>0){
+                value = "；随机扩展码位数："+accountBasicInfoValidator.getRandomExtendCodeLength();
+            }
+            messageMap.put("extendCode",!StringUtils.isEmpty(accountBasicInfoValidator.getExtendCode())? "固定扩展码：" +accountBasicInfoValidator.getExtendCode() + value: "固定扩展码：无");
         }
-        messageMap.put("extendCode",!StringUtils.isEmpty(accountBasicInfoValidator.getExtendCode())? "固定扩展码：" +accountBasicInfoValidator.getExtendCode() + value: "固定扩展码：无");
         //查询系统参数
         ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","MAX_SMS_TEXT_LENGTH");
         if(!StringUtils.isEmpty(systemParamValue.getData())){

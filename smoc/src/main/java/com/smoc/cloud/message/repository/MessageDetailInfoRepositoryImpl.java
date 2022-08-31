@@ -56,7 +56,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" t.MESSAGE_TOTAL,");
             sqlBuffer.append(" t.SIGN,");
             sqlBuffer.append(" t.SUBMIT_STYLE");
-            //sqlBuffer.append(" ,t.TIME_ELAPSED");
+            sqlBuffer.append(" ,t.TIME_ELAPSED");
             sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
             sqlBuffer.append(" where (1=1) ");
 
@@ -113,7 +113,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             }
 
             //耗时
-            /*if(!StringUtils.isEmpty(qo.getTimeElapsed())){
+            if(!StringUtils.isEmpty(qo.getTimeElapsed())){
                 String[] elapsed = qo.getTimeElapsed().split("-");
                 if(!StringUtils.isEmpty(elapsed[0])){
                     sqlBuffer.append(" and t.TIME_ELAPSED >?");
@@ -123,7 +123,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
                     sqlBuffer.append(" and t.TIME_ELAPSED <=?");
                     paramsList.add(elapsed[1]);
                 }
-            }*/
+            }
 
             //时间起
             if (!StringUtils.isEmpty(qo.getStartDate())) {
@@ -233,7 +233,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             }
 
             //耗时
-            /*if(!StringUtils.isEmpty(qo.getTimeElapsed())){
+            if(!StringUtils.isEmpty(qo.getTimeElapsed())){
                 String[] elapsed = qo.getTimeElapsed().split("-");
                 if(!StringUtils.isEmpty(elapsed[0])){
                     sqlBuffer.append(" and t.TIME_ELAPSED >?");
@@ -243,7 +243,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
                     sqlBuffer.append(" and t.TIME_ELAPSED <=?");
                     paramsList.add(elapsed[1]);
                 }
-            }*/
+            }
 
             //时间起
             if (!StringUtils.isEmpty(qo.getStartDate())) {

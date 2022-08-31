@@ -6,4 +6,4 @@ export _CONFIG=$_HOME/config
 cd $_HOME
 echo `pwd`
 
-java -classpath $_CONFIG:$_LIB/* -server -Xmx1024m -Xms512m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/smoc/logs/protocol-access-sgip -Ddruid.mysql.usePingMethod=false -Dfile.encoding=UTF-8 com.protocol.access.sgip.MinaSgip
+java -classpath $_CONFIG:$_LIB/* -server -Xmx512m -Xms512m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/smoc/logs/protocol-access-sgip -Ddruid.mysql.usePingMethod=false -Dfile.encoding=UTF-8 com.protocol.access.sgip.MinaSgip

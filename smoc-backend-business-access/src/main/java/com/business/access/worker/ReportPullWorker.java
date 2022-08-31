@@ -65,7 +65,10 @@ public class ReportPullWorker extends SuperCacheWorker{
 							FixedConstant.SPLICER, businessRouteValue.getStatusCodeSource(),
 							FixedConstant.SPLICER, size
 							);
-					reportStoreWorker.put(businessRouteValue.getAccountMessageIDs(), businessRouteValue);
+					String key = new StringBuilder(businessRouteValue.getAccountMessageIDs())
+							.append(",").append(businessRouteValue.getBusinessMessageID())
+							.append(",").append(businessRouteValue.getMessageIndex()).toString();
+					reportStoreWorker.put(key, businessRouteValue);
 					AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.AccountReportQueue, 
 							new StringBuilder().append(businessRouteValue.getAccountID()).append(",").append(size).toString()));
 				}else{
@@ -73,7 +76,10 @@ public class ReportPullWorker extends SuperCacheWorker{
 				}
 				
 			}else if(BusinessDataManager.getInstance().getReportStoreToDatabaseProtocol().contains(businessRouteValue.getProtocol())){
-				reportStoreWorker.put(businessRouteValue.getAccountMessageIDs(), businessRouteValue);
+				String key = new StringBuilder(businessRouteValue.getAccountMessageIDs())
+						.append(",").append(businessRouteValue.getBusinessMessageID())
+						.append(",").append(businessRouteValue.getMessageIndex()).toString();
+				reportStoreWorker.put(key, businessRouteValue);
 			}
 			logger.info(
 					new StringBuilder().append("保存回执").append("{}accountID={}").append("{}phoneNumber={}")

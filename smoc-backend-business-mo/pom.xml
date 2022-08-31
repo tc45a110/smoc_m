@@ -15,7 +15,11 @@
         <project.common.version>4.0.2</project.common.version>
         <project.packageName>business-mo</project.packageName>
         <project.absolute.path>${project.basedir}/../smoc-backend-base-common</project.absolute.path>
-        <project.resources.fileName>xingyu</project.resources.fileName>
+        <!--<project.resources.fileName>xingyu</project.resources.fileName>--><!--星语-->
+        <!--开发环境-->
+        <!--<project.resources.fileName>example</project.resources.fileName>-->
+        <!--小舟-->
+        <project.resources.fileName>xiaozhou</project.resources.fileName>
     </properties>
 
     <build>

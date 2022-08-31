@@ -1,18 +1,21 @@
 package com.inse.manager;
+
+import com.base.common.dao.LavenderDBSingleton;
+import com.base.common.worker.SuperMapWorker;
+import com.inse.manager.AccountChanelTemplateInfoManager.AccountChanelTemplateInfo;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
-import com.base.common.dao.LavenderDBSingleton;
-import com.base.common.worker.SuperMapWorker;
-import com.inse.manager.AccountChanelTemplateInfoManager.AccountChanelTemplateInfo;
 
 public class AccountChanelTemplateInfoManager extends SuperMapWorker<String, AccountChanelTemplateInfo> {
 	private static AccountChanelTemplateInfoManager manager = new AccountChanelTemplateInfoManager();
 
 	private AccountChanelTemplateInfoManager() {
 		loadData();
+		this.setName("AccountChanelTemplateInfoManager");
 		this.start();
 	}
 
