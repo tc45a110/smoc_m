@@ -31,7 +31,7 @@ public class DAO {
 		try {		
 		conn = LavenderDBSingleton.getInstance().getConnection();
 		conn.setAutoCommit(false);
-		sql.append("select TEMPLATE_ID,TEMPLATE_TITLE,MM_ATTCHMENT,BUSINESS_ACCOUNT,TEMPLATE_FLAG from smoc.account_template_info ");
+		sql.append("select TEMPLATE_ID,TEMPLATE_CONTENT,MM_ATTCHMENT,BUSINESS_ACCOUNT,TEMPLATE_FLAG from smoc.account_template_info ");
 		sql.append("where TEMPLATE_STATUS='2' and TEMPLATE_TYPE='MULTI_SMS'");
 		
 		sql.append(" and TEMPLATE_ID not in (select TEMPLATE_ID from smoc.account_channel_template_info where CHANNEL_ID = ?) ");
@@ -44,7 +44,7 @@ public class DAO {
 			AccountTemplateInfo accounttemplateinfo=new AccountTemplateInfo();
 				
 			accounttemplateinfo.setTemplateId(rs.getString("TEMPLATE_ID"));			
-			accounttemplateinfo.setTemplateTitle(rs.getString("TEMPLATE_TITLE"));		
+			accounttemplateinfo.setTemplateTitle(rs.getString("TEMPLATE_CONTENT"));
 			accounttemplateinfo.setMmAttchnent(rs.getString("MM_ATTCHMENT"));		
 			accounttemplateinfo.setBusinessAccount(rs.getString("BUSINESS_ACCOUNT"));			
 			accounttemplateinfo.setTemplateFlag(rs.getString("TEMPLATE_FLAG"));
