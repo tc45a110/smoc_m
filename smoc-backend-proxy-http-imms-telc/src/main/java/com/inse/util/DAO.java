@@ -38,7 +38,7 @@ public class DAO {
 	
 		pstmt = conn.prepareStatement(sql.toString());	
 		pstmt.setString(1, channelID);
-		logger.info("sql={}",sql.toString());
+
 		rs = pstmt.executeQuery();		
 		while (rs.next()) {	
 			AccountTemplateInfo accounttemplateinfo=new AccountTemplateInfo();

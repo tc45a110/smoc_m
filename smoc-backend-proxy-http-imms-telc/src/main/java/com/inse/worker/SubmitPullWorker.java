@@ -9,6 +9,7 @@ import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ChannelRunStatusManager;
+import com.base.common.manager.ResourceManager;
 import com.base.common.util.DateUtil;
 import com.base.common.util.HttpClientUtil;
 import com.base.common.vo.BusinessRouteValue;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
+	private static int TIMEOUT = ResourceManager.getInstance().getIntValue("timeout");
+	private static int  REPONSETIMEOUT= ResourceManager.getInstance().getIntValue("reponsetimeout");
 	private ResponseWorker responseWorker;
 	private String channelID;
 
@@ -117,13 +120,9 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 					url = resultMap.get("url") + "/sapi/option";
 				}
 
-				// 连接超时时间
-				int timeOut = (int) ChannelInfoManager.getInstance().getSubmitInterval(channelID);
-				// 提交响应超时时间
-				int reponseTimeout = (int) ChannelInfoManager.getInstance().getResponseTimeout(channelID);
-				String response = HttpClientUtil.doRequest(url, jsonobject.toString(), timeOut,
-						reponseTimeout);
-				logger.info("响应消息={}",response);
+				String response = HttpClientUtil.doRequest(url, jsonobject.toString(), TIMEOUT,
+						REPONSETIMEOUT);
+
 				//维护通道运行状态
 				ChannelInteractiveStatusManager.getInstance().process(channelID, response);
 				BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();

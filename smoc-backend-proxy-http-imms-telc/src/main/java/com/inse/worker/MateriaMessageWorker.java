@@ -31,6 +31,8 @@ import java.util.Set;
 public class MateriaMessageWorker extends SuperQueueWorker<String> {
 	private String channelID;
 	public static String MMS_PATH = ResourceManager.getInstance().getValue("mms.resource.path");
+	private static int TIMEOUT = ResourceManager.getInstance().getIntValue("timeout");
+	private static int  REPONSETIMEOUT= ResourceManager.getInstance().getIntValue("reponsetimeout");
 
 	public MateriaMessageWorker(String channelID) {
 		this.channelID = channelID;
@@ -92,7 +94,7 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 								responsemessage.setMessage(object.getString("ResMsg"));
 								DAO.insertAccountChannelTemplateInfo(responsemessage, accounttemplateinfo, "0",
 										channelID, options,extend);
-								logger.info("提交失败平台模板ID={},失败原因={}",accounttemplateinfo.getTemplateId(),responsemessage.getMessage());
+								logger.info("提交失败的平台模板ID={},失败原因={}",accounttemplateinfo.getTemplateId(),responsemessage.getMessage());
 
 							}
 						}
@@ -123,15 +125,12 @@ public class MateriaMessageWorker extends SuperQueueWorker<String> {
 		try {
 			//获取通道接口参数
 			Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-			// 连接超时时间
-			int timeOut = (int) ChannelInfoManager.getInstance().getSubmitInterval(channelID);
-			// 提交响应超时时间
-			int reponseTimeout = (int) ChannelInfoManager.getInstance().getResponseTimeout(channelID);
+
 			String urls=resultMap.get("url")+"/sapi/material";
 
 			httpclient = HttpClients.createDefault();
 			HttpPost httppost = new HttpPost(urls);
-			httppost.setConfig(RequestConfig.custom().setConnectTimeout(timeOut).setSocketTimeout(reponseTimeout).build());
+			httppost.setConfig(RequestConfig.custom().setConnectTimeout(TIMEOUT).setSocketTimeout(REPONSETIMEOUT).build());
 			// 将字符串转换成集合
 			List<String> urlList = Arrays.asList(urlpath.split(","));
 

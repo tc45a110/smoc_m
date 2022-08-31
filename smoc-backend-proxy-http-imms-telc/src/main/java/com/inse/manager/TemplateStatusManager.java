@@ -1,10 +1,8 @@
 package com.inse.manager;
-
 import com.base.common.worker.SuperQueueWorker;
 import com.inse.message.StatusMessage;
 import com.inse.util.DAO;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
