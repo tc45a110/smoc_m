@@ -52,13 +52,13 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 form-group">
-                                                <label for="registerEnterpriseId">报备企业名称<span class="text-danger">*</span>&nbsp;
+                                                <label for="registerEnterpriseId">报备企业名称（非端口使用企业）<span class="text-danger">*</span>&nbsp;
                                                     <span class="text-danger" th:if="${#fields.hasErrors('registerEnterpriseId')}"
                                                           th:errors="*{registerEnterpriseId}"  style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input id="registerEnterpriseId" type="text" class="form-control" th:field="*{registerEnterpriseId}"
                                                        required="" data-parsley-length="[2,128]" autocomplete="off"
-                                                       placeholder="报备企业名称">
+                                                       placeholder="报备企业名称（非端口使用企业）">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="registerEnterpriseName">端口使用企业名称<span class="text-danger">*</span>&nbsp;
