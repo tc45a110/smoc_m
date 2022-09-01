@@ -9,7 +9,6 @@ import java.util.UUID;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.ChannelInfoManager;
-import com.base.common.manager.ChannelMOManager;
 import com.base.common.manager.LongSMSMOManager;
 import com.base.common.util.ChannelMOUtil;
 import com.base.common.vo.ChannelMO;

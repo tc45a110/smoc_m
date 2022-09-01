@@ -63,9 +63,9 @@ public class PushTemplateStatusWorker extends SuperQueueWorker<String> {
                             String platformTemplateStatus = CHANNEL_TEMPLATE_STATUS_MAP.get(channelTemplateStatus);
                             if (StringUtils.isNotEmpty(platformTemplateStatus)) {
                                 DAO.updateAccountChannelTemplateInfo(channelTemplateStatus, statusDesc, channelID, channelTemplateID, 2);
-                                logger.info("运营商模板ID={},运营商状态={},转换平台状态={}", channelTemplateID, channelTemplateStatus, platformTemplateStatus);
+                                logger.info("获取通道模板ID={},通道模板状态={},转换平台状态={}", channelTemplateID, channelTemplateStatus, platformTemplateStatus);
                             } else {
-                                logger.warn("运营商模板ID={},运营商状态={},转换平台状态为空", channelTemplateID, channelTemplateStatus);
+                                logger.warn("获取通道模板ID={},通道模板状态={},转换平台状态为空", channelTemplateID, channelTemplateStatus);
                             }
                         }
                     }

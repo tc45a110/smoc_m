@@ -1,12 +1,10 @@
 package com.inse.util;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.ResourceManager;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,8 +73,6 @@ public class TemplateTransition {
         }
         return resultMap;
     }
-
-
     public static void main(String[] args) {
         String sa ="[{\"index\":0,\"resSize\":\"1867\",\"resUrl\":\"/20220531/38a23c7c6b2d4c6eb03e0e0ccb66b264/ec73039362cf432d93a645fa2228e997.png\",\"resType\":\"PIC\",\"resPostfix\":\"png\",\"stayTimes\":\"2\",\"frameTxt\":\"说几句急急急${1}，急急急${2}罗瑟科什\"},{\"index\":1,\"resSize\":\"6\",\"resUrl\":\"/20220422/38a23c7c6b2d4c6eb03e0e0ccb66b264/23086d60027049bb89725cc27f0899f1.png\",\"resType\":\"PIC\",\"resPostfix\":\"png\",\"stayTimes\":\"2\",\"frameTxt\":\"顶顶顶${3}顶顶顶顶顶\"}]";
 
