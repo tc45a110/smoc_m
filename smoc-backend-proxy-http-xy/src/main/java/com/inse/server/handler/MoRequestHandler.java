@@ -84,7 +84,7 @@ public class MoRequestHandler implements HttpHandler {
 				String channelSRCID = ChannelInfoManager.getInstance().getChannelSRCID(channelID);
 				ChannelMO channelMO = ChannelMOUtil.getMO(phoneNumber,extNumber,content,channelID,channelSRCID);
 				LongSMSMOManager.getInstance().add(channelMO);
-				//ChannelMOManager.getInstance().add(channelMO);
+
 			}
 
 		}
