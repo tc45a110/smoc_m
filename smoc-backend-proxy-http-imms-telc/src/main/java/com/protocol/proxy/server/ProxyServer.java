@@ -2,12 +2,12 @@
  * @desc
  * 
  */
-package com.inse.server;
+package com.protocol.proxy.server;
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
-import com.inse.manager.*;
+import com.protocol.proxy.manager.*;
 
 
 public class ProxyServer {

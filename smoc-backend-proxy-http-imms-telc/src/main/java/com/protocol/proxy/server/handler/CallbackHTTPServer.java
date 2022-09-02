@@ -1,6 +1,6 @@
-package com.inse.server.handler;
+package com.protocol.proxy.server.handler;
 
-import com.inse.util.ChannelInterfaceUtil;
+import com.protocol.proxy.util.ChannelInterfaceUtil;
 import com.sun.net.httpserver.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

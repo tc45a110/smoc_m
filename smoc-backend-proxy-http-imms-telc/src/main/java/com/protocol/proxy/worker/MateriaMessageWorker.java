@@ -1,15 +1,16 @@
-package com.inse.worker;
+package com.protocol.proxy.worker;
+
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.AccountInfoManager;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperQueueWorker;
-import com.inse.manager.ChannelInteractiveStatusManager;
-import com.inse.message.AccountTemplateInfo;
-import com.inse.message.ResponseMessage;
-import com.inse.util.ChannelInterfaceUtil;
-import com.inse.util.DAO;
-import com.inse.util.TemplateTransition;
+import com.protocol.proxy.manager.ChannelInteractiveStatusManager;
+import com.protocol.proxy.message.AccountTemplateInfo;
+import com.protocol.proxy.message.ResponseMessage;
+import com.protocol.proxy.util.ChannelInterfaceUtil;
+import com.protocol.proxy.util.DAO;
+import com.protocol.proxy.util.TemplateTransition;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -22,12 +23,14 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 public class MateriaMessageWorker extends SuperQueueWorker<String> {
 	private String channelID;
 	public static String MMS_PATH = ResourceManager.getInstance().getValue("mms.resource.path");

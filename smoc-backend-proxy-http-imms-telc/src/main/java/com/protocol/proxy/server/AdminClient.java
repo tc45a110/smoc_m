@@ -2,7 +2,7 @@
  * @desc
  * 
  */
-package com.inse.server;
+package com.protocol.proxy.server;
 
 import com.base.common.constant.DynamicConstant;
 

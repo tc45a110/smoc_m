@@ -68,7 +68,7 @@ spring:
     host: 172.22.171.219
     port: 6379
     password: J15mDngG
-    database: 1
+    database: 2
     timeout: 3000
     jedis:
       pool:

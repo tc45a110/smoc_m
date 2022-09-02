@@ -2,7 +2,8 @@
 * @desc
 * 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
 */
-package com.inse.worker;
+package com.protocol.proxy.worker;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.cache.CacheBaseService;
@@ -14,11 +15,12 @@ import com.base.common.util.DateUtil;
 import com.base.common.util.HttpClientUtil;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
-import com.inse.manager.AccountChanelTemplateInfoManager;
-import com.inse.manager.ChannelInteractiveStatusManager;
-import com.inse.util.ChannelInterfaceUtil;
+import com.protocol.proxy.manager.AccountChanelTemplateInfoManager;
+import com.protocol.proxy.manager.ChannelInteractiveStatusManager;
+import com.protocol.proxy.util.ChannelInterfaceUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +61,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
 				// 获取平台模板id
 				String templateId = businessRouteValue.getAccountTemplateID();
 				// 获取通道模板id
-				String channelTemplateID=AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(templateId);
+				String channelTemplateID= AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(templateId);
 				if(channelTemplateID==null){
 					return;
 				}

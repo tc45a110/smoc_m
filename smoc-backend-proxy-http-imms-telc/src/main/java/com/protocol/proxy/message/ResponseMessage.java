@@ -1,4 +1,4 @@
-package com.inse.message;
+package com.protocol.proxy.message;
 
 public class ResponseMessage {
 	private String message;

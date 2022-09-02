@@ -2,10 +2,10 @@
  * @desc
  * 
  */
-package com.inse.manager;
+package com.protocol.proxy.manager;
 
 import com.base.common.worker.SuperMapWorker;
-import com.inse.server.handler.CallbackHTTPServer;
+import com.protocol.proxy.server.handler.CallbackHTTPServer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +27,7 @@ public class CallbackHTTPServerManager extends SuperMapWorker<String, CallbackHT
 		sleep(INTERVAL);
 	}
 
-	public void maintain(String channelID,CallbackHTTPServer callbackHTTPServer){
+	public void maintain(String channelID, CallbackHTTPServer callbackHTTPServer){
 		add(channelID,callbackHTTPServer);
 	}
 

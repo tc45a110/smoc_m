@@ -2,15 +2,17 @@
  * @desc
  * 
  */
-package com.inse.manager;
+package com.protocol.proxy.manager;
+
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperMapWorker;
-import com.inse.server.handler.CallbackHTTPServer;
-import com.inse.util.ChannelInterfaceUtil;
-import com.inse.worker.MateriaMessageWorker;
-import com.inse.worker.SubmitPullWorker;
+import com.protocol.proxy.server.handler.CallbackHTTPServer;
+import com.protocol.proxy.util.ChannelInterfaceUtil;
+import com.protocol.proxy.worker.MateriaMessageWorker;
+import com.protocol.proxy.worker.SubmitPullWorker;
 import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;

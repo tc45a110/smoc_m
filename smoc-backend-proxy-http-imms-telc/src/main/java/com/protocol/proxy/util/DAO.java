@@ -1,18 +1,16 @@
-package com.inse.util;
+package com.protocol.proxy.util;
+
+import com.base.common.dao.LavenderDBSingleton;
+import com.protocol.proxy.message.AccountTemplateInfo;
+import com.protocol.proxy.message.ResponseMessage;
+import com.protocol.proxy.message.StatusMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.base.common.dao.LavenderDBSingleton;
-import com.inse.message.ResponseMessage;
-import com.inse.message.StatusMessage;
-import com.inse.message.AccountTemplateInfo;
+import java.util.*;
 
 public class DAO {
 	private static final Logger logger = LoggerFactory.getLogger(DAO.class);
@@ -93,7 +91,7 @@ public class DAO {
 	/**
 	 * 保存运营商模板及平台模板状态信息
 	 */
-	public static void insertAccountChannelTemplateInfo(ResponseMessage response,AccountTemplateInfo template,String templateStatus,String channelID,String options,String extend) {
+	public static void insertAccountChannelTemplateInfo(ResponseMessage response, AccountTemplateInfo template, String templateStatus, String channelID, String options, String extend) {
 		StringBuffer sql = new StringBuffer();
 		Connection conn = null;
 		PreparedStatement pstmt = null;

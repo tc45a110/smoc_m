@@ -1,4 +1,4 @@
-package com.inse.manager;
+package com.protocol.proxy.manager;
 
 import com.base.common.manager.ChannelRunStatusManager;
 import com.base.common.worker.SuperConcurrentMapWorker;
