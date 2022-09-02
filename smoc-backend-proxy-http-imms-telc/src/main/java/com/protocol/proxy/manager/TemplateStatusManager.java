@@ -1,8 +1,10 @@
-package com.inse.manager;
+package com.protocol.proxy.manager;
+
 import com.base.common.worker.SuperQueueWorker;
-import com.inse.message.StatusMessage;
-import com.inse.util.DAO;
+import com.protocol.proxy.message.StatusMessage;
+import com.protocol.proxy.util.DAO;
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 

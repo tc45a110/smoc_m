@@ -1,8 +1,8 @@
-package com.inse.manager;
+package com.protocol.proxy.manager;
 
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.worker.SuperMapWorker;
-import com.inse.manager.AccountChanelTemplateInfoManager.AccountChanelTemplateInfo;
+import com.protocol.proxy.manager.AccountChanelTemplateInfoManager.AccountChanelTemplateInfo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

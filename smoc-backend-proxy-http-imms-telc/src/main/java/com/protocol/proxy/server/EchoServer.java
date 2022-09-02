@@ -2,14 +2,15 @@
  * @desc
  * 
  */
-package com.inse.server;
+package com.protocol.proxy.server;
+
+import com.base.common.constant.DynamicConstant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import com.base.common.constant.DynamicConstant;
 
 public class EchoServer {
 

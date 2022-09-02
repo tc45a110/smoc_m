@@ -1,8 +1,8 @@
-package com.inse.server.handler;
+package com.protocol.proxy.server.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.inse.manager.TemplateStatusManager;
-import com.inse.message.StatusMessage;
+import com.protocol.proxy.manager.TemplateStatusManager;
+import com.protocol.proxy.message.StatusMessage;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

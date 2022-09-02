@@ -1,4 +1,4 @@
-package com.inse.message;
+package com.protocol.proxy.message;
 
 public class AccountTemplateInfo {
 	//模板id

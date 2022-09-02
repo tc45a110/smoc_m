@@ -2,7 +2,7 @@
  * @desc
  * 
  */
-package com.inse.manager;
+package com.protocol.proxy.manager;
 
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.DynamicConstant;

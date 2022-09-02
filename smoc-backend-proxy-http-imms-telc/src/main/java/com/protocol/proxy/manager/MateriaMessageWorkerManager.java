@@ -2,9 +2,10 @@
  * @desc
  * 
  */
-package com.inse.manager;
+package com.protocol.proxy.manager;
 import com.base.common.worker.SuperMapWorker;
-import com.inse.worker.MateriaMessageWorker;
+import com.protocol.proxy.worker.MateriaMessageWorker;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class MateriaMessageWorkerManager extends SuperMapWorker<String, MateriaM
 		sleep(INTERVAL);
 	}
 
-	public void maintain(String channelID,MateriaMessageWorker materiaMessageWorker){
+	public void maintain(String channelID, MateriaMessageWorker materiaMessageWorker){
 		add(channelID,materiaMessageWorker);
 	}
 

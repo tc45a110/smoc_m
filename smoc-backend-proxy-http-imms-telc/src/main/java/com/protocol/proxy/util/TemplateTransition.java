@@ -1,14 +1,17 @@
-package com.inse.util;
+package com.protocol.proxy.util;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.base.common.util.DateUtil;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.base.common.util.DateUtil;
+
 public class TemplateTransition {
 	private static Logger logger = Logger.getLogger(TemplateTransition.class);
 	/**

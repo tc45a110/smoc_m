@@ -1,6 +1,7 @@
-package com.inse.util;
+package com.protocol.proxy.util;
 
 import java.util.regex.Pattern;
+
 public class MyStringUtils {
 	static	Pattern pattern = Pattern.compile("\\$\\{\\d{1,2}}");
 	
