@@ -2,7 +2,7 @@ spring:
   application: #服务应用名称
     name: smoc-auth-ui
   profiles: #指定启动模式
-    active: zhou
+    active: dev
   main:
     allow-bean-definition-overriding: true
   thymeleaf:
