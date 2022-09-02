@@ -1,0 +1,157 @@
+server: #服务端口
+  port: 18082
+  # 下面是配置undertow作为服务器的参数
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    io-threads: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    worker-threads: 256
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+  servlet:
+    context-path: /smoc
+  connection-timeout: 15000
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  data:
+    jpa:
+      repositories:
+        enabled: true
+    redis:
+      repositories:
+        enabled: false
+  jpa:
+    database: MYSQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+    show-sql: true
+    open-in-view: true
+
+  # ========================================================================================
+  #  datasource hikari pool
+  # ========================================================================================
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: MpmSpringHikariCP
+      jdbc-url: jdbc:mysql://rm-2zergmfbo0d88p44aao.mysql.rds.aliyuncs.com:3306/smoc_prod?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: yunsen_smoc
+      password: YUN%smoc9#40
+      auto-commit: true
+      connection-timeout: 30000
+      idle-timeout: 60000
+      max-lifetime: 180000
+      connection-test-query: select 1 from dual
+      minimum-idle: 10
+      maximum-pool-size: 100
+      data-source-properties:
+        prepStmtCacheSize: 256
+        prepStmtCacheSqlLimit: 2048
+        cachePrepStmts: true
+        useServerPrepStmts: true
+
+  #**********************************************************
+  # Redis
+  #**********************************************************
+  redis: #redis配置  配置了布隆过滤器、限流插件
+    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
+
+  redis2: #redis2配置
+    host: 123.57.216.87
+    port: 6555
+    password: Dj!bm%Mk8DyP
+    database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
+
+  redis3: #redis3配置：携号转网redis
+    host: 123.57.216.87
+    port: 6555
+    password: Dj!bm%Mk8DyP
+    database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
+
+rocketmq:
+  name-server: 123.57.216.87:9876
+  producer:
+    #生产者组名，规定在一个应用里面必须唯一
+    group: group-filter
+    #消息发送的超时时间，默认为3000ms
+    send-message-timeout: 50000
+    #消息达到4096字节的时候，消息就会被压缩。默认4096
+    compress-message-body-threshold: 4096
+    #最大的消息限制 默认为128K
+    maxMessageSize: 4096
+    #同步消息发送失败重试次数 默认2次
+    retry-times-when-send-failed: 5
+    #在内部发送失败时是否重试其他代理,这个参数在有多个broker才生效。
+    retry-next-server: true
+    #异步消息发送失败重试的次数 默认2次
+    retry-times-when-send-async-failed: 5
+
+com:
+  manpuman:
+    tomcat:
+      connection-timeout: 15000
+      acceptor-thread-count: 4
+      min-spare-threads: 100
+      max-spare-threads: 300
+      accept-count: 200
+      max-connections: 1000
+      max-threads: 500
+      protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
+
+    cloud:
+      smoc:
+        message:
+          mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
+          mobile-count-limit: 1000 #该批次手机号总量
+        tablestore:
+          end-point: https://message-log.cn-beijing.ots.aliyuncs.com #访问地址
+          access-key-id: LTAI5tA6ZbwmPhL578Tq4w7P #AccessKey ID
+          access-key-secret: R1QXpJAvrUW8rNf9Zn3zLvc81TquV9 #AccessKey Secret
+          instance-name: message-log #访问实例
+
+logging:
+  config: classpath:logback-spring.xml
+  path: E:/log/smoc-log/smoc-logs
+  level:
+    root: info
+
+

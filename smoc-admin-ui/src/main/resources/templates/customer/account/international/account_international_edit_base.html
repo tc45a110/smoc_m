@@ -152,6 +152,15 @@
                                                             class="text-danger" th:if="${#fields.hasErrors('countryCode')}"
                                                             th:errors="*{countryCode}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
+                                                    <div class="btn-switch btn-switch-danger">
+                                                        <input type="checkbox" id="input-btn-switch-danger"/>
+                                                        <label for="input-btn-switch-danger"
+                                                               class="btn btn-rounded btn-danger waves-effect waves-light">
+                                                            <em class="glyphicon glyphicon-ok"></em>
+                                                            <strong>全选</strong>
+                                                        </label>
+                                                    </div>
+                                                    <br><br>
                                                     <div style="text-align: left;">
                                                         <mpm:tag id="countryCode" identity="internationalArea" required="true"
                                                                  name="countryCode" show-type="checkbox"  key="code" class="form-control"
@@ -224,6 +233,18 @@
             var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
             parent.location.href = contextPath + '/account/edit/center/enterprise/'+'[[${accountBasicInfoValidator.accountId}]]';
         }
+
+         $("#input-btn-switch-danger").click(function() {
+           if($("#input-btn-switch-danger").prop("checked")){
+                $("input[name='countryCode']").each(function(index){
+                   $(this).prop("checked",true);
+                });
+            }else{
+                $("input[name='countryCode']").each(function(index){
+                   $(this).prop("checked",false);
+                });
+            }
+        });
 
     });
 

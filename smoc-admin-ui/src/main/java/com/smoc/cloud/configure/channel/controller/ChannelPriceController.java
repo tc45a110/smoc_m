@@ -1,6 +1,8 @@
 package com.smoc.cloud.configure.channel.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Dict;
@@ -9,26 +11,27 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
-import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelPriceService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
+import com.smoc.cloud.configure.channel.service.ExcelListen;
+import com.smoc.cloud.configure.channel.service.ExcelPriceData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.context.WebEngineContext;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -179,6 +182,7 @@ public class ChannelPriceController {
 
     /**
      * 查询通道价格
+     *
      * @param channelId
      * @param request
      * @return
@@ -204,16 +208,16 @@ public class ChannelPriceController {
         Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
         List<Dict> dictList = new ArrayList<>();
         //分省
-        if("PROVINCE".equals(data.getData().getBusinessAreaType())){
-            DictType dictType  = dictMap.get("provices");
+        if ("PROVINCE".equals(data.getData().getBusinessAreaType())) {
+            DictType dictType = dictMap.get("provices");
             dictList = dictType.getDict();
         }
         //国际
-        if("INTL".equals(data.getData().getBusinessAreaType())){
-            DictType dictType  = dictMap.get("internationalArea");
+        if ("INTL".equals(data.getData().getBusinessAreaType())) {
+            DictType dictType = dictMap.get("internationalArea");
             dictList = dictType.getDict();
         }
-        if(dictList.size()<1){
+        if (dictList.size() < 1) {
             return "数据为空或无效";
         }
 
@@ -225,29 +229,175 @@ public class ChannelPriceController {
             return listData.getMessage();
         }
 
-        if(StringUtils.isEmpty(listData.getData())){
+        if (StringUtils.isEmpty(listData.getData())) {
             return "未配置通道价格";
         }
 
         //封装区域价格数据
         StringBuilder channelPrices = new StringBuilder();
         List<ChannelPriceValidator> list = listData.getData();
-        for (int a=0;a<list.size();a++) {
+        for (int a = 0; a < list.size(); a++) {
             ChannelPriceValidator channelPrice = list.get(a);
             String name = "";
-            for (int i =0;i<dictList.size();i++) {
+            for (int i = 0; i < dictList.size(); i++) {
                 Dict dict = dictList.get(i);
                 if (channelPrice.getAreaCode().equals(dict.getFieldCode())) {
                     name += dict.getFieldName();
                     break;
                 }
             }
-            channelPrices.append(name+"："+channelPrice.getChannelPrice()+"；");
-            if (a != list.size()-1) {
+            channelPrices.append(name + "：" + channelPrice.getChannelPrice() + "；");
+            if (a != list.size() - 1) {
                 channelPrices.append("@");
             }
         }
 
         return channelPrices.toString();
+    }
+
+    /**
+     * 进入通道价格导入页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/toImport/{channelId}", method = RequestMethod.GET)
+    public ModelAndView importChannelPrice(@PathVariable String channelId) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_import_price");
+        //查询通道是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(channelId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        String supportAreaCodes = data.getData().getSupportAreaCodes();
+        //如果区域为空直接返回
+        if (StringUtils.isEmpty(supportAreaCodes)) {
+            view.addObject("error", "未配置业务区域");
+            return view;
+        }
+
+        ChannelPriceValidator channelPriceValidator = new ChannelPriceValidator();
+        channelPriceValidator.setChannelId(data.getData().getChannelId());
+        channelPriceValidator.setPriceStyle("AREA_PRICE");
+
+        view.addObject("channelPriceValidator", channelPriceValidator);
+        return view;
+    }
+
+    /**
+     * 通道价格导入
+     *
+     * @return
+     */
+    @RequestMapping(value = "/import/save", method = RequestMethod.POST)
+    public ModelAndView saveChannelPrice(@ModelAttribute ChannelPriceValidator channelPriceValidator, @RequestPart("countriesFile") MultipartFile countriesFile, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_import_price");
+
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //查询通道是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(channelPriceValidator.getChannelId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //通道配置的国际
+        String supportAreaCodes = data.getData().getSupportAreaCodes();
+        //如果区域为空直接返回
+        if (StringUtils.isEmpty(supportAreaCodes)) {
+            view.addObject("error", "未配置业务区域");
+            return view;
+        }
+
+        //读取国际短信 国家短信
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        DictType dictType = dictMap.get("internationalArea");
+        Map<String, String> countries = new HashMap<>();
+        String[] areas = supportAreaCodes.split(",");
+        for (String area : areas) {
+            for (Dict dict : dictType.getDict()) {
+                if (area.equals(dict.getFieldCode())) {
+                    countries.put(dict.getFieldName(), dict.getFieldCode());
+                }
+            }
+        }
+
+        ExcelListen excelListen = new ExcelListen();
+        try {
+            InputStream inputStream = countriesFile.getInputStream();
+            String fileType = countriesFile.getOriginalFilename().substring(countriesFile.getOriginalFilename().lastIndexOf("."));
+            if(!((".xlsx".equals(fileType) || ".xls".equals(fileType)))){
+                view.addObject("error", "文件类型错误！");
+                return view;
+            }
+
+            EasyExcel.read(inputStream, ExcelPriceData.class, excelListen).sheet().doRead();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            view.addObject("error", "文件导入错误！");
+            return view;
+        }
+
+        if(null == excelListen || excelListen.result.size()<1){
+            view.addObject("error", "导入数据为空！");
+            return view;
+        }
+
+        //封装区域价格数据
+        List<ChannelPriceValidator> list = new ArrayList<>();
+        for (ExcelPriceData excelPriceData:excelListen.result) {
+            ChannelPriceValidator channelPrice = new ChannelPriceValidator();
+            String countryName = excelPriceData.getCountriesName();
+            if(StringUtils.isEmpty(countryName)){
+                continue;
+            }
+            String countriesCode = countries.get(countryName.trim());
+            if(StringUtils.isEmpty(countriesCode)){
+                continue;
+            }
+            channelPrice.setAreaCode(countriesCode);
+
+            String price = excelPriceData.getPrice();
+            if(StringUtils.isEmpty(price)){
+                continue;
+            }
+            //校验价格为数字
+            String reg = "^[0-9]+(.[0-9]+)?$";
+            if(!price.matches(reg)){
+                continue;
+            }
+            channelPrice.setChannelPrice(new BigDecimal(price));
+
+            channelPrice.setCreatedBy(user.getRealName());
+            list.add(channelPrice);
+        }
+
+        //log.info("[list]:{}",new Gson().toJson(list));
+        //保存数据
+        channelPriceValidator.setPrices(list);
+        channelPriceValidator.setPriceStyle(data.getData().getPriceStyle());
+        ResponseData priceData = channelPriceService.savePrice(channelPriceValidator, "edit");
+        if (!ResponseCode.SUCCESS.getCode().equals(priceData.getCode())) {
+            view.addObject("error", priceData.getCode() + ":" + priceData.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(priceData.getCode())) {
+            systemUserLogService.logsAsync("CHANNEL_BASE", channelPriceValidator.getChannelId(), user.getRealName(), "edit", "修改区域计价配置", JSON.toJSONString(channelPriceValidator));
+        }
+
+        //记录日志
+        log.info("[通道管理][区域计价导入][{}][{}]数据:{}", "edit", user.getUserName(), JSON.toJSONString(channelPriceValidator));
+
+        view.setView(new RedirectView("/configure/channel/edit/price/" + channelPriceValidator.getChannelId(), true, false));
+        return view;
     }
 }
