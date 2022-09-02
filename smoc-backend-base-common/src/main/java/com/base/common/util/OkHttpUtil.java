@@ -219,7 +219,16 @@ public class OkHttpUtil {
     }
     
     public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException {
-    	OkHttpUtil.get("http://www.baidu.com", null, 10, 10);
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 500; i++) {
+            OkHttpUtil.get("http://www.baidu.com", null, 10, 10);
+        }
+        System.out.println("耗时:"+(System.currentTimeMillis()-start));
+        start = System.currentTimeMillis();
+        for (int i = 0; i < 500; i++) {
+            HttpClientUtil.doRequest("http://www.baidu.com", "{\"body\":\"1231\"}", 1000, 1000);
+        }
+         System.out.println("耗时:"+(System.currentTimeMillis()-start));
 	}
     
 }

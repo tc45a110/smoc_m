@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.base.common.manager.AlarmManager;
+import com.base.common.vo.AlarmMessage;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
@@ -125,10 +127,6 @@ public class LavenderDBSingleton {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-
 	}
 
 	/**
@@ -149,6 +147,7 @@ public class LavenderDBSingleton {
 			}
 			return (dataSource.getConnection());
 		} catch (Exception e) {
+			AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.Database, e.getMessage()));
 			e.printStackTrace();
 			return conn;
 		}

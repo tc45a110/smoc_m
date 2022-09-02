@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assembly>
-    <!-- 最终打包文件的后缀，格式为 ${fileName}-bin -->
-    <id>bin</id>
+    <!-- 最终打包文件的后缀，格式为 ${fileName}-${project.resources.fileName} -->
+    <id>${project.resources.fileName}</id>
     <!-- 最终打包成一个用于发布的zip文件 -->
     <formats>
         <format>zip</format>
