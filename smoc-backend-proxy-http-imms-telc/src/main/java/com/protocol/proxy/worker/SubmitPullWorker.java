@@ -1,13 +1,13 @@
 /**
-* @desc
-* 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
-*/
+ * @desc 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
+ */
 package com.protocol.proxy.worker;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
+import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ChannelRunStatusManager;
 import com.base.common.manager.ResourceManager;
@@ -27,161 +27,150 @@ import java.util.List;
 import java.util.Map;
 
 public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
-	private static int TIMEOUT = ResourceManager.getInstance().getIntValue("timeout");
-	private static int RESPONSE_TIMEOUT = ResourceManager.getInstance().getIntValue("response.timeout");
-	private ResponseWorker responseWorker;
-	private String channelID;
+    private static int TIMEOUT = ResourceManager.getInstance().getIntValue("timeout");
+    private static int RESPONSE_TIMEOUT = ResourceManager.getInstance().getIntValue("response.timeout");
+    private ResponseWorker responseWorker;
+    private String channelID;
 
-	public SubmitPullWorker(String channelID, String index) {
-		this.channelID = channelID;
-		responseWorker = new ResponseWorker(channelID, index);
-		this.setName(new StringBuilder("SubmitPullWorker-").append(channelID).append("-").append(index).toString());
-		this.start();
-	}
+    public SubmitPullWorker(String channelID, String index) {
+        this.channelID = channelID;
+        responseWorker = new ResponseWorker(channelID, index);
+        this.setName(new StringBuilder("SubmitPullWorker-").append(channelID).append("-").append(index).toString());
+        this.start();
+    }
 
-	@Override
-	protected void doRun() throws Exception{
+    @Override
+    protected void doRun() throws Exception {
+        long startTime = System.currentTimeMillis();
+        //获取提交的时间间隔
+        long interval = ChannelInfoManager.getInstance().getSubmitInterval(channelID);
+        //获取提交的数据
+        BusinessRouteValue businessRouteValue = CacheBaseService.getSubmitFromMiddlewareCache(channelID);
+        try {
+            if (businessRouteValue != null) {
+                // 发送多媒体信息,获取响应信息
+                // 获取通道接口参数
+                String accountTemplateID = businessRouteValue.getAccountTemplateID();
+                // 获取通道模板id
+                String channelTemplateID = AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(accountTemplateID);
+                if (channelTemplateID == null) {
+                    return;
+                }
+                Map<String, String> argMap = ChannelInterfaceUtil.getArgMap(channelID);
 
-		long startTime = System.currentTimeMillis();
-	
-		//获取提交的时间间隔
-		long interval = ChannelInfoManager.getInstance().getSubmitInterval(channelID);
-		//获取提交的数据
-		BusinessRouteValue businessRouteValue = CacheBaseService.getSubmitFromMiddlewareCache(channelID);
-		try {
-			if (businessRouteValue != null) {
-				// 发送多媒体信息,获取响应信息
-				// 获取通道接口参数
+                String url = null;
+                //获取通道模板标识,1表示普通模板,2 表示变量模板
+                if (String.valueOf(FixedConstant.TemplateFlag.COMMON_TEMPLATE.ordinal()).equals(
+                        AccountChanelTemplateInfoManager.getInstance().getTemplateFlag(accountTemplateID))) {
+                    url = argMap.get("url") + "/sapi/send";
+                } else {
+                    url = argMap.get("url") + "/sapi/option";
+                }
+                String requestBody = requestBody(businessRouteValue,argMap,channelTemplateID);
 
-				Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-				String loginname = resultMap.get("login-name");
-				String loginpass = resultMap.get("login-pass");
+                String response = HttpClientUtil.doRequest(url, requestBody, TIMEOUT,
+                        RESPONSE_TIMEOUT);
 
-				JSONObject jsonobject = new JSONObject();
-				// 获取平台模板id
-				String templateId = businessRouteValue.getAccountTemplateID();
-				// 获取通道模板id
-				String channelTemplateID= AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(templateId);
-				if(channelTemplateID==null){
-					return;
-				}
-				jsonobject.put("MsgID", channelTemplateID);
+                //维护通道运行状态
+                ChannelInteractiveStatusManager.getInstance().process(channelID, response);
+                BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
+                //获取账号扩展码
+                String extendCode = AccountChanelTemplateInfoManager.getInstance().getAccountExtendCode(accountTemplateID);
+                //获取通道接入码
+                String channelSRCID = ChannelInfoManager.getInstance().getChannelSRCID(channelID);
+                newBusinessRouteValue.setAccountExtendCode(extendCode);
+                newBusinessRouteValue.setChannelSubmitSRCID(channelSRCID + extendCode);
+                newBusinessRouteValue.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
 
+                if (StringUtils.isNotEmpty(response) && response.contains("ResCode") && response.contains("TransID")) {
+                    JSONObject json = JSONObject.parseObject(response);
+                    newBusinessRouteValue.setNextNodeErrorCode(json.getString("ResCode"));
+                    newBusinessRouteValue.setChannelMessageID(json.getString("TransID"));
+                } else {
+                    newBusinessRouteValue.setNextNodeErrorCode(InsideStatusCodeConstant.FAIL_CODE);
+                }
 
-				// 封装接口所需要的参数
-				String data = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_SECONDE);
-				String authenticator = DigestUtils.md5Hex(loginname + data + loginpass).toUpperCase();
-				List<String> PhonesList = new ArrayList<String>();
-				PhonesList.add(businessRouteValue.getPhoneNumber());
-				jsonobject.put("Phones", PhonesList);
-				jsonobject.put("SiID", loginname);
-				jsonobject.put("Date", data);
-				jsonobject.put("Authenticator", authenticator);
-				String url = null;
+                // 添加响应消息到队列
+                responseWorker.add(newBusinessRouteValue);
+                logger.info(new StringBuilder().append("提交信息")
+                                .append("{}accountID={}")
+                                .append("{}phoneNumber={}")
+                                .append("{}messageContent={}")
+                                .append("{}channelID={}")
+                                .append("{}accountTemplateID={}")
+                                .append("{}requestBody={}").toString(),
+                        FixedConstant.SPLICER, businessRouteValue.getAccountID(),
+                        FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
+                        FixedConstant.SPLICER, businessRouteValue.getMessageContent(),
+                        FixedConstant.SPLICER, businessRouteValue.getChannelID(),
+                        FixedConstant.SPLICER, businessRouteValue.getAccountTemplateID(),
+                        FixedConstant.SPLICER, requestBody);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        controlSubmitSpeed(interval, (System.currentTimeMillis() - startTime));
+    }
 
+    private String requestBody(BusinessRouteValue businessRouteValue, Map<String, String> argMap, String channelTemplateID) {
+        // 发送多媒体信息,获取响应信息
+        // 获取通道接口参数
+        String loginName = argMap.get("login-name");
+        String loginPass = argMap.get("login-pass");
 
-				//获取通道模板标识,1表示普通模板,2 表示变量模板
-				if ("1".equals(AccountChanelTemplateInfoManager.getInstance().getTemplateFlag(templateId))) {
+        JSONObject bodyJsonObject = new JSONObject();
+        // 获取平台模板id
+        String accountTemplateID = businessRouteValue.getAccountTemplateID();
+        bodyJsonObject.put("MsgID", channelTemplateID);
 
-					jsonobject.put("Method", "send");
-					url = resultMap.get("url") + "/sapi/send";
+        // 封装接口所需要的参数
+        String data = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_SECONDE);
+        String authenticator = DigestUtils.md5Hex(loginName.concat(data).concat(loginPass)).toUpperCase();
+        bodyJsonObject.put("Phones", new String[]{businessRouteValue.getPhoneNumber()});
+        bodyJsonObject.put("SiID", loginName);
+        bodyJsonObject.put("Date", data);
+        bodyJsonObject.put("Authenticator", authenticator);
 
-				} else {
-					// 获取通道模板变量格式
-					String option = AccountChanelTemplateInfoManager.getInstance().getChannelTemplateVariableFormat(templateId);
-					// 获取变量值
-					String dataList = businessRouteValue.getMessageContent();
+        //获取通道模板标识,1表示普通模板,2 表示变量模板
+        if (String.valueOf(FixedConstant.TemplateFlag.COMMON_TEMPLATE.ordinal()).equals(
+                AccountChanelTemplateInfoManager.getInstance().getTemplateFlag(accountTemplateID))) {
+            bodyJsonObject.put("Method", "send");
+        } else {
+            bodyJsonObject.put("Method", "option");
+            // 获取通道模板变量格式
+            String channelTemplateVariableFormat = AccountChanelTemplateInfoManager.getInstance().getChannelTemplateVariableFormat(accountTemplateID);
+            // 获取变量值
+            String[] paramArr = businessRouteValue.getMessageContent().split("\\|");
+            List<JSONObject> contentList = new ArrayList<JSONObject>();
+            //构建变量参数
+            JSONArray jsonArray = JSONObject.parseArray(channelTemplateVariableFormat);
+            JSONObject jsonObject = null;
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject paramJSONObject = jsonArray.getJSONObject(i);
+                jsonObject = new JSONObject();
+                JSONArray variableParamJSONArray = paramJSONObject.getJSONArray("Param");
 
-					String[] datas = dataList.split("\\|");
+                Map<String, String> paramMap = new HashMap<String, String>();
+                for (Object object : variableParamJSONArray) {
+                    int index = (Integer) object;
+                    paramMap.put(String.valueOf(index), paramArr[index]);
+                }
+                jsonObject.put("Frame", paramJSONObject.get("Frame"));
+                jsonObject.put("Param", paramMap);
+                contentList.add(jsonObject);
+            }
+            bodyJsonObject.put("Content", contentList);
+        }
+        return bodyJsonObject.toJSONString();
+    }
 
-					List<JSONObject> listcontent = new ArrayList<JSONObject>();
-					JSONArray array = JSONObject.parseArray(option);
-
-					for (int i = 0; i < array.size(); i++) {
-						String str = array.get(i)+"";
-
-						JSONObject jsonObject_ = JSONObject.parseObject(str);
-
-						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("Frame", jsonObject_.get("Frame"));
-
-						Map<String, String> paramMap = new HashMap<String, String>();
-						JSONArray array_ = jsonObject_.getJSONArray("Param");
-
-						for (Object object : array_) {
-							int index = (Integer) object;
-							paramMap.put(String.valueOf(index), datas[index]);
-						}
-
-						jsonObject.put("Param", paramMap);
-						listcontent.add(jsonObject);
-
-					}
-					jsonobject.put("Method", "option");
-					jsonobject.put("Content", listcontent);
-					url = resultMap.get("url") + "/sapi/option";
-				}
-
-				String response = HttpClientUtil.doRequest(url, jsonobject.toString(), TIMEOUT,
-						RESPONSE_TIMEOUT);
-
-				//维护通道运行状态
-				ChannelInteractiveStatusManager.getInstance().process(channelID, response);
-				BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
-				//获取账号扩展码
-				String extend = AccountChanelTemplateInfoManager.getInstance().getAccountExtendCode(templateId);
-				//获取通道接入码
-				String channelSRCID = ChannelInfoManager.getInstance().getChannelSRCID(channelID);
-				newBusinessRouteValue.setAccountExtendCode(extend);
-				newBusinessRouteValue.setChannelSubmitSRCID(channelSRCID + extend);
-
-				if (StringUtils.isNotEmpty(response) && response.contains("ResCode") && response.contains("TransID")) {
-					JSONObject json = JSONObject.parseObject(response);
-					newBusinessRouteValue.setNextNodeCode(json.getString("ResCode"));
-					newBusinessRouteValue.setChannelMessageID(json.getString("TransID"));
-					newBusinessRouteValue
-							.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
-
-				} else {
-					newBusinessRouteValue.setNextNodeCode("2");
-					newBusinessRouteValue
-							.setChannelMessageID(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI));
-					newBusinessRouteValue
-							.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
-				}
-
-
-				// 添加响应消息到队列
-				responseWorker.add(newBusinessRouteValue);
-				logger.info(new StringBuilder().append("提交信息")
-								.append("{}accountID={}")
-								.append("{}phoneNumber={}")
-								.append("{}messageContent={}")
-								.append("{}channelID={}")
-								.append("{}accountTemplateID={}")
-								.append("{}jsonobject={}").toString(),
-						FixedConstant.SPLICER, businessRouteValue.getAccountID(),
-						FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
-						FixedConstant.SPLICER, businessRouteValue.getMessageContent(),
-						FixedConstant.SPLICER, businessRouteValue.getChannelID(),
-						FixedConstant.SPLICER, businessRouteValue.getAccountTemplateID(),
-						FixedConstant.SPLICER, jsonobject.toString());
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		long endTime = System.currentTimeMillis();
-		controlSubmitSpeed(interval, (endTime - startTime));
-
-	}
-
-	public void exit() {
-		//停止线程
-		responseWorker.exit();
-		super.exit();
-		// 维护通道运行状态
-		ChannelRunStatusManager.getInstance().process(channelID,
-				String.valueOf(FixedConstant.ChannelRunStatus.ABNORMAL.ordinal()));
-	}
+    public void exit() {
+        //停止线程
+        responseWorker.exit();
+        super.exit();
+        // 维护通道运行状态
+        ChannelRunStatusManager.getInstance().process(channelID,
+                String.valueOf(FixedConstant.ChannelRunStatus.ABNORMAL.ordinal()));
+    }
 
 }

@@ -20,6 +20,8 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 
 	private static ReportWorkerManager manager = new ReportWorkerManager();
 
+	private static final String REPORT_RECEIVD = "RECEIVD";
+
 	private Set<ReportWorker> reportWorkerSet = new HashSet<ReportWorker>();
 
 	private ReportWorkerManager() {
@@ -64,7 +66,7 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 			if (businessRouteValue == null) {
 				return;
 			}
-			if("RECEIVD".equals(businessRouteValue.getStatusCode())){
+			if(REPORT_RECEIVD.equals(businessRouteValue.getStatusCode())){
 				return;
 			}
 			if (DynamicConstant.REPORT_SUCCESS_CODE.equals(businessRouteValue.getStatusCode())) {
@@ -73,6 +75,9 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
 				businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
 			}
 			businessRouteValue.setChannelReportTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
+			businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.CHANNEL.name());
+			businessRouteValue.setSubStatusCode("");
+			businessRouteValue.setChannelReportSRCID("");
 			CacheBaseService.saveReportToMiddlewareCache(businessRouteValue);
 			logger.info(new StringBuilder().append("状态报告信息")
 							.append("{}phoneNumber={}")

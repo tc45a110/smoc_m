@@ -20,7 +20,7 @@
                 <!--  获取国际区号(SMPP)  -->
                 <exclude>com.googlecode.libphonenumber:*</exclude>
                 <!--  http请求  -->
-                <exclude>org.apache.httpcomponents:*</exclude>
+<!--                <exclude>org.apache.httpcomponents:*</exclude>-->
                 <!--  okhttp请求  -->
                 <exclude>org.jetbrains*:*</exclude>
                 <exclude>com.squareup.*:*</exclude>

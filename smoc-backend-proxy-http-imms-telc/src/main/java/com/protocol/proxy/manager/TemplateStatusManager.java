@@ -1,5 +1,6 @@
 package com.protocol.proxy.manager;
 
+import com.base.common.constant.FixedConstant;
 import com.base.common.worker.SuperQueueWorker;
 import com.protocol.proxy.message.StatusMessage;
 import com.protocol.proxy.util.DAO;
@@ -25,17 +26,17 @@ public class TemplateStatusManager extends SuperQueueWorker<StatusMessage> {
 	 */
 	private static final Map<String, String> CHANNEL_TEMPLATE_STATUS_MAP = new HashMap<String, String>();
 	static {
-		CHANNEL_TEMPLATE_STATUS_MAP.put("0", "1");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("1", "3");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("2", "3");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("3", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("4", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("5", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("6", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("7", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("8", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("9", "2");
-		CHANNEL_TEMPLATE_STATUS_MAP.put("10", "2");
+		CHANNEL_TEMPLATE_STATUS_MAP.put("0", String.valueOf(FixedConstant.TemplateStatus.REJECT.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("1", String.valueOf(FixedConstant.TemplateStatus.NO_APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("2", String.valueOf(FixedConstant.TemplateStatus.NO_APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("3", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("4", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("5", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("6", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("7", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("8", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("9", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
+		CHANNEL_TEMPLATE_STATUS_MAP.put("10", String.valueOf(FixedConstant.TemplateStatus.APPROVED.ordinal()));
 	}
 
 	private static TemplateStatusManager manager = new TemplateStatusManager();

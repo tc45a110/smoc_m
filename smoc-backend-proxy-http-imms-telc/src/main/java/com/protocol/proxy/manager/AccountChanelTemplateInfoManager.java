@@ -114,15 +114,15 @@ public class AccountChanelTemplateInfoManager extends SuperMapWorker<String, Acc
 			pstmt = conn.prepareStatement(sql.toString());
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				AccountChanelTemplateInfo accountchanneltemplateinfo = new AccountChanelTemplateInfo();
+				AccountChanelTemplateInfo accountChanelTemplateInfo = new AccountChanelTemplateInfo();
 				String templateID = rs.getString("TEMPLATE_ID");
-				accountchanneltemplateinfo.setBusinessAccount(rs.getString(("BUSINESS_ACCOUNT")));
-				accountchanneltemplateinfo.setChannelTemplateID(rs.getString(("CHANNEL_TEMPLATE_ID")));
-				accountchanneltemplateinfo
+				accountChanelTemplateInfo.setBusinessAccount(rs.getString(("BUSINESS_ACCOUNT")));
+				accountChanelTemplateInfo.setChannelTemplateID(rs.getString(("CHANNEL_TEMPLATE_ID")));
+				accountChanelTemplateInfo
 						.setChannelTemplateVariableFormat(rs.getString(("CHANNEL_TEMPLATE_VARIABLE_FORMAT")));
-				accountchanneltemplateinfo.setTemplateFlag(rs.getString(("TEMPLATE_FLAG")));
-				accountchanneltemplateinfo.setAccountExtendCode(rs.getString(("ACCOUNT_EXTEND_CODE")));
-				templateMap.put(templateID, accountchanneltemplateinfo);
+				accountChanelTemplateInfo.setTemplateFlag(rs.getString(("TEMPLATE_FLAG")));
+				accountChanelTemplateInfo.setAccountExtendCode(rs.getString(("ACCOUNT_EXTEND_CODE")));
+				templateMap.put(templateID, accountChanelTemplateInfo);
 
 			}
 			superMap = templateMap;

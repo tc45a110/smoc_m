@@ -9,7 +9,7 @@ import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperMapWorker;
 import com.protocol.proxy.server.handler.CallbackHTTPServer;
 import com.protocol.proxy.util.ChannelInterfaceUtil;
-import com.protocol.proxy.worker.MateriaMessageWorker;
+import com.protocol.proxy.worker.MaterialMessageWorker;
 import com.protocol.proxy.worker.SubmitPullWorker;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -88,8 +88,8 @@ public class SubmitPullWorkerManager extends SuperMapWorker<String, Set<SubmitPu
 			CallbackHTTPServerManager.getInstance().maintain(channelID,callbackHTTPServer);
 
 			// 启动模板推送服务
-			MateriaMessageWorker materiaMessageworker = new MateriaMessageWorker(channelID);
-			materiaMessageworker.setName("MateriaMessageWorker-"+channelID);
+			MaterialMessageWorker materiaMessageworker = new MaterialMessageWorker(channelID);
+			materiaMessageworker.setName("MaterialMessageWorker-"+channelID);
 			materiaMessageworker.start();
 			MateriaMessageWorkerManager.getInstance().maintain(channelID,materiaMessageworker);
 

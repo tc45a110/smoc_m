@@ -1,4 +1,4 @@
-export _HOME=/smoc/apps/protocol-proxy-imms-telc
+export _HOME=/smoc/apps/protocol-proxy-http-imms-telc
 export _LIB=$_HOME/lib
 export _CONFIG=$_HOME/config
 
