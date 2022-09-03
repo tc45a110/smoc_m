@@ -317,6 +317,19 @@ public class FixedConstant {
 		BEING_REGISTER,//报备中
 		ALREADY_REGISTER//已报备
 	}
+
+	public static enum TemplateFlag {
+		VARIABLE_TEMPLATE,//变量模板
+		COMMON_TEMPLATE,//普通模板
+	}
+
+	public static enum TemplateStatus{
+		INVALID,//无效
+		REJECT,//拒绝
+		APPROVED,//审核通过
+		NO_APPROVED,//待审核
+	}
+
 }
 
 
