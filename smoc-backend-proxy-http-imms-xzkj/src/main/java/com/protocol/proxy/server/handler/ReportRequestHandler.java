@@ -60,7 +60,7 @@ public class ReportRequestHandler implements HttpHandler {
 
             resultject.put("code", "0000");
             resultject.put("message", "接受成功");
-            // 将响应结果map转成json数据返回
+
             responseBody.write(resultject.toString().getBytes());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

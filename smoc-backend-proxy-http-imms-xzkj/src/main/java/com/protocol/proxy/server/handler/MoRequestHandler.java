@@ -55,7 +55,7 @@ public class MoRequestHandler implements HttpHandler {
 			String queryString = sb.toString();
 			logger.info("{},{},msgid={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid,
 					ip, queryString);
-			// 请求数据转json对象
+			//请求数据转json对象
 			process(queryString);
 			response.put("code", "0000");
 			response.put("message","接受成功");

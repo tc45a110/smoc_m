@@ -25,18 +25,14 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue> {
             return;
         }
 
-        if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeCode())) {
-            businessRouteValue.setNextNodeErrorCode(businessRouteValue.getNextNodeCode());
+        if (DynamicConstant.RESPONSE_SUCCESS_CODE.equals(businessRouteValue.getNextNodeErrorCode())) {
             businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.SUCCESS_CODE);
-            businessRouteValue.setChannelTotal(1);
-            businessRouteValue.setChannelIndex(1);
         } else {
-            businessRouteValue.setNextNodeErrorCode(businessRouteValue.getNextNodeCode());
             businessRouteValue.setNextNodeCode(InsideStatusCodeConstant.FAIL_CODE);
-            businessRouteValue.setChannelTotal(1);
-            businessRouteValue.setChannelIndex(1);
-        }
 
+        }
+        businessRouteValue.setChannelTotal(1);
+        businessRouteValue.setChannelIndex(1);
         businessRouteValue.setChannelSRCID(ChannelInfoManager.getInstance().getChannelSRCID(channelID));
         CacheBaseService.saveResponseToMiddlewareCache(businessRouteValue);
         logger.info(new StringBuilder().append("响应信息")

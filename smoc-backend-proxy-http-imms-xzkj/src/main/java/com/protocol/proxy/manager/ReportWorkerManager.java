@@ -66,6 +66,9 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
                 businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
             }
             businessRouteValue.setChannelReportTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
+            businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.CHANNEL.name());
+            businessRouteValue.setSubStatusCode("");
+            businessRouteValue.setChannelReportSRCID("");
             CacheBaseService.saveReportToMiddlewareCache(businessRouteValue);
             logger.info(new StringBuilder().append("状态报告信息")
                             .append("{}phoneNumber={}")
@@ -79,7 +82,6 @@ public class ReportWorkerManager extends SuperQueueWorker<BusinessRouteValue> {
                     FixedConstant.SPLICER, businessRouteValue.getStatusCode(),
                     FixedConstant.SPLICER, businessRouteValue.getChannelID(),
                     FixedConstant.SPLICER, businessRouteValue.getChannelReportTime());
-
         }
 
     }

@@ -98,13 +98,13 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 ChannellnteractiveStatusManager.getInstance().process(channelID, response);
                 BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
                 newBusinessRouteValue.setChannelSubmitSRCID(extNumber);
+                newBusinessRouteValue.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
 
                 if (StringUtils.isNotEmpty(response) && response.contains("code") && response.contains("data")) {
                     JSONObject json = JSONObject.parseObject(response);
                     JSONObject jsonData = JSONObject.parseObject(json.getString("data"));
-                    newBusinessRouteValue.setNextNodeCode(json.getString("code"));
+                    newBusinessRouteValue.setNextNodeErrorCode(json.getString("code"));
                     newBusinessRouteValue.setChannelMessageID(jsonData.getString("msgId"));
-                    newBusinessRouteValue.setAccountTemplateID(jsonData.getString("templateId"));
                 } else {
                     newBusinessRouteValue.setNextNodeErrorCode(InsideStatusCodeConstant.FAIL_CODE);
                 }
