@@ -17,20 +17,20 @@ public class GetReport {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/report/getReport";
+        String url = "http://39.97.121.96:18088/smoc-gateway/http-server/report/getReport";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-        header.put("account", "YQT112");
+        header.put("account", "NZW100");
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();
         //短信发送订单号
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "YQT112");
+        requestDataMap.put("account", "NZW100");
 
         //msgId ，发送短信时的订单号
         //requestDataMap.put("msgId", "202204211307584599387668430");
@@ -54,7 +54,7 @@ public class GetReport {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "!TA5!*aFN");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "d46?d6BS");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 
