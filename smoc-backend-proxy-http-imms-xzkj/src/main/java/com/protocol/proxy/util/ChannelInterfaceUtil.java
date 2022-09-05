@@ -1,10 +1,8 @@
 package com.protocol.proxy.util;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.manager.ChannelInfoManager;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
