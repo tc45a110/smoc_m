@@ -11,6 +11,7 @@ public class ExportModelRowMapper implements RowMapper<ExportModel> {
     public ExportModel mapRow(ResultSet rs, int rowNum) throws SQLException {
         ExportModel qo = new ExportModel();
         qo.setId(rs.getString("ID"));
+        qo.setCertifyId(rs.getString("CERTIFY_ID"));
         qo.setRegCodeNum(rs.getString("REGISTER_CODE_NUMBER"));
         qo.setAccessProvince(rs.getString("ACCESS_PROVINCE"));
         qo.setNumberSegment(rs.getString("NUMBER_SEGMENT"));

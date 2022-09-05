@@ -19,6 +19,9 @@ public class SystemProperties {
     //公司名称
     public String companyName;
 
+    //公司logo
+    public String companyLogo;
+
     //系统名称
     public  String systemName;
 

@@ -114,7 +114,7 @@ public class EnterpriseSignCertifyController {
         enterpriseSignCertifyValidator.setId(UUID.uuid32());
         enterpriseSignCertifyValidator.setCertifyStatus("1");
         enterpriseSignCertifyValidator.setAuthorizeStartDate(DateTimeUtils.getDateFormat(new Date()));
-        enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 2)));
+        enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 5)));
         enterpriseSignCertifyValidator.setPersonLiableCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPersonHandledCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPosition("阿里云服务器");
@@ -270,9 +270,6 @@ public class EnterpriseSignCertifyController {
                 }
                 authorizeCertificateFile.transferTo(file);
                 enterpriseSignCertifyValidator.setAuthorizeCertificate(authorizeCertificateFileName);
-            } else if ("add".equals(op)) {
-                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
-                return view;
             }
 
             //授权书

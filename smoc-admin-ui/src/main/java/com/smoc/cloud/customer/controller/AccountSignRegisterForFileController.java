@@ -207,40 +207,42 @@ public class AccountSignRegisterForFileController {
 
                     ExportModel exportModel = exportPage.getData().getList().get(i);
                     //复制营业执照/组织机构代码证
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getBusinessLicense());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getBusinessLicense());
 
                     //复制责任人（含法人）证件
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getLiableCertUrl());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getLiableCertUrl());
 
                     //复制经办人证件
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getHandledCertUrl());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getHandledCertUrl());
 
                     //复制授权书
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getAuthorizeCert());
+                    if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getAuthorizeCert());
+                    }
 
                     //复制授权书
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getOfficePhotos());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getOfficePhotos());
 
 
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
                     exportModel.setOperate("新增");
                     models.add(exportModel);
-                    if (!(i == 0) && ((i + 1) % 100 == 0 || i == (size - 1))) {
+                    if (((i + 1) % 100 == 0 || i == (size - 1))) {
 
                         //创建生成文件的文件夹
                         String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                        currentFold = "移动签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                        currentFold = "移动签名报备" + "/" + exportOrderNo + "/" + orderNo;
                         File fold = new File(rootPath + currentFold);
                         while (!fold.exists()) {
                             fold.mkdirs();
                         }
 
                         //生成图片的压缩文件
-                        String zipFile = rootPath + currentFold + File.separator + "附件.zip";
+                        String zipFile = rootPath + currentFold + "/" + "附件.zip";
                         CompressUtil.compress(files, zipFile, false);
 
                         //生成excel文件
-                        String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                        String excelFile = rootPath + currentFold + "/" + orderNo + ".xlsx";
                         writerExcelFile(excelFile, models, "cmcc.xlsx");
                         //log.info("[files]:{}", new Gson().toJson(files));
                         files = new HashSet<>();
@@ -253,12 +255,12 @@ public class AccountSignRegisterForFileController {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath + File.separator + "移动签名报备" + File.separator + "temp";
+            String tempPath = rootPath + "移动签名报备" + "/" + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+            String zipFilePath = temp + "/" + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -269,7 +271,7 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath + File.separator + "移动签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + "移动签名报备" + "/" + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
@@ -298,26 +300,26 @@ public class AccountSignRegisterForFileController {
 
                 //创建生成文件的文件夹
                 String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                currentFold = "联通签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                currentFold = "联通签名报备" + "/" + exportOrderNo + "/" + orderNo;
                 File fold = new File(rootPath + currentFold);
                 while (!fold.exists()) {
                     fold.mkdirs();
                 }
 
                 //生成excel文件
-                String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                String excelFile = rootPath + currentFold + "/" + orderNo + ".xlsx";
                 writerExcelFile(excelFile, models, "unic.xlsx");
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath + File.separator + "联通签名报备" + File.separator + "temp";
+            String tempPath = rootPath + "联通签名报备" + "/" + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+            String zipFilePath = temp + "/" + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -328,7 +330,7 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath + File.separator + "联通签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + "联通签名报备" + "/" + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
@@ -362,26 +364,26 @@ public class AccountSignRegisterForFileController {
 
                 //创建生成文件的文件夹
                 String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                currentFold = "电信签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                currentFold = "电信签名报备" + "/" + exportOrderNo + "/" + orderNo;
                 File fold = new File(rootPath + currentFold);
                 while (!fold.exists()) {
                     fold.mkdirs();
                 }
 
                 //生成excel文件
-                String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                String excelFile = rootPath + currentFold + "/" + orderNo + ".xlsx";
                 writerExcelFile(excelFile, models, "telc.xlsx");
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath + File.separator + "电信签名报备" + File.separator + "temp";
+            String tempPath = rootPath + "电信签名报备" + "/" + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+            String zipFilePath = temp + "/" + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -392,7 +394,7 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath + File.separator + "电信签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + "电信签名报备" + "/" + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
@@ -531,40 +533,42 @@ public class AccountSignRegisterForFileController {
                     ExportModel exportModel = exportPage.getData().getList().get(i);
                     ids.add(exportModel.getId());
                     //复制营业执照/组织机构代码证
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getBusinessLicense());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getBusinessLicense());
 
                     //复制责任人（含法人）证件
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getLiableCertUrl());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getLiableCertUrl());
 
                     //复制经办人证件
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getHandledCertUrl());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getHandledCertUrl());
 
                     //复制授权书
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getAuthorizeCert());
+                    if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getAuthorizeCert());
+                    }
 
                     //复制授权书
-                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getOfficePhotos());
+                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getOfficePhotos());
 
 
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
                     exportModel.setOperate("新增");
                     models.add(exportModel);
-                    if (!(i == 0) && ((i + 1) % 100 == 0 || i == (size - 1))) {
+                    if (((i + 1) % 100 == 0 || i == (size - 1))) {
 
                         //创建生成文件的文件夹
                         String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                        currentFold = "移动签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                        currentFold = "移动签名报备" + "/" + exportOrderNo + "/" + orderNo;
                         File fold = new File(rootPath + currentFold);
                         while (!fold.exists()) {
                             fold.mkdirs();
                         }
 
                         //生成图片的压缩文件
-                        String zipFile = rootPath + currentFold + File.separator + "附件.zip";
+                        String zipFile = rootPath + currentFold + "/" + "附件.zip";
                         CompressUtil.compress(files, zipFile, false);
 
                         //生成excel文件
-                        String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                        String excelFile = rootPath + currentFold + "/" + orderNo + ".xlsx";
                         writerExcelFile(excelFile, models, "cmcc.xlsx");
                         //log.info("[files]:{}", new Gson().toJson(files));
                         files = new HashSet<>();
@@ -577,12 +581,12 @@ public class AccountSignRegisterForFileController {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath + File.separator + "移动签名报备" + File.separator + "temp";
+            String tempPath = rootPath + "移动签名报备" + "/" + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+            String zipFilePath = temp + "/" + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -593,7 +597,7 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath + File.separator + "移动签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + "移动签名报备" + "/" + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
@@ -629,26 +633,26 @@ public class AccountSignRegisterForFileController {
 
                 //创建生成文件的文件夹
                 String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                currentFold = "联通签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                currentFold = "联通签名报备" + "/" + exportOrderNo + "/" + orderNo;
                 File fold = new File(rootPath + currentFold);
                 while (!fold.exists()) {
                     fold.mkdirs();
                 }
 
                 //生成excel文件
-                String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                String excelFile = rootPath + currentFold + "/" + orderNo + ".xlsx";
                 writerExcelFile(excelFile, models, "unic.xlsx");
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath + File.separator + "联通签名报备" + File.separator + "temp";
+            String tempPath = rootPath + "联通签名报备" + "/" + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+            String zipFilePath = temp + "/" + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -659,7 +663,7 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath + File.separator + "联通签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + "联通签名报备" + "/" + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
@@ -700,26 +704,26 @@ public class AccountSignRegisterForFileController {
 
                 //创建生成文件的文件夹
                 String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                currentFold = "电信签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                currentFold = "电信签名报备" + "/" + exportOrderNo + "/" + orderNo;
                 File fold = new File(rootPath + currentFold);
                 while (!fold.exists()) {
                     fold.mkdirs();
                 }
 
                 //生成excel文件
-                String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                String excelFile = rootPath + currentFold + "/" + orderNo + ".xlsx";
                 writerExcelFile(excelFile, models, "telc.xlsx");
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath + File.separator + "电信签名报备" + File.separator + "temp";
+            String tempPath = rootPath + "电信签名报备" + "/" + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+            String zipFilePath = temp + "/" + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -730,7 +734,7 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath + File.separator + "电信签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + "电信签名报备" + "/" + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
