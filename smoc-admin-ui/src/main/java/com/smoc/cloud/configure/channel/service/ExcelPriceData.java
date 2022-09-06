@@ -12,9 +12,12 @@ public class ExcelPriceData {
     @ExcelProperty(value = "国家码", index = 0)
     private String countriesNo;
 
-    @ExcelProperty(value = "国家名称", index = 1)
+    @ExcelProperty(value = "国家名称", index = 2)
     private String countriesName;
 
-    @ExcelProperty(value = "单价/元(最多精确到小数点后四位)", index = 2)
+    @ExcelProperty(value = "通道单价/元(最多精确到小数点后六位)", index = 3)
     private String price;
+
+    @ExcelProperty(value = "客户单价/元(最多精确到小数点后六位))", index = 4)
+    private String accountPrice;
 }

@@ -317,60 +317,57 @@ public class ChannelPriceController {
         //读取国际短信 国家短信
         ServletContext context = request.getServletContext();
         Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
-        DictType dictType = dictMap.get("internationalArea");
         Map<String, String> countries = new HashMap<>();
         String[] areas = supportAreaCodes.split(",");
         for (String area : areas) {
-            for (Dict dict : dictType.getDict()) {
-                if (area.equals(dict.getFieldCode())) {
-                    countries.put(dict.getFieldName(), dict.getFieldCode());
-                }
-            }
+            countries.put(area, area);
         }
 
         ExcelListen excelListen = new ExcelListen();
         try {
             InputStream inputStream = countriesFile.getInputStream();
             String fileType = countriesFile.getOriginalFilename().substring(countriesFile.getOriginalFilename().lastIndexOf("."));
-            if(!((".xlsx".equals(fileType) || ".xls".equals(fileType)))){
+            if (!((".xlsx".equals(fileType) || ".xls".equals(fileType)))) {
                 view.addObject("error", "文件类型错误！");
                 return view;
             }
 
             EasyExcel.read(inputStream, ExcelPriceData.class, excelListen).sheet().doRead();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             view.addObject("error", "文件导入错误！");
             return view;
         }
 
-        if(null == excelListen || excelListen.result.size()<1){
+        if (null == excelListen || excelListen.result.size() < 1) {
             view.addObject("error", "导入数据为空！");
             return view;
         }
 
         //封装区域价格数据
         List<ChannelPriceValidator> list = new ArrayList<>();
-        for (ExcelPriceData excelPriceData:excelListen.result) {
+        for (ExcelPriceData excelPriceData : excelListen.result) {
             ChannelPriceValidator channelPrice = new ChannelPriceValidator();
-            String countryName = excelPriceData.getCountriesName();
-            if(StringUtils.isEmpty(countryName)){
+            //excel中国家编码
+            String countryNo = excelPriceData.getCountriesNo();
+            if (StringUtils.isEmpty(countryNo)) {
                 continue;
             }
-            String countriesCode = countries.get(countryName.trim());
-            if(StringUtils.isEmpty(countriesCode)){
+            //通道配置的国家编码
+            String countriesCode = countries.get(countryNo);
+            if (StringUtils.isEmpty(countriesCode)) {
                 continue;
             }
             channelPrice.setAreaCode(countriesCode);
 
             String price = excelPriceData.getPrice();
-            if(StringUtils.isEmpty(price)){
+            if (StringUtils.isEmpty(price)) {
                 continue;
             }
             //校验价格为数字
             String reg = "^[0-9]+(.[0-9]+)?$";
-            if(!price.matches(reg)){
+            if (!price.matches(reg)) {
                 continue;
             }
             channelPrice.setChannelPrice(new BigDecimal(price));
@@ -379,7 +376,7 @@ public class ChannelPriceController {
             list.add(channelPrice);
         }
 
-        //log.info("[list]:{}",new Gson().toJson(list));
+        log.info("[list]:{}",new Gson().toJson(list));
         //保存数据
         channelPriceValidator.setPrices(list);
         channelPriceValidator.setPriceStyle(data.getData().getPriceStyle());
