@@ -176,6 +176,7 @@ public class AccountSignRegisterForFileController {
         params.setPageSize(1000);
         params.setCurrentPage(1);
         ResponseData<PageList<ExportModel>> exportPage = this.accountSignRegisterForFileService.query(params,registerOrderNo);
+        log.info("[exportPage]：{}",new Gson().toJson(exportPage));
         if (!ResponseCode.SUCCESS.getCode().equals(exportPage.getCode())) {
             return;
         }
@@ -501,6 +502,7 @@ public class AccountSignRegisterForFileController {
         params.setCurrentPage(1);
         params.setParams(queryExportModel);
         ResponseData<PageList<ExportModel>> exportPage = this.accountSignRegisterForFileService.export(params);
+        log.info("[exportPage]：{}",new Gson().toJson(exportPage));
         if (!ResponseCode.SUCCESS.getCode().equals(exportPage.getCode())) {
             return;
         }

@@ -15,6 +15,8 @@ public class ExportModel {
     private String regCodeNum;
     //接入省份
     private String accessProvince;
+    //接入地市
+    private String accessCity;
     //报备完整码号
     private String numberSegment;
     //报备签名

@@ -148,6 +148,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(" asr.ID");
         sqlBuffer.append(",asr.REGISTER_CODE_NUMBER");
         sqlBuffer.append(",asr.ACCESS_PROVINCE");
+        sqlBuffer.append(",asr.ACCESS_CITY");
         sqlBuffer.append(",asr.NUMBER_SEGMENT");
         sqlBuffer.append(",asr.REGISTER_SIGN");
         sqlBuffer.append(",asr.REGISTER_CARRIER");
@@ -202,6 +203,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(" asr.ID");
         sqlBuffer.append(",asr.REGISTER_CODE_NUMBER");
         sqlBuffer.append(",asr.ACCESS_PROVINCE");
+        sqlBuffer.append(",asr.ACCESS_CITY");
         sqlBuffer.append(",asr.NUMBER_SEGMENT");
         sqlBuffer.append(",asr.REGISTER_SIGN");
         sqlBuffer.append(",asr.REGISTER_CARRIER");

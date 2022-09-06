@@ -14,6 +14,7 @@ public class ConfigChannelBasicInfo {
     private String businessType;
     private BigDecimal maxComplaintRate;
     private String accessProvince;
+    private String accessCity;
     private String channelProvder;
     private String infoType;
     private String businessAreaType;
@@ -317,6 +318,16 @@ public class ConfigChannelBasicInfo {
 
     public void setChannelRestrictContent(String channelRestrictContent) {
         this.channelRestrictContent = channelRestrictContent;
+    }
+
+    @Basic
+    @Column(name = "ACCESS_CITY")
+    public String getAccessCity() {
+        return accessCity;
+    }
+
+    public void setAccessCity(String accessCity) {
+        this.accessCity = accessCity;
     }
 
     @Basic

@@ -31,6 +31,7 @@ public class SignRegisterRepository {
         sql.append("ac.CHANNEL_ID,");
         sql.append("ci.SRC_ID,");
         sql.append("c.ACCESS_PROVINCE,");
+        sql.append("c.ACCESS_CITY,");
         sql.append("c.CHANNEL_NAME ");
         sql.append(" from account_channel_info ac,config_channel_interface ci,config_channel_basic_info c");
         sql.append(" where ac.CHANNEL_ID = ci.CHANNEL_ID and ac.CHANNEL_ID = c.CHANNEL_ID and c.IS_REGISTER='1' and ac.ACCOUNT_ID=?");

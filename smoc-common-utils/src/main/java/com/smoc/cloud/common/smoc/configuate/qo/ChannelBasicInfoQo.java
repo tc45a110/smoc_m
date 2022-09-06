@@ -54,6 +54,8 @@ public class ChannelBasicInfoQo {
     private String channelRestrictContent;
     //接入省份
     private String accessProvince;
+
+    private String accessCity;
     //优先级
     private Integer channelPriority;
     //权重

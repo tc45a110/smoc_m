@@ -20,4 +20,7 @@ public class SignChannel {
     //接入省份
     private String accessProvince;
 
+    //接入省份
+    private String accessCity;
+
 }

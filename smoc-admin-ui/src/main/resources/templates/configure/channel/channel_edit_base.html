@@ -76,7 +76,8 @@
                                                     </label>
                                                     <mpm:tag id="businessType" identity="businessType"
                                                              name="businessType" show-type="select" key="code"
-                                                             mask-value="INTERNATIONAL_SMS,INTELLECT_SMS" class="form-control"
+                                                             mask-value="INTERNATIONAL_SMS,INTELLECT_SMS"
+                                                             class="form-control"
                                                              th:value="${channelBasicInfoValidator.businessType}"
                                                              required="true" title="业务类型"/>
                                                 </div>
@@ -147,7 +148,35 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-8 m-b-10">
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label style="margin-right:10px">接入地市<span
+                                                            class="text-danger"
+                                                            th:if="${#fields.hasErrors('accessCity')}"
+                                                            th:errors="*{accessCity}"
+                                                            style="font-weight: 200;font-size: 12px"></span>
+                                                    </label><br>
+                                                    <input type="text" class="form-control"
+                                                           autocomplete="off" th:field="*{accessCity}"
+                                                           data-parsley-length="[0,48]" placeholder="接入地市">
+                                                </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label style="margin-bottom:15px">是否需要报备<span
+                                                            class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger"
+                                                            th:if="${#fields.hasErrors('isRegister')}"
+                                                            th:errors="*{isRegister}"
+                                                            style="font-weight: 200;font-size: 12px"></span>
+                                                    </label><br>
+                                                    <mpm:tag id="isRegister" identity="isOrNo" name="isRegister"
+                                                             show-type="radio" style="margin-top:0px" key="code"
+                                                             th:value="${channelBasicInfoValidator.isRegister}"
+                                                             required="true" title="是否"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-12 m-b-10">
                                                     <label style="margin-right:10px">信息分类<span
                                                             class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('infoType')}"
@@ -158,17 +187,6 @@
                                                              show-type="checkbox" key="code" class="form-control"
                                                              th:value="${channelBasicInfoValidator.infoType}"
                                                              required="true" title="信息分类"/>
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label style="margin-bottom:15px">是否需要报备<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" th:if="${#fields.hasErrors('isRegister')}"
-                                                            th:errors="*{isRegister}"
-                                                            style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br>
-                                                    <mpm:tag id="isRegister" identity="isOrNo" name="isRegister"
-                                                             show-type="radio" style="margin-top:0px" key="code"
-                                                             th:value="${channelBasicInfoValidator.isRegister}"
-                                                             required="true" title="是否"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -521,12 +539,14 @@
 
     }
 
+
 </script>
 <script>
 
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>

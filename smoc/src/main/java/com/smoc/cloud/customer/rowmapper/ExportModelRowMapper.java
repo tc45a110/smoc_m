@@ -14,6 +14,7 @@ public class ExportModelRowMapper implements RowMapper<ExportModel> {
         qo.setCertifyId(rs.getString("CERTIFY_ID"));
         qo.setRegCodeNum(rs.getString("REGISTER_CODE_NUMBER"));
         qo.setAccessProvince(rs.getString("ACCESS_PROVINCE"));
+        qo.setAccessCity(rs.getString("ACCESS_CITY"));
         qo.setNumberSegment(rs.getString("NUMBER_SEGMENT"));
         qo.setRegisterSign(rs.getString("REGISTER_SIGN"));
         qo.setRegisterCarrier(rs.getString("REGISTER_CARRIER"));
