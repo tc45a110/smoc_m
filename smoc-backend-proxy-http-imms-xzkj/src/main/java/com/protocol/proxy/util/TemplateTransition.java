@@ -16,23 +16,23 @@ public class TemplateTransition {
     public static String MMS_PATH = ResourceManager.getInstance().getValue("mms.resource.path");
 
 
-    public static Map<String, String> getTemplate(String MmAttchnent, String channelID, String TemplateTitle, String signaTureNonce, String timesTamp, String templateFlag){
+    public static Map<String, String> getTemplate(String mmAttchnent, String channelID, String TemplateTitle, String signatureNonce, String timesTamp, String templateFlag){
         // 获取通道接口扩展参数
         Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-        String loginname= resultMap.get("login-name");
-        String loginpass= resultMap.get("login-pass");
+        String loginName= resultMap.get("login-name");
+
         // 请求的数据
         Map<String, Object> requestDataMap = new HashMap<>();
         // 订单号，成功后的订单不能重复
-        requestDataMap.put("orderNo", signaTureNonce);
+        requestDataMap.put("orderNo", signatureNonce);
         // 业务账号；
-        requestDataMap.put("account", loginname);
+        requestDataMap.put("account", loginName);
         // 时间戳
         requestDataMap.put("timestamp", timesTamp);
 
         List<Map<String, Object>> mediaItems = new ArrayList<>();
         try {
-            JSONArray array = JSONObject.parseArray(MmAttchnent);
+            JSONArray array = JSONObject.parseArray(mmAttchnent);
             for (int i = 0; i < array.size(); i++) {
                 //总第几帧
                 String str = array.get(i) + "";

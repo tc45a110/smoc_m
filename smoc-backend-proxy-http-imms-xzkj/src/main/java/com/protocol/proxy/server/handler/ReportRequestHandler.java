@@ -1,5 +1,4 @@
 package com.protocol.proxy.server.handler;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.vo.BusinessRouteValue;
@@ -10,7 +9,6 @@ import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,10 +27,10 @@ public class ReportRequestHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String msgid = UUID.randomUUID().toString().replaceAll("-", "");
+        String msgId = UUID.randomUUID().toString().replaceAll("-", "");
         String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
-        JSONObject resultject = new JSONObject();
-        logger.info("{},{},msgid={},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid, ip);
+        JSONObject response = new JSONObject();
+        logger.info("{},{},msgId={},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgId, ip);
         OutputStream responseBody = exchange.getResponseBody();
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/plain;charset=utf-8");
@@ -45,7 +43,7 @@ public class ReportRequestHandler implements HttpHandler {
                 sb.append(line);
             }
             String queryString = sb.toString();
-            logger.info("{},{},msgid={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid,
+            logger.info("{},{},msgId={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgId,
                     ip, queryString);
             // 请求数据转json对象
             JSONObject request = null;
@@ -58,15 +56,15 @@ public class ReportRequestHandler implements HttpHandler {
                 process(request.getJSONArray("data"));
             }
 
-            resultject.put("code", "0000");
-            resultject.put("message", "接受成功");
+            response.put("code", "0000");
+            response.put("message", "接受成功");
 
-            responseBody.write(resultject.toString().getBytes());
+            responseBody.write(response.toString().getBytes());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            resultject.put("code", "0000");
-            resultject.put("message", "接受成功");
-            responseBody.write(resultject.toString().getBytes());
+            response.put("code", "0000");
+            response.put("message", "接受成功");
+            responseBody.write(response.toString().getBytes());
         } finally {
             if (responseBody != null) {
                 responseBody.close();

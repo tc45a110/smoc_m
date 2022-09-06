@@ -154,6 +154,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",sr.APP_NAME");
         sqlBuffer.append(",sr.SERVICE_TYPE");
         sqlBuffer.append(",sr.MAIN_APPLICATION");
+        sqlBuffer.append(",esc.ID CERTIFY_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_NAME");
         sqlBuffer.append(",esc.SOCIAL_CREDIT_CODE");
@@ -207,6 +208,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",sr.APP_NAME");
         sqlBuffer.append(",sr.SERVICE_TYPE");
         sqlBuffer.append(",sr.MAIN_APPLICATION");
+        sqlBuffer.append(",esc.ID CERTIFY_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_NAME");
         sqlBuffer.append(",esc.SOCIAL_CREDIT_CODE");

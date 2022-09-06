@@ -52,13 +52,13 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 form-group">
-                                                <label for="registerEnterpriseId">报备企业名称（非端口使用企业）<span class="text-danger">*</span>&nbsp;
+                                                <label for="registerEnterpriseId">信息报送单位（填代理商名称）<span class="text-danger">*</span>&nbsp;
                                                     <span class="text-danger" th:if="${#fields.hasErrors('registerEnterpriseId')}"
                                                           th:errors="*{registerEnterpriseId}"  style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input id="registerEnterpriseId" type="text" class="form-control" th:field="*{registerEnterpriseId}"
                                                        required="" data-parsley-length="[2,128]" autocomplete="off"
-                                                       placeholder="报备企业名称（非端口使用企业）">
+                                                       placeholder="信息报送单位（填代理商名称）">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="registerEnterpriseName">端口使用企业名称<span class="text-danger">*</span>&nbsp;
@@ -182,9 +182,9 @@
                                                 <input name="handledCertificate" type="file" class="filestyle"  th:attr="required=${'add'==op?'true':'false'}"  data-buttonname="btn-primary">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label >授权书<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                <label >授权书<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px"></span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
                                                 </label>
-                                                <input name="authorizeCertificateFile" type="file" class="filestyle"  th:attr="required=${'add'==op?'true':'false'}" data-buttonname="btn-purple">
+                                                <input name="authorizeCertificateFile" type="file" class="filestyle"  data-buttonname="btn-purple">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="position">现场拍摄留存经办人照片<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>

@@ -62,6 +62,7 @@ com:
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
         system-name: 自服务平台 #系统名称
         company-name: 北京星语互联科技有限公司  #公司名称
+        company-logo: logo.png  #公司logo
         enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话
         main-url: /service_main

@@ -10,8 +10,8 @@ import com.base.common.util.DateUtil;
 import com.base.common.util.HttpClientUtil;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
-import com.protocol.proxy.manager.AccountChannelTemplatelnfoManager;
-import com.protocol.proxy.manager.ChannellnteractiveStatusManager;
+import com.protocol.proxy.manager.AccountChanelTemplateInfoManager;
+import com.protocol.proxy.manager.ChannelInteractiveStatusManager;
 import com.protocol.proxy.util.ChannelInterfaceUtil;
 import com.protocol.proxy.util.MyStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,25 +47,25 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 // 发送多媒体信息,获取响应信息
                 // 获取通道接口参数
                 Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-                String loginname = resultMap.get("login-name");
-                String loginnpass = resultMap.get("login-pass");
+                String loginName = resultMap.get("login-name");
+                String loginPass = resultMap.get("login-pass");
 
                 JSONObject jsonobject = new JSONObject();
                 // 获取平台模板id
                 String templateId = businessRouteValue.getAccountTemplateID();
                 // 获取通道模板id
-                String channelTemplateID= AccountChannelTemplatelnfoManager.getInstance().getChannelTemplateID(templateId);
+                String channelTemplateID= AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(templateId);
                 if(channelTemplateID==null){
                     return;
                 }
 
-                String signaTureNonce = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI)+ MyStringUtils.getRandom(10);
+                String signatureNonce = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI)+ MyStringUtils.getRandom(10);
                 String timesTamp =DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI);
                 jsonobject.put("templateId", channelTemplateID);
                 //订单号，成功后的订单不能重复
-                jsonobject.put("orderNo", signaTureNonce);
+                jsonobject.put("orderNo", signatureNonce);
                 //业务账号
-                jsonobject.put("account", loginname);
+                jsonobject.put("account", loginName);
                 //时间戳
                 jsonobject.put("timestamp", timesTamp );
                 String  extNumber="";
@@ -75,7 +75,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 }
                 List<String> PhonesList = new ArrayList<String>();
                 //获取通道模板标识,1表示普通模板,2 表示变量模板
-                if (String.valueOf(FixedConstant.TemplateFlag.COMMON_TEMPLATE.ordinal()).equals(AccountChannelTemplatelnfoManager .getInstance().getTemplateFlag(templateId))) {
+                if (String.valueOf(FixedConstant.TemplateFlag.COMMON_TEMPLATE.ordinal()).equals(AccountChanelTemplateInfoManager.getInstance().getTemplateFlag(templateId))) {
                     PhonesList.add(businessRouteValue.getPhoneNumber());
                     jsonobject.put("content", PhonesList);
                 } else {
@@ -85,17 +85,17 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 }
 
                 String url = resultMap.get("url")+"/message/sendMultimediaMessageByTemplate";
-                String signature= MyStringUtils.getSignaTure(signaTureNonce, loginname, timesTamp, loginnpass);
+                String signature= MyStringUtils.getSignature(signatureNonce,loginName, timesTamp, loginPass);
                 Map<String, String> headerMap=new HashMap<>();
                 headerMap.put("Content-Type", "application/json; charset=utf-8");
-                headerMap.put("signature-nonce", signaTureNonce);
-                headerMap.put("account", loginname);
+                headerMap.put("signature-nonce", signatureNonce);
+                headerMap.put("account", loginName);
                 headerMap.put("signature", signature);
 
                 String response = HttpClientUtil.doRequest(url ,headerMap,jsonobject.toString(),TIMEOUT,RESPONSE_TIMEOUT);
 
                 //维护通道运行状态
-                ChannellnteractiveStatusManager.getInstance().process(channelID, response);
+                ChannelInteractiveStatusManager.getInstance().process(channelID, response);
                 BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
                 newBusinessRouteValue.setChannelSubmitSRCID(extNumber);
                 newBusinessRouteValue.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));

@@ -1,5 +1,4 @@
 package com.protocol.proxy.server.handler;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.ChannelInfoManager;
@@ -14,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,9 +34,9 @@ public class MoRequestHandler implements HttpHandler {
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		String msgid = UUID.randomUUID().toString().replaceAll("-", "");
+		String msgId = UUID.randomUUID().toString().replaceAll("-", "");
 		String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
-		logger.info("{},{},msgid={},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid, ip);
+		logger.info("{},{},msgId={},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(),msgId, ip);
 		OutputStream responseBody = exchange.getResponseBody();
 		Headers responseHeaders = exchange.getResponseHeaders();
 		responseHeaders.set("Content-Type", "application/json;charset=utf-8");
@@ -53,7 +51,7 @@ public class MoRequestHandler implements HttpHandler {
 				sb.append(line);
 			}
 			String queryString = sb.toString();
-			logger.info("{},{},msgid={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgid,
+			logger.info("{},{},msgId={},ip={},body={}", exchange.getRequestMethod(), exchange.getRequestURI(), msgId,
 					ip, queryString);
 			//请求数据转json对象
 			process(queryString);
