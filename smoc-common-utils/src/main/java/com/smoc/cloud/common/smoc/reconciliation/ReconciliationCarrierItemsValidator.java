@@ -30,6 +30,9 @@ public class ReconciliationCarrierItemsValidator {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String channelName;
+    private String channelAccessAccount;
+    private String protocol;
 
     //条数差额
     private long quantityDifference;

@@ -56,6 +56,7 @@ public class ChannelSearchController {
         params.setPageSize(8);
         params.setCurrentPage(1);
         ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
+        channelBasicInfoQo.setFlag("ALL");//标识：查询所有运营商
         params.setParams(channelBasicInfoQo);
 
         //查询
@@ -90,6 +91,7 @@ public class ChannelSearchController {
         ModelAndView view = new ModelAndView("configure/search/channel_search_history_price_list");
 
         //分页查询
+        channelBasicInfoQo.setFlag("ALL");
         pageParams.setParams(channelBasicInfoQo);
 
         ResponseData<PageList<ChannelBasicInfoQo>> data = channelService.page(pageParams);

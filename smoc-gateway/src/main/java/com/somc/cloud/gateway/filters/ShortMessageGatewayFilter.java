@@ -73,13 +73,13 @@ public class ShortMessageGatewayFilter {
                 requestHeaderData.setSignatureNonce(signatureNonce);
                 requestHeaderData.setSignature(signature);
                 requestHeaderData.setAccount(account);
-                //log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
+                log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
 
                 //获取body内容
                 String requestBody = "";
                 if (HttpMethod.POST.equals(exchange.getRequest().getMethod())) {
                     requestBody = exchange.getAttribute("cachedRequestBodyObject");
-                    //log.info("[接口请求]请求数据:{}", requestBody);
+                    log.info("[接口请求]请求数据:{}", requestBody);
                 }
 
                 //requestBody 为空

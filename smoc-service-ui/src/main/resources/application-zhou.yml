@@ -63,6 +63,7 @@ com:
         system-name: 自服务平台 #系统名称
         company-name: 武汉舟济信息技术有限公司  #公司名称
         company-logo: logo_xiaozhou.png  #公司logo
+        company-ielogo: favicon_xiaozhou.ico  #浏览器logo
         enable-verify-code: true #是否启用验证码
         help-mobile: 联系电话 #帮助电话
         main-url: /service_main

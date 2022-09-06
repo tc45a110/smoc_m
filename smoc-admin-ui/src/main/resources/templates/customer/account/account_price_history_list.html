@@ -52,7 +52,8 @@
                                         <td>[[${histories.priceDate}]]</td>
                                         <td>
                                            <mpm:tag  th:if="${histories.carrierType =='1'}"  identity="carrier"
-                                                      show-type="button" key="code" th:value="${histories.carrier}" class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                                      show-type="button" key="code" th:value="${histories.carrier}"
+                                                     class="UNIC,btn btn-info btn-rounded btn-sm waves-effect waves-light;CMCC,btn btn-purple btn-rounded btn-sm waves-effect waves-light;TELC,btn btn-brown btn-rounded btn-sm waves-effect waves-light;"/>
                                            <mpm:tag th:if="${histories.carrierType=='2'}"  identity="internationalArea"
                                                      show-type="button" key="code" th:value="${histories.carrier}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                         </td>

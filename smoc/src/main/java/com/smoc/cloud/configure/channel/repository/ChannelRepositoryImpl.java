@@ -102,12 +102,20 @@ public class ChannelRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getProtocol().trim());
         }
 
-        if (!StringUtils.isEmpty(qo.getCarrier())) {
-            sqlBuffer.append(" and t.CARRIER like ?");
-            paramsList.add( "%"+qo.getCarrier().trim()+"%");
+        if("ALL".equals(qo.getFlag())){
+            if (!StringUtils.isEmpty(qo.getCarrier())) {
+                sqlBuffer.append(" and t.CARRIER like ?");
+                paramsList.add( "%"+qo.getCarrier().trim()+"%");
+            }
         }else{
-            sqlBuffer.append(" and t.CARRIER !='INTL' ");
+            if (!StringUtils.isEmpty(qo.getCarrier())) {
+                sqlBuffer.append(" and t.CARRIER like ?");
+                paramsList.add( "%"+qo.getCarrier().trim()+"%");
+            }else{
+                sqlBuffer.append(" and t.CARRIER !='INTL' ");
+            }
         }
+
 
         if (!StringUtils.isEmpty(qo.getBusinessType())) {
             sqlBuffer.append(" and t.BUSINESS_TYPE = ?");

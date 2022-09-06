@@ -62,6 +62,7 @@ com:
         system-name: 自服务平台 #系统名称
         company-name: 北京星语互联科技有限公司  #公司名称
         company-logo: logo.png  #公司logo
+        company-ielogo: favicon.ico  #浏览器logo
         enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话
         main-url: /service_main

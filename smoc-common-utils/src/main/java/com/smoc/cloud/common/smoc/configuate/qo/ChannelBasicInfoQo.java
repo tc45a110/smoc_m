@@ -67,4 +67,5 @@ public class ChannelBasicInfoQo {
 
     private String accountId;
     private String countryCode;
+    private String flag;
 }

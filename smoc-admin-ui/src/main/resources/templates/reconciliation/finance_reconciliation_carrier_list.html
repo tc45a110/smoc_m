@@ -112,6 +112,7 @@
                                     <th>账期</th>
                                     <th>运营商</th>
                                     <th>接入码号（通道ID）</th>
+                                    <th>通道名称/对接账号</th>
                                     <th>成功发送量</th>
                                     <th>价格</th>
                                     <th>总金额</th>
@@ -136,6 +137,11 @@
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
                                             [[${dataInfo.srcId}]]([[${dataInfo.channelId}]])
+                                        </td>
+                                        <td class="smoc" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
+                                            [[${dataInfo.channelName}]]<br>
+                                            <mpm:tag identity="channelProtocolType" show-type="label"
+                                                     key="code" th:value="${dataInfo.protocol}"/>：[[${dataInfo.channelAccessAccount}]]
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
                                             [[${dataInfo.totalSendQuantity}]]
@@ -192,6 +198,11 @@
                                     <tr th:class="${infoStat.odd} ? 'bgRow'"  th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index >0}">
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                             [[${dataInfo.srcId}]]([[${dataInfo.channelId}]])
+                                        </td>
+                                        <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                            [[${dataInfo.channelName}]]<br>
+                                            <mpm:tag identity="channelProtocolType" show-type="label"
+                                                     key="code" th:value="${dataInfo.protocol}"/>：[[${dataInfo.channelAccessAccount}]]
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                            [[${dataInfo.totalSendQuantity}]]

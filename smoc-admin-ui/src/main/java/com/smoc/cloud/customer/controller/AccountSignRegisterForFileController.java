@@ -204,6 +204,7 @@ public class AccountSignRegisterForFileController {
                 Set<String> files = new HashSet<>();
                 Integer size = exportPage.getData().getList().size();
                 List<ExportModel> models = new ArrayList<>();
+                String serviceType = "账号注册,账号登录,广告促销,通知提醒,公共服务";
                 for (int i = 0; i < size; i++) {
 
                     ExportModel exportModel = exportPage.getData().getList().get(i);
@@ -227,6 +228,7 @@ public class AccountSignRegisterForFileController {
 
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
                     exportModel.setOperate("新增");
+                    exportModel.setServiceType(serviceType);
                     models.add(exportModel);
                     if (((i + 1) % 100 == 0 || i == (size - 1))) {
 
@@ -530,6 +532,7 @@ public class AccountSignRegisterForFileController {
                 Set<String> files = new HashSet<>();
                 Integer size = exportPage.getData().getList().size();
                 List<ExportModel> models = new ArrayList<>();
+                String serviceType = "账号注册,账号登录,广告促销,通知提醒,公共服务";
                 for (int i = 0; i < size; i++) {
 
                     ExportModel exportModel = exportPage.getData().getList().get(i);
@@ -554,6 +557,7 @@ public class AccountSignRegisterForFileController {
 
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
                     exportModel.setOperate("新增");
+                    exportModel.setServiceType(serviceType);
                     models.add(exportModel);
                     if (((i + 1) % 100 == 0 || i == (size - 1))) {
 
