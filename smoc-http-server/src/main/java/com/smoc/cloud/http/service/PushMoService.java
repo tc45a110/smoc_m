@@ -1,6 +1,7 @@
 package com.smoc.cloud.http.service;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
 import com.smoc.cloud.common.utils.DateTimeUtils;
@@ -120,7 +121,8 @@ public class PushMoService {
                     //子线程
                     //log.info("[上行短信推送成功]：{}");
                     String code = response.body().string();
-                    if ("0000".equals(code)) {
+                    Map map = (Map) JSONObject.parse(code);
+                    if ("0000".equals(map.get("code"))) {
                         messageRepository.batchDelete(mos);
                     }else{
                         log.info("[上行推送失败]：url:{};原因:{}",url, code);
