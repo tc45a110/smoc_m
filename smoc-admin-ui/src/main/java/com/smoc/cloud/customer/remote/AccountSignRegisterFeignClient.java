@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.ExcelRegisterImportData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,4 +58,13 @@ public interface AccountSignRegisterFeignClient {
      */
     @RequestMapping(value = "/sign/register/findExtendDataByAccount/{account}/{id}", method = RequestMethod.GET)
     ResponseData<List<String>> findExtendDataByAccount(@PathVariable String account, @PathVariable String id) throws Exception;
+
+    /**
+     * 报备数据导入
+     *
+     * @param importList
+     * @return
+     */
+    @RequestMapping(value = "/sign/register/registerImport", method = RequestMethod.POST)
+    ResponseData registerImport(@RequestBody List<ExcelRegisterImportData> importList) throws Exception;
 }

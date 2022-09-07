@@ -1,10 +1,13 @@
 package com.smoc.cloud.sign.service;
 
+import com.smoc.cloud.common.smoc.customer.qo.ExcelRegisterImportData;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountSignRegister;
 import com.smoc.cloud.customer.repository.AccountSignRegisterRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
+import com.smoc.cloud.sequence.repository.SequenceRepository;
 import com.smoc.cloud.sign.mode.SignChannel;
 import com.smoc.cloud.sign.mode.SignRegister;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +20,8 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Statement;
+import java.util.*;
 
 /**
  * 签名报备
@@ -38,6 +41,9 @@ public class SignRegisterService {
 
     @Resource
     private AccountSignRegisterRepository accountSignRegisterRepository;
+
+    @Resource
+    private SequenceRepository sequenceRepository;
 
     @Async
     public void generateSignRegisterByRegisterId(String signRegisterId) {
@@ -164,6 +170,11 @@ public class SignRegisterService {
             stmt.executeBatch();
             conn.commit();
         } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
             e.printStackTrace();
         } finally {
             try {
@@ -304,6 +315,11 @@ public class SignRegisterService {
             stmt.executeBatch();
             conn.commit();
         } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
             e.printStackTrace();
         } finally {
             try {
@@ -320,5 +336,89 @@ public class SignRegisterService {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 报备数据导入
+     *
+     * @param importList
+     */
+    public void importExcel(List<ExcelRegisterImportData> importList) {
+
+        //log.info("importList:{}",new Gson().toJson(importList));
+
+        if (null == importList || importList.size() < 1) {
+            return;
+        }
+
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            stmt = conn.createStatement();
+            Set<String> accounts = new HashSet<>();
+            for (ExcelRegisterImportData importData : importList) {
+                //签名扩展号
+                String signExtendNumber = sequenceRepository.findSequence(importData.getAccount()) + "";
+                if (StringUtils.isEmpty(signExtendNumber)) {
+                    continue;
+                }
+
+                accounts.add(importData.getAccount().trim());
+                //String deleteSql = "delete from enterprise_sign_certify where SOCIAL_CREDIT_CODE='" + importData.getSocialCreditCode() + "' ";
+                //stmt.addBatch(deleteSql);
+
+                String authStartDate = DateTimeUtils.getDateFormat(new Date());
+                String authEndDate = DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 5));
+                String rootPath = "/share/resourceFile/certify/import/";
+                StringBuffer insertCertify = new StringBuffer("insert IGNORE into enterprise_sign_certify(ID,REGISTER_ENTERPRISE_ID,REGISTER_ENTERPRISE_NAME,SOCIAL_CREDIT_CODE,BUSINESS_LICENSE,PERSON_LIABLE_NAME,PERSON_LIABLE_CERTIFICATE_TYPE,PERSON_LIABLE_CERTIFICATE_NUMBER,PERSON_LIABLE_CERTIFICATE_URL,PERSON_HANDLED_NAME,PERSON_HANDLED_CERTIFICATE_TYPE,PERSON_HANDLED_CERTIFICATE_NUMBER,PERSON_HANDLED_CERTIFICATE_URL,AUTHORIZE_START_DATE,AUTHORIZE_EXPIRE_DATE,OFFICE_PHOTOS,CERTIFY_STATUS,CREATED_BY,CREATED_TIME)");
+                insertCertify.append(" values('" + importData.getSocialCreditCode().trim() + "','" + UUID.uuid32() + "','" + importData.getRegisterEnterpriseName().trim() + "','" + importData.getSocialCreditCode().trim() + "','" + rootPath + importData.getBusinessLicense().trim() + "','" + importData.getPersonLiableName().trim() + "','居民身份证','" + importData.getPersonLiableCertificateNumber().trim() + "','" + rootPath + importData.getPersonLiableCertificateUrl().trim() + "','" + importData.getPersonHandledName().trim() + "','居民身份证','" + importData.getPersonHandledCertificateNumber().trim() + "','" + rootPath + importData.getPersonHandledCertificateUrl().trim() + "','" + authStartDate + "','" + authEndDate + "','" + rootPath + importData.getOfficePhotos().trim() + "','1','系统导入',now())");
+                //log.info("insertCertify:{}",insertCertify);
+                stmt.addBatch(insertCertify.toString());
+                String serviceType = "账号注册,账号登录,广告促销,通知提醒,公共服务";
+                String mainApplication = "账号注册,账号登录,广告促销,通知提醒,公共服务";
+                StringBuffer insertSign = new StringBuffer("insert IGNORE into account_sign_register(ID,REGISTER_ENTERPRISE,ACCOUNT,SIGN,SIGN_EXTEND_NUMBER,EXTEND_TYPE,EXTEND_DATA,ENTERPRISE_ID,APP_NAME,SERVICE_TYPE,MAIN_APPLICATION,REGISTER_STATUS,SIGN_REGISTER_STATUS,KEY_VALUE_UPDATE_STATUS,CREATED_BY,CREATED_TIME)");
+                insertSign.append(" values('" + UUID.uuid32() + "','" + UUID.uuid32() + "','" + importData.getAccount().trim() + "','" + importData.getSign().trim() + "','" + signExtendNumber + "','1','01','" + importData.getSocialCreditCode().trim() + "','" + importData.getSign().trim() + "','" + serviceType + "','" + mainApplication + "','1','0','0','系统导入',now())");
+                //log.info("insertSign:{}",insertSign);
+                stmt.addBatch(insertSign.toString());
+            }
+            stmt.executeBatch();
+            conn.commit();
+
+            batchGenerateSignRegisterByAccount(accounts);
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != conn) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+                if (null != stmt) {
+                    stmt.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 根据账号批量生成报备数据
+     *
+     * @param accounts
+     */
+    public void batchGenerateSignRegisterByAccount(Set<String> accounts) {
+
+        for (String account : accounts) {
+            this.generateSignRegisterByAccount(account);
+        }
+
     }
 }
