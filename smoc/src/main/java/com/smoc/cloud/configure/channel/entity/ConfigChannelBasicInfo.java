@@ -31,6 +31,7 @@ public class ConfigChannelBasicInfo {
     private String channelRunStatus;
     private String channelStatus;
     private String isRegister;
+    private String registerEnterprise;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -258,6 +259,16 @@ public class ConfigChannelBasicInfo {
 
     public void setIsRegister(String isRegister) {
         this.isRegister = isRegister;
+    }
+
+    @Basic
+    @Column(name = "REGISTER_ENTERPRISE")
+    public String getRegisterEnterprise() {
+        return registerEnterprise;
+    }
+
+    public void setRegisterEnterprise(String registerEnterprise) {
+        this.registerEnterprise = registerEnterprise;
     }
 
     @Basic

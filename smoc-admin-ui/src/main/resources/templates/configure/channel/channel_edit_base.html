@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-6 m-b-10">
+                                                <div class="col-sm-12 m-b-10">
                                                     <label style="margin-right:10px">接入地市<span
                                                             class="text-danger"
                                                             th:if="${#fields.hasErrors('accessCity')}"
@@ -159,6 +159,12 @@
                                                            autocomplete="off" th:field="*{accessCity}"
                                                            data-parsley-length="[0,48]" placeholder="接入地市">
                                                 </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
                                                 <div class="col-sm-6 m-b-10">
                                                     <label style="margin-bottom:15px">是否需要报备<span
                                                             class="text-danger">*</span>&nbsp;<span
@@ -171,6 +177,17 @@
                                                              show-type="radio" style="margin-top:0px" key="code"
                                                              th:value="${channelBasicInfoValidator.isRegister}"
                                                              required="true" title="是否"/>
+                                                </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label style="margin-right:10px">报备代理商名称<span
+                                                            class="text-danger"
+                                                            th:if="${#fields.hasErrors('registerEnterprise')}"
+                                                            th:errors="*{registerEnterprise}"
+                                                            style="font-weight: 200;font-size: 12px"></span>
+                                                    </label><br>
+                                                    <input type="text" class="form-control"
+                                                           autocomplete="off" th:field="*{registerEnterprise}"
+                                                           data-parsley-length="[0,128]" placeholder="报备代理商名称">
                                                 </div>
                                             </div>
                                         </div>

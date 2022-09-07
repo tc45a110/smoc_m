@@ -56,6 +56,10 @@ public class ChannelBasicInfoQo {
     private String accessProvince;
 
     private String accessCity;
+
+    private String isRegister;
+
+    private String registerEnterprise;
     //优先级
     private Integer channelPriority;
     //权重

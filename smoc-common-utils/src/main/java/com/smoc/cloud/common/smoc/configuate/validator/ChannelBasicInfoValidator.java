@@ -78,6 +78,7 @@ public class ChannelBasicInfoValidator {
     private String channelStatus;
 
     private String isRegister;
+    private String registerEnterprise;
 
     private String createdBy;
     private String createdTime;

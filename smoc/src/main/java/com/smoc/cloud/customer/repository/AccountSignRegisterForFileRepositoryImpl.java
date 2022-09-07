@@ -149,6 +149,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",asr.REGISTER_CODE_NUMBER");
         sqlBuffer.append(",asr.ACCESS_PROVINCE");
         sqlBuffer.append(",asr.ACCESS_CITY");
+        sqlBuffer.append(",asr.REGISTER_ENTERPRISE");
         sqlBuffer.append(",asr.NUMBER_SEGMENT");
         sqlBuffer.append(",asr.REGISTER_SIGN");
         sqlBuffer.append(",asr.REGISTER_CARRIER");
@@ -156,7 +157,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",sr.SERVICE_TYPE");
         sqlBuffer.append(",sr.MAIN_APPLICATION");
         sqlBuffer.append(",esc.ID CERTIFY_ID");
-        sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
+//        sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_NAME");
         sqlBuffer.append(",esc.SOCIAL_CREDIT_CODE");
         sqlBuffer.append(",esc.BUSINESS_LICENSE");
@@ -204,6 +205,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",asr.REGISTER_CODE_NUMBER");
         sqlBuffer.append(",asr.ACCESS_PROVINCE");
         sqlBuffer.append(",asr.ACCESS_CITY");
+        sqlBuffer.append(",asr.REGISTER_ENTERPRISE");
         sqlBuffer.append(",asr.NUMBER_SEGMENT");
         sqlBuffer.append(",asr.REGISTER_SIGN");
         sqlBuffer.append(",asr.REGISTER_CARRIER");
@@ -211,7 +213,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",sr.SERVICE_TYPE");
         sqlBuffer.append(",sr.MAIN_APPLICATION");
         sqlBuffer.append(",esc.ID CERTIFY_ID");
-        sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
+//        sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_NAME");
         sqlBuffer.append(",esc.SOCIAL_CREDIT_CODE");
         sqlBuffer.append(",esc.BUSINESS_LICENSE");

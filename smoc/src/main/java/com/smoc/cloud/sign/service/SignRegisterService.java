@@ -79,8 +79,8 @@ public class SignRegisterService {
             stmt.execute();
             StringBuffer sql = new StringBuffer();
             sql.append("insert IGNORE into account_sign_register_for_file ");
-            sql.append("(ID,REGISTER_SIGN_ID,ACCOUNT,CHANNEL_ID,CHANNEL_NAME,ACCESS_PROVINCE,ACCESS_CITY,REGISTER_CARRIER,REGISTER_CODE_NUMBER,REGISTER_EXTEND_NUMBER,REGISTER_SIGN,NUMBER_SEGMENT,REGISTER_STATUS,CREATED_TIME,REGISTER_TYPE) ");
-            sql.append("values(?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?)");
+            sql.append("(ID,REGISTER_SIGN_ID,ACCOUNT,CHANNEL_ID,CHANNEL_NAME,ACCESS_PROVINCE,ACCESS_CITY,REGISTER_ENTERPRISE,REGISTER_CARRIER,REGISTER_CODE_NUMBER,REGISTER_EXTEND_NUMBER,REGISTER_SIGN,NUMBER_SEGMENT,REGISTER_STATUS,CREATED_TIME,REGISTER_TYPE) ");
+            sql.append("values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?)");
             stmt = conn.prepareStatement(sql.toString());
 
             String signExtendNumber = accountSignRegister.getSignExtendNumber();
@@ -99,13 +99,14 @@ public class SignRegisterService {
                     stmt.setString(5, signChannel.getChannelName());
                     stmt.setString(6, signChannel.getAccessProvince());
                     stmt.setString(7, signChannel.getAccessCity());
-                    stmt.setString(8, signChannel.getCarrier());
-                    stmt.setString(9, signChannel.getSrcId());
-                    stmt.setString(10, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                    stmt.setString(11, accountSignRegister.getSign());
-                    stmt.setString(12, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                    stmt.setString(13, "1");
+                    stmt.setString(8, signChannel.getRegisterEnterprise());
+                    stmt.setString(9, signChannel.getCarrier());
+                    stmt.setString(10, signChannel.getSrcId());
+                    stmt.setString(11, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                    stmt.setString(12, accountSignRegister.getSign());
+                    stmt.setString(13, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
                     stmt.setString(14, "1");
+                    stmt.setString(15, "1");
                     stmt.addBatch();
                 }
 
@@ -121,13 +122,15 @@ public class SignRegisterService {
                         stmt.setString(4, signChannel.getChannelId());
                         stmt.setString(5, signChannel.getChannelName());
                         stmt.setString(6, signChannel.getAccessProvince());
-                        stmt.setString(7, signChannel.getCarrier());
-                        stmt.setString(8, signChannel.getSrcId());
-                        stmt.setString(9, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                        stmt.setString(10, accountSignRegister.getSign());
-                        stmt.setString(11, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                        stmt.setString(12, "1");
-                        stmt.setString(13, "2");
+                        stmt.setString(7, signChannel.getAccessCity());
+                        stmt.setString(8, signChannel.getRegisterEnterprise());
+                        stmt.setString(9, signChannel.getCarrier());
+                        stmt.setString(10, signChannel.getSrcId());
+                        stmt.setString(11, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                        stmt.setString(12, accountSignRegister.getSign());
+                        stmt.setString(13, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                        stmt.setString(14, "1");
+                        stmt.setString(15, "1");
                         stmt.addBatch();
                     }
                 }
@@ -145,13 +148,15 @@ public class SignRegisterService {
                         stmt.setString(4, signChannel.getChannelId());
                         stmt.setString(5, signChannel.getChannelName());
                         stmt.setString(6, signChannel.getAccessProvince());
-                        stmt.setString(7, signChannel.getCarrier());
-                        stmt.setString(8, signChannel.getSrcId());
-                        stmt.setString(9, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                        stmt.setString(10, accountSignRegister.getSign());
-                        stmt.setString(11, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                        stmt.setString(12, "1");
-                        stmt.setString(13, "3");
+                        stmt.setString(7, signChannel.getAccessCity());
+                        stmt.setString(8, signChannel.getRegisterEnterprise());
+                        stmt.setString(9, signChannel.getCarrier());
+                        stmt.setString(10, signChannel.getSrcId());
+                        stmt.setString(11, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                        stmt.setString(12, accountSignRegister.getSign());
+                        stmt.setString(13, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                        stmt.setString(14, "1");
+                        stmt.setString(15, "1");
                         stmt.addBatch();
                     }
                 }

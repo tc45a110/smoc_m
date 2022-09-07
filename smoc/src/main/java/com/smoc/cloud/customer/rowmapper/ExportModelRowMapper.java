@@ -21,7 +21,7 @@ public class ExportModelRowMapper implements RowMapper<ExportModel> {
         qo.setAppName(rs.getString("APP_NAME"));
         qo.setServiceType(rs.getString("SERVICE_TYPE"));
         qo.setMainApplication(rs.getString("MAIN_APPLICATION"));
-        qo.setRegisterEnterprise(rs.getString("REGISTER_ENTERPRISE_ID"));
+        qo.setRegisterEnterprise(rs.getString("REGISTER_ENTERPRISE"));
         qo.setEnterpriseName(rs.getString("REGISTER_ENTERPRISE_NAME"));
         qo.setSocialCreditCode(rs.getString("SOCIAL_CREDIT_CODE"));
         qo.setBusinessLicense(rs.getString("BUSINESS_LICENSE"));

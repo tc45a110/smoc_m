@@ -118,6 +118,7 @@ public class EnterpriseSignCertifyController {
         enterpriseSignCertifyValidator.setPersonLiableCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPersonHandledCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPosition("阿里云服务器");
+        enterpriseSignCertifyValidator.setRegisterEnterpriseId(UUID.uuid32());
 
 //        enterpriseSignCertifyValidator.setRegisterEnterpriseName("吉林省达维众成科技有限公司");
 //        enterpriseSignCertifyValidator.setSocialCreditCode("91110108769914581E");
