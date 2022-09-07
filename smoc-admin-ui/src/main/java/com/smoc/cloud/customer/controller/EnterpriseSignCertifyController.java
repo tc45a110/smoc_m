@@ -423,6 +423,7 @@ public class EnterpriseSignCertifyController {
 
         accountSignRegisterService.registerImport(importList);
 
+        view.setView(new RedirectView("/sign/certify/list", true, false));
         return view;
     }
 
