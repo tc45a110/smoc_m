@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +21,7 @@ public class IdGeneratorFactory {
         return taskId+id;
     }
 
-    @Autowired
+    @Resource(name = "redisTemplate2")
     RedisTemplate redisTemplate;
 
     /**

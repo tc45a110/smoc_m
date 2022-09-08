@@ -67,7 +67,7 @@ public class SendMessageService {
 
         //批次发送数量
         Integer length = params.getContent().length;
-        if (1000 < length) {
+        if (500 < length) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
@@ -80,7 +80,11 @@ public class SendMessageService {
         AccountTemplateInfo accountTemplateInfo = optional.get();
         //msgId
         String messageId = idGeneratorFactory.getTaskId();
-        sendMessageAsyncService.sendMessageByTemplate(length, params, accountTemplateInfo,messageId);
+        ResponseData responseData = sendMessageAsyncService.sendMessageByTemplate(length, params, accountTemplateInfo, messageId);
+        if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+            return responseData;
+        }
+
 //        log.info("[普通短信]:{}", new Gson().toJson(accountTemplateInfo));
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
@@ -116,7 +120,7 @@ public class SendMessageService {
 
         //批次发送数量
         Integer length = params.getContent().length;
-        if (1000 < length) {
+        if (500 < length) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
@@ -129,7 +133,10 @@ public class SendMessageService {
         AccountTemplateInfo accountTemplateInfo = optional.get();
         //msgId
         String messageId = idGeneratorFactory.getTaskId();
-        sendMessageAsyncService.sendMultimediaMessageByTemplate(length, params, accountTemplateInfo,messageId);
+        ResponseData responseData = sendMessageAsyncService.sendMultimediaMessageByTemplate(length, params, accountTemplateInfo, messageId);
+        if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+            return responseData;
+        }
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
         result.put("templateId", params.getTemplateId());
@@ -137,7 +144,6 @@ public class SendMessageService {
         result.put("mobiles", length + "");
         return ResponseDataUtil.buildSuccess(result);
     }
-
 
 
     /**
@@ -166,7 +172,7 @@ public class SendMessageService {
 
         //批次发送数量
         Integer length = params.getContent().length;
-        if (1000 < length) {
+        if (500 < length) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
@@ -179,7 +185,7 @@ public class SendMessageService {
         AccountTemplateInfo accountTemplateInfo = optional.get();
         //msgId
         String messageId = idGeneratorFactory.getTaskId();
-        sendMessageAsyncService.sendInterMessageByTemplate(length, params, accountTemplateInfo,messageId);
+        sendMessageAsyncService.sendInterMessageByTemplate(length, params, accountTemplateInfo, messageId);
 //        log.info("[普通短信]:{}", new Gson().toJson(accountTemplateInfo));
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());

@@ -2,10 +2,15 @@ package com.smoc.cloud.http.service;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.SendMessageByTemplateRequestParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
 import com.smoc.cloud.http.entity.MessageFormat;
 import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
+import com.smoc.cloud.http.filters.filter.full_filter.FullFilterParamsFilter;
+import com.smoc.cloud.http.filters.request.model.RequestFullParams;
 import com.smoc.cloud.http.redis.IdGeneratorFactory;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.repository.MessageRepository;
@@ -38,6 +43,9 @@ public class SendMessageAsyncService {
     @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
 
+    @Autowired
+    private FullFilterParamsFilter fullFilterParamsFilter;
+
 
     /**
      * 修改为异步，把处理过程、发送过程单独拉出来
@@ -46,8 +54,7 @@ public class SendMessageAsyncService {
      * @param params
      * @param accountTemplateInfo
      */
-    @Async("threadPoolTaskExecutor")
-    public void sendMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo,String messageId) {
+    public ResponseData sendMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo, String messageId) {
         List<MessageFormat> messages = new ArrayList<>();
         //模版内容
         String templateContent = accountTemplateInfo.getTemplateContent();
@@ -108,10 +115,23 @@ public class SendMessageAsyncService {
             messageFormat.setCreateTime(new Date());
 
             messages.add(messageFormat);
-            log.info("[http短信日志]：{}",new Gson().toJson(messages));
+
+            /**
+             * 过滤服务
+             */
+            RequestFullParams fullParams = new RequestFullParams();
+            fullParams.setAccount(messageFormat.getAccountId());
+            fullParams.setPhone(messageFormat.getPhoneNumber());
+            fullParams.setMessage(messageFormat.getMessageContent());
+            ResponseData responseData = fullFilterParamsFilter.filter(fullParams);
+            if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+                return responseData;
+            }
+            log.info("[http短信日志]：{}", new Gson().toJson(messages));
         }
         //异步 批量保存短消息
         this.saveMessageBatch(messageId, messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
+        return ResponseDataUtil.buildSuccess();
     }
 
 
@@ -122,8 +142,7 @@ public class SendMessageAsyncService {
      * @param params
      * @param accountTemplateInfo
      */
-    @Async("threadPoolTaskExecutor")
-    public void sendMultimediaMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo,String messageId) {
+    public ResponseData sendMultimediaMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo, String messageId) {
         List<MessageFormat> messages = new ArrayList<>();
         //多媒体模板内容
         //String multimediaMessage = optional.get().getMmAttchment();
@@ -182,12 +201,26 @@ public class SendMessageAsyncService {
             messageFormat.setReportFlag(1);
             messageFormat.setCreateTime(new Date());
             messages.add(messageFormat);
-            log.info("[http多媒体短信日志]：{}",new Gson().toJson(messages));
+
+            /**
+             * 过滤服务
+             */
+            RequestFullParams fullParams = new RequestFullParams();
+            fullParams.setAccount(messageFormat.getAccountId());
+            fullParams.setPhone(messageFormat.getPhoneNumber());
+            fullParams.setMessage("abcdefg");
+            ResponseData responseData = fullFilterParamsFilter.filter(fullParams);
+            if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+                return responseData;
+            }
+
+            log.info("[http多媒体短信日志]：{}", new Gson().toJson(messages));
         }
 
         //异步 批量保存短消息
         this.saveMessageBatch(messageId, messages, messageCount, phoneCount, "", params.getTemplateId(), params.getAccount(), params.getExtNumber());
 //        log.info("[组织短信]3：{}", System.currentTimeMillis());
+        return ResponseDataUtil.buildSuccess();
     }
 
     /**
@@ -197,8 +230,8 @@ public class SendMessageAsyncService {
      * @param params
      * @param accountTemplateInfo
      */
-    @Async("threadPoolTaskExecutor")
-    public void sendInterMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo,String messageId) {
+
+    public void sendInterMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo, String messageId) {
         List<MessageFormat> messages = new ArrayList<>();
         //模版内容
         String templateContent = accountTemplateInfo.getTemplateContent();
@@ -255,7 +288,7 @@ public class SendMessageAsyncService {
             messageFormat.setReportFlag(1);
             messageFormat.setCreateTime(new Date());
             messages.add(messageFormat);
-            log.info("[http国际短信日志]：{}",new Gson().toJson(messages));
+            log.info("[http国际短信日志]：{}", new Gson().toJson(messages));
         }
 
         //异步 批量保存短消息
@@ -273,8 +306,9 @@ public class SendMessageAsyncService {
      * @param phoneCount   发送手机号数量
      */
 
+    @Async("threadPoolTaskExecutor")
     public void saveMessageBatch(String messageId, List<MessageFormat> messages, Integer messageCount, Integer phoneCount, String templateContent, String templateId, String account, String extNumber) {
-        log.info("[http国际短信日志]：{}",new Gson().toJson(messages));
+        log.info("[http国际短信日志]：{}", new Gson().toJson(messages));
         //发送消息
         if (phoneCount > 0) {
             messageRepository.saveMessageBatch(messages, messageCount, phoneCount);
