@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class AccountRateLimiter {
 
-    @Resource
+    @Resource(name = "redisTemplate2")
     private RedisTemplate<String, Object> redisTemplate;
 
 
