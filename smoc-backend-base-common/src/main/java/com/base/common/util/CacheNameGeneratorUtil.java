@@ -188,4 +188,11 @@ public class CacheNameGeneratorUtil {
 		.toString();
 	}
 
+	public static final String generateAlarmAccountBalanceCacheName(String accountID){
+		return new StringBuilder()
+				.append(RedisHashKeyConstant.ALARM_ACCOUNT_BALANCE_PREFIX)
+				.append(accountID)
+				.toString();
+	}
+
 }

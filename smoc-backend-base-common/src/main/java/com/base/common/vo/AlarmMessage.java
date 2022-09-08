@@ -24,6 +24,7 @@ public class AlarmMessage {
 		ChannelSuccessRate,//通道成功率
 		ChannelDelayRate,//通道延迟率
 		ChannelUnknownRate,//通道未知率
+		AccountFinance,//账号余额告警
 	}
 	
 	/**

@@ -51,7 +51,7 @@ public class DateUtil {
 	/**
 	 * 得到当前日期
 	 * 
-	 * @param format日期格式
+	 * @param format 日期格式
 	 * @return String 当前日期 format日期格式
 	 * @author kevin
 	 */
@@ -94,6 +94,44 @@ public class DateUtil {
 		}
 		return 0;
 	}
+
+	/**
+	 * 获取两个时间段的间隔时间，单位：秒
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public static int getIntervalTime(String startTime,String endTime,String format) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			long start = sdf.parse(startTime).getTime();
+			long end = sdf.parse(endTime).getTime();
+			int intervalTime = (int)(end -start)/1000;
+			return intervalTime;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	/**
+	 * 获取两个时间段的间隔时间，单位：分钟
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public static int getMinuteIntervalTime(Date startTime,Date endTime) {
+		try {
+			long start = startTime.getTime();
+			long end = endTime.getTime();
+			double interval = (double) (end - start) / (1000d * 60d);
+			int intervalTime = (int)Math.round(interval);
+			return intervalTime;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 	
 	/**
 	 *   字符串解析成时间类型
@@ -132,7 +170,7 @@ public class DateUtil {
 	
 	/**
 	 * 获取N天之后的数据  -:前 	 +:后
-	 * @param minute
+	 * @param day
 	 * @param format
 	 * @return
 	 */

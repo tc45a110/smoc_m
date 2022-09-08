@@ -1,5 +1,7 @@
 package com.base.common.cache;
 
+import com.base.common.constant.RedisHashKeyConstant;
+import com.base.common.vo.BalanceAlarm;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,8 +102,9 @@ class MainCacheBaseService {
 	
 	/**
 	 * 维护账号运营商日提交/成功量
-	 * @param channelID
-	 * @param successNumber
+	 * @param accountID
+	 * @param carrier
+	 * @param number
 	 * @return
 	 */
 	public static void saveAccountCarrierDailyToMiddlewareCache(String accountID,String carrier,int number){
@@ -153,7 +156,7 @@ class MainCacheBaseService {
 	/**
 	 * 保存通道价格到中间件缓存
 	 * @param channelID
-	 * @param areaCoden 业务区域;值为ALL表示全国
+	 * @param areaCode 业务区域;值为ALL表示全国
 	 * @param price
 	 */
 	public static void saveChannelPriceToMiddlewareCache(String channelID,String areaCode,String price){	
@@ -171,7 +174,7 @@ class MainCacheBaseService {
 	/**
 	 * 从中间件缓存获取通道价格
 	 * @param channelID
-	 * @param areaCoden 业务区域;值为ALL表示全国
+	 * @param areaCode 业务区域;值为ALL表示全国
 	 * @return
 	 */
 	public static String getChannelPriceFromMiddlewareCache(String channelID,String areaCode){	
@@ -259,6 +262,50 @@ class MainCacheBaseService {
 			logger.error(e.getMessage(),e);
 		}
 		return false;
+	}
+
+	/**
+	 * 保存账号余额告警信息
+	 * @param balanceAlarm
+	 */
+	public static void saveBalanceAlarmToMiddlewareCache(BalanceAlarm balanceAlarm){
+		cacheBaseService.putObject(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(balanceAlarm.getAccountID()),balanceAlarm,REDIS_NAME);
+	}
+
+	/**
+	 * 获取账号余额告警对象
+	 * @param accountID
+	 * @return
+	 */
+	public static BalanceAlarm getBalanceAlarmToMiddlewareCache(String accountID){
+		return cacheBaseService.getObject(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(accountID) , BalanceAlarm.class, REDIS_NAME);
+	}
+
+	/**
+	 * 删除账号余额告警对象
+	 * @param accountID
+	 * @return
+	 */
+	public static void deleteBalanceAlarmToMiddlewareCache(String accountID){
+		cacheBaseService.delObject(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(accountID) , REDIS_NAME);
+	}
+
+	/**
+	 * 获取需要余额告警的账号
+	 * @param key
+	 * @return
+	 */
+	public static String getAccountBalanceAlarmToMiddlewareCache(String key){
+		return cacheBaseService.getString(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(key), REDIS_NAME);
+	}
+
+	/**
+	 * 保存需要余额告警的账号
+	 * @param key
+	 * @return
+	 */
+	public static void saveAccountBalanceAlarmToMiddlewareCache(String key,String value){
+		cacheBaseService.putString(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(key),60*60, value, REDIS_NAME);
 	}
 }
 

@@ -1,5 +1,6 @@
 package com.base.common.cache;
 
+import com.base.common.vo.BalanceAlarm;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.vo.ProtocolRouteValue;
 
@@ -242,11 +243,52 @@ public class CacheBaseService {
 	
 	/**
 	 * 从缓存中获取一个账号队列中元素数量
-	 * @param channelID
+	 * @param accountID
 	 * @return
 	 */
 	public static int getAccountReportQueueSizeFromMiddlewareCache(String accountID){
 		return AccountCacheBaseService.getAccountReportQueueSizeFromMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 保存账号余额告警对象
+	 * @param balanceAlarm
+	 */
+	public static void saveBalanceAlarmToMiddlewareCache(BalanceAlarm balanceAlarm){
+		MainCacheBaseService.saveBalanceAlarmToMiddlewareCache(balanceAlarm);
+	}
+
+	/**
+	 * 获取账号余额告警对象
+	 * @return
+	 */
+	public static BalanceAlarm getBalanceAlarmToMiddlewareCache(String accountID){
+		return MainCacheBaseService.getBalanceAlarmToMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 删除账号余额告警对象
+	 * @param accountID
+	 */
+	public static void deleteBalanceAlarmToMiddlewareCache(String accountID){
+		MainCacheBaseService.deleteBalanceAlarmToMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 保存需要余额告警的账号
+	 * @param key
+	 */
+	public static void saveAccountBalanceAlarmToMiddlewareCache(String key,String value){
+		MainCacheBaseService.saveAccountBalanceAlarmToMiddlewareCache(key, value);
+	}
+
+	/**
+	 * 获取上次需要余额告警的账号
+	 * @param key
+	 * @return
+	 */
+	public static String getAccountBalanceAlarmToMiddlewareCache(String key){
+		return MainCacheBaseService.getAccountBalanceAlarmToMiddlewareCache(key);
 	}
 }
 

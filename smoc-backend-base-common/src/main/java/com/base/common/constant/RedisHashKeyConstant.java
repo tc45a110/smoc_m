@@ -30,6 +30,11 @@ public class RedisHashKeyConstant {
 	 * 通道限量hash的key值前缀
 	 */
 	public static final String CHANNEL_LIMIT_PREFIX = "channel:temporary:limit:";
+
+	/**
+	 * 账号余额监控hash的key值前缀
+	 */
+	public static final String ALARM_ACCOUNT_BALANCE_PREFIX = "alarm:account:balance:";
 	
 }
 

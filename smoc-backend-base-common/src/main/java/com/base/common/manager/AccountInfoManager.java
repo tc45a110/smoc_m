@@ -310,6 +310,19 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 	}
 
 	/**
+	 * 获取财务账号的余额，若共享则获取共享账号的余额: 可用金额+授信额度
+	 * @param accountID
+	 * @return
+	 */
+	public double getAccountAvailableAmount(String accountID) {
+		AccountInfo accountInfo = get(accountID);
+		if (accountInfo != null) {
+			return accountInfo.getAccountUsableSum() + accountInfo.getAccountCreditSum();
+		}
+		return 0d;
+	}
+
+	/**
 	 * 加载数据
 	 */
 	private void loadData() {
