@@ -25,3 +25,6 @@
 
 #账号成功率、延迟率统计
 2,12,22,32,42,52 * * * * /smoc/apps/business-statistics/account.alarm.message.sh
+
+#账号余额监控
+*/1 * * * * /smoc/apps/business-statistics/account.balance.alarm.sh
