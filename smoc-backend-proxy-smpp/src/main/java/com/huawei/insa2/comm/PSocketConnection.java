@@ -369,7 +369,7 @@ public abstract class PSocketConnection{
 		
 		name = host + ':' + port; 
 		systemId = args.get("login-name", "");
-		interfaceVersion = (byte)args.get("version", 34);
+		interfaceVersion = (byte)args.get("version", 52);
 		password = args.get("login-pass", "");
 		systemType = args.get("systemType", "");
         addrTon = (byte)args.get("addr-ton", 0);
@@ -377,7 +377,7 @@ public abstract class PSocketConnection{
         addressRange = args.get("address-range", "");
         
         // commonID  消息标识
-        loginType = Integer.valueOf(args.get("loginType", "1"));
+        loginType = Integer.valueOf(args.get("loginType", "9"));
 		
 		// 读取数据最长等待时间，超过此时间没有读到数据认为连接中断。0表示永不超时。
 		readTimeout = 1000 * args.get("read-timeout", 90);

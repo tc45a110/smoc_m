@@ -42,7 +42,7 @@ public class ChannelInterfaceUtil {
 		
 		resultMap.put("login-name", interfaceInfoMap.get("CHANNEL_ACCESS_ACCOUNT"));
 		resultMap.put("login-pass", interfaceInfoMap.get("CHANNEL_ACCESS_PASSWORD"));
-		resultMap.put("loginType", "1");
+		//resultMap.put("loginType", "9");
 		resultMap.put("systemType", "");
 		resultMap.put("addressRange", "");
 		resultMap.put("version", interfaceInfoMap.get("VERSION"));
