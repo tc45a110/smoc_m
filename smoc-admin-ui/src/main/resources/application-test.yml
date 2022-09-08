@@ -72,8 +72,8 @@ com:
         certify-file-type: jpg  #证件文件允许的文件类型 多个用 “,” 隔开
         sign-register-root-path: /alidata/smoc/register/
         message-resource:
-          resource-url: http://39.107.110.237/smoc/message/resource #访问资源路径
-          resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录
+          resource-url: http://39.107.110.237/A/resource #访问资源路径
+          resource-file-root-path: /share/A/resource  #资源文件根目录
 
         intelligence:
           account: AP0681

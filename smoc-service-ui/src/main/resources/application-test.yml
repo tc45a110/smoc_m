@@ -73,8 +73,8 @@ com:
           enterprise-file-path: /alidata/smoc/enterprise/ #签名资质文件根目录
           mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
         message-resource:
-          resource-url: http://39.107.110.237/smoc/message/resource #访问资源路径
-          resource-file-root-path: /alidata/smoc/message/resource  #彩信资源文件根目录
+          resource-url: http://39.107.110.237/A/resource #访问资源路径
+          resource-file-root-path: /share/A/resource  #彩信资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #彩信资源图片格式
           resource-allow-format[1]: midi,wav,amr,mp3,aac  #彩信资源音频格式
           resource-allow-format[2]: 3gp,mp4  #彩信资源视频频格式

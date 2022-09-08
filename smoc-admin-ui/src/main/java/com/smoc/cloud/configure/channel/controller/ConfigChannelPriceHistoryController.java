@@ -5,8 +5,10 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelPriceHistoryValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.configure.channel.service.ConfigChannelPriceHistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class ConfigChannelPriceHistoryController {
     @Autowired
     private ConfigChannelPriceHistoryService channelPriceHistoryService;
 
+    @Autowired
+    private ChannelService channelService;
+
     /**
      * 列表
      *
@@ -39,6 +44,11 @@ public class ConfigChannelPriceHistoryController {
     @RequestMapping(value = "/list/{channelId}", method = RequestMethod.GET)
     public ModelAndView list(@PathVariable String channelId) {
         ModelAndView view = new ModelAndView("configure/channel/channel_price_history_list");
+
+        ResponseData<ChannelBasicInfoValidator> channelData = channelService.findChannelById(channelId);
+        if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
+            view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
+        }
 
         //初始化数据
         PageParams<ConfigChannelPriceHistoryValidator> params = new PageParams<ConfigChannelPriceHistoryValidator>();
@@ -63,6 +73,7 @@ public class ConfigChannelPriceHistoryController {
         view.addObject("configChannelPriceHistoryValidator", configChannelPriceHistoryValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("channelBasicInfoValidator", channelData.getData());
         return view;
     }
 
@@ -74,6 +85,12 @@ public class ConfigChannelPriceHistoryController {
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute ConfigChannelPriceHistoryValidator configChannelPriceHistoryValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("configure/channel/channel_price_history_list");
+
+        ResponseData<ChannelBasicInfoValidator> channelData = channelService.findChannelById(configChannelPriceHistoryValidator.getChannelId());
+        if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
+            view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
+        }
+
         //分页查询
         pageParams.setParams(configChannelPriceHistoryValidator);
 
@@ -86,6 +103,7 @@ public class ConfigChannelPriceHistoryController {
         view.addObject("configChannelPriceHistoryValidator", configChannelPriceHistoryValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("channelBasicInfoValidator", channelData.getData());
 
         return view;
     }

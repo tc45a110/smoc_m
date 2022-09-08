@@ -371,7 +371,7 @@ public class SignRegisterService {
 
                 String authStartDate = DateTimeUtils.getDateFormat(new Date());
                 String authEndDate = DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 5));
-                String rootPath = "/share/resourceFile/certify/import/";
+                String rootPath = "";//"/share/resourceFile/certify/import/";
                 StringBuffer insertCertify = new StringBuffer("insert IGNORE into enterprise_sign_certify(ID,REGISTER_ENTERPRISE_ID,REGISTER_ENTERPRISE_NAME,SOCIAL_CREDIT_CODE,BUSINESS_LICENSE,PERSON_LIABLE_NAME,PERSON_LIABLE_CERTIFICATE_TYPE,PERSON_LIABLE_CERTIFICATE_NUMBER,PERSON_LIABLE_CERTIFICATE_URL,PERSON_HANDLED_NAME,PERSON_HANDLED_CERTIFICATE_TYPE,PERSON_HANDLED_CERTIFICATE_NUMBER,PERSON_HANDLED_CERTIFICATE_URL,AUTHORIZE_START_DATE,AUTHORIZE_EXPIRE_DATE,OFFICE_PHOTOS,CERTIFY_STATUS,CREATED_BY,CREATED_TIME)");
                 insertCertify.append(" values('" + importData.getSocialCreditCode().trim() + "','" + UUID.uuid32() + "','" + importData.getRegisterEnterpriseName().trim() + "','" + importData.getSocialCreditCode().trim() + "','" + rootPath + importData.getBusinessLicense().trim() + "','" + importData.getPersonLiableName().trim() + "','居民身份证','" + importData.getPersonLiableCertificateNumber().trim() + "','" + rootPath + importData.getPersonLiableCertificateUrl().trim() + "','" + importData.getPersonHandledName().trim() + "','居民身份证','" + importData.getPersonHandledCertificateNumber().trim() + "','" + rootPath + importData.getPersonHandledCertificateUrl().trim() + "','" + authStartDate + "','" + authEndDate + "','" + rootPath + importData.getOfficePhotos().trim() + "','1','系统导入',now())");
                 //log.info("insertCertify:{}",insertCertify);

@@ -89,7 +89,7 @@ com:
       http:
         server:
           message-resource:
-            resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录
+            resource-file-root-path: /share/A/resource  #资源文件根目录
             resource-file-size-limit: 4096  #资源文件大小限制，以K为单位
 
 logging:

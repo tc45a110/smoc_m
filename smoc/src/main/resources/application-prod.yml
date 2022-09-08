@@ -63,7 +63,9 @@ spring:
         useServerPrepStmts: true
 
   #**********************************************************
-  # Redis
+  # 阿里云Redis
+  # 系统关键词、白名单、黑名单(在管理端添加的)、省号码
+  # 生成的企业和账号(主要是查重)、业务账号过滤参数、模板
   #**********************************************************
   redis: #redis配置
     host: r-2ze96mgel4jyc0k58g.redis.rds.aliyuncs.com
@@ -79,7 +81,7 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
-  redis2: #redis2配置 布隆过滤器、限流插件
+  redis2: #redis2配置 布隆过滤器、限流插件、4000多万黑名单、账号信息(http请求网关验证)
     host: 172.22.171.219
     port: 6379
     password: J15mDngG

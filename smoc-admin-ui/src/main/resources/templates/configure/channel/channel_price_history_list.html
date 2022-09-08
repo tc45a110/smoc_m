@@ -50,7 +50,9 @@
                                     <tr th:each="histories:${list}">
                                         <td>[[${histories.priceDate}]]</td>
                                         <td>
-                                            <mpm:tag id="province" identity="provices" name="province" show-type="button" key="code"  mask-value="ALL" class="form-control"
+                                            <mpm:tag th:if="${channelBasicInfoValidator.carrier ne 'INTL'}" id="province" identity="provices" name="province" show-type="button" key="code"  mask-value="ALL" class="form-control"
+                                                     th:value="${histories.areaCode}" title="业务区域"/>
+                                            <mpm:tag th:if="${channelBasicInfoValidator.carrier eq 'INTL'}" identity="internationalArea" show-type="button" key="code" class="form-control"
                                                      th:value="${histories.areaCode}" title="业务区域"/>
                                         </td>
                                         <td>

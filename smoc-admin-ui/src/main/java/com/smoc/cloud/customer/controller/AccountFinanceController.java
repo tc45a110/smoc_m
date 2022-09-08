@@ -102,6 +102,7 @@ public class AccountFinanceController {
 
         }else{
             accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+            accountFinanceInfoValidator.setCarrierType("1");
         }
         ResponseData<Map<String, BigDecimal>> map = accountFinanceService.editCarrierPrice(accountFinanceInfoValidator);
         view.addObject("list", map.getData());
@@ -115,7 +116,6 @@ public class AccountFinanceController {
                 accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal(accountFinanceInfoValidator.getAccountCreditSum().stripTrailingZeros().toPlainString()));
             }
         } else {
-            accountFinanceInfoValidator.setCarrierType("1");
             accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal("0"));
             accountFinanceInfoValidator.setFrozenReturnDate("1");//返还时间
             accountFinanceInfoValidator.setPayType("1");//付费方式
@@ -308,9 +308,9 @@ public class AccountFinanceController {
         if("INTL".equals(data.getData().getCarrier())){
             accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
             accountFinanceInfoValidator.setCarrierType("2");//国际运营商
-
         }else{
             accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+            accountFinanceInfoValidator.setCarrierType("1");
         }
 
         //查询账号配置的运营商价格
@@ -321,7 +321,6 @@ public class AccountFinanceController {
                 accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal(accountFinanceInfoValidator.getAccountCreditSum().stripTrailingZeros().toPlainString()));
             }
         } else {
-            accountFinanceInfoValidator.setCarrierType("1");
             accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal("0"));
             accountFinanceInfoValidator.setFrozenReturnDate("1");//返还时间
             accountFinanceInfoValidator.setPayType("1");//付费方式

@@ -27,6 +27,7 @@ import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -198,7 +199,7 @@ public class ChannelController {
             ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
             channelBasicInfoValidator.setChannelStatus("002");//默认编辑中
             channelBasicInfoValidator.setReportEnable("1");//有无报告：有
-            channelBasicInfoValidator.setSignType("1");//签名方式：通道自签名
+            channelBasicInfoValidator.setSignType("2");//签名方式：客户签名
             channelBasicInfoValidator.setUpMessageEnable("1");//有无上行：有
             channelBasicInfoValidator.setTransferEnable("0");//携号转网:否
             channelBasicInfoValidator.setBusinessAreaType("COUNTRY");//区域范围默认全国
@@ -244,6 +245,8 @@ public class ChannelController {
         }
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        channelBasicInfoValidator.setChannelName(StringEscapeUtils.unescapeHtml4(channelBasicInfoValidator.getChannelName()));
 
         //参数验证
         result = paramsValidator(channelBasicInfoValidator, result);
