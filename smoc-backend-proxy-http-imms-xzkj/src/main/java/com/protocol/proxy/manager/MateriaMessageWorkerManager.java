@@ -1,16 +1,16 @@
 package com.protocol.proxy.manager;
 
 import com.base.common.worker.SuperMapWorker;
-import com.protocol.proxy.worker.MateriaMessageWorker;
+import com.protocol.proxy.worker.MaterialMessageWorker;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class MateriaMessageWorkerManager extends SuperMapWorker<String, MateriaMessageWorker> {
+public class MateriaMessageWorkerManager extends SuperMapWorker<String, MaterialMessageWorker> {
     private static MateriaMessageWorkerManager manager = new MateriaMessageWorkerManager();
 
     private MateriaMessageWorkerManager() {
-        this.setName("MateriaMessageWorkerManager");
+        this.setName("MaterialMessageWorkerManager");
         this.start();
     }
 
@@ -22,7 +22,7 @@ public class MateriaMessageWorkerManager extends SuperMapWorker<String, MateriaM
         sleep(INTERVAL);
     }
 
-    public void maintain(String channelID, MateriaMessageWorker materiaMessageWorker){
+    public void maintain(String channelID, MaterialMessageWorker materiaMessageWorker){
         add(channelID,materiaMessageWorker);
     }
 
@@ -43,7 +43,7 @@ public class MateriaMessageWorkerManager extends SuperMapWorker<String, MateriaM
      * @param channelID
      */
     public void exit(String channelID) {
-        MateriaMessageWorker materiaMessageWorker = remove(channelID);
+        MaterialMessageWorker materiaMessageWorker = remove(channelID);
         if (materiaMessageWorker != null) {
             materiaMessageWorker.exit();
         }

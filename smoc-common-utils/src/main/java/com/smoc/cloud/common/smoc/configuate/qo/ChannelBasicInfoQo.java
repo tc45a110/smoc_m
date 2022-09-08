@@ -54,6 +54,12 @@ public class ChannelBasicInfoQo {
     private String channelRestrictContent;
     //接入省份
     private String accessProvince;
+
+    private String accessCity;
+
+    private String isRegister;
+
+    private String registerEnterprise;
     //优先级
     private Integer channelPriority;
     //权重
@@ -65,4 +71,5 @@ public class ChannelBasicInfoQo {
 
     private String accountId;
     private String countryCode;
+    private String flag;
 }

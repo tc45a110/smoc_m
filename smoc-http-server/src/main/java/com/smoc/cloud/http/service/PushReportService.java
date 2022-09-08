@@ -1,5 +1,6 @@
 package com.smoc.cloud.http.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.ReportStatusRequestParams;
 import com.smoc.cloud.common.http.server.message.response.ReportResponseParams;
@@ -123,7 +124,8 @@ public class PushReportService {
                     //子线程
                     //log.info("[报告推送成功]：{}");
                     String code = response.body().string();
-                    if ("0000".equals(code)) {
+                    Map map = (Map) JSONObject.parse(code);
+                    if ("0000".equals(map.get("code"))) {
                         messageRepository.batchDeleteReports(rrps);
                     } else {
                         log.info("[报告推送失败]：url:{};原因:{}", url, code);

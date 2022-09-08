@@ -9,17 +9,17 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccountChannelTemplatelnfoManager extends SuperMapWorker<String, AccountChannelTemplatelnfoManager.AccountChannelTemplateInfo> {
+public class AccountChanelTemplateInfoManager extends SuperMapWorker<String, AccountChanelTemplateInfoManager.AccountChannelTemplateInfo> {
 
-    private static AccountChannelTemplatelnfoManager manager = new AccountChannelTemplatelnfoManager();
+    private static AccountChanelTemplateInfoManager manager = new AccountChanelTemplateInfoManager();
 
-    private AccountChannelTemplatelnfoManager() {
+    private AccountChanelTemplateInfoManager() {
         loadData();
         this.setName("AccountChanelTemplateInfoManager");
         this.start();
     }
 
-    public static AccountChannelTemplatelnfoManager getInstance() {
+    public static AccountChanelTemplateInfoManager getInstance() {
         return manager;
     }
 

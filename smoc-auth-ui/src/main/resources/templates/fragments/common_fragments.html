@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>[[${@systemProperties.systemName}]]-[[${@systemProperties.companyName}]]</title>
-    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
-    <link rel="bookmark" th:href="@{/static/favicon.ico}"/>
+    <link rel="shortcut icon" th:href="@{/static/{logo}(logo=${@systemProperties.companyIelogo})}"/>
+    <link rel="bookmark" th:href="@{/static/{logo}(logo=${@systemProperties.companyIelogo})}"/>
 </th:block>
 <th:block th:fragment="common_css">
     <!-- common css start-->

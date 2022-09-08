@@ -86,7 +86,7 @@ public class ReconciliationAccountRepository extends BasePageRepository {
         sqlBuffer.append(" t.CARRIER,");
         sqlBuffer.append(" t.BUSINESS_TYPE,");
         sqlBuffer.append(" t.TOTAL_SEND_QUANTITY,");
-        sqlBuffer.append(" t.PRICE, ");
+        sqlBuffer.append(" IFNULL(t.PRICE,0)PRICE, ");
         sqlBuffer.append(" t.CHARGE_TYPE ");
         sqlBuffer.append(" from reconciliation_account_items t ");
         sqlBuffer.append(" where  t.STATUS='1' and t.ENTERPRISE_ID=? and t.ACCOUNT_PERIOD=?");
@@ -99,7 +99,7 @@ public class ReconciliationAccountRepository extends BasePageRepository {
         result.put("list",list);
 
         //查询sql
-        String sumSql = "select sum(TOTAL_SEND_QUANTITY*PRICE) am,sum(TOTAL_SEND_QUANTITY) quantity from reconciliation_account_items t where  t.STATUS='1' and t.ENTERPRISE_ID=? and t.ACCOUNT_PERIOD=? ";
+        String sumSql = "select IFNULL(sum(TOTAL_SEND_QUANTITY*PRICE),0) am,sum(TOTAL_SEND_QUANTITY) quantity from reconciliation_account_items t where  t.STATUS='1' and t.ENTERPRISE_ID=? and t.ACCOUNT_PERIOD=? ";
         Map<String, Object> sum = jdbcTemplate.queryForMap(sumSql,params);
         if(null != sum){
             result.put("am",sum.get("am"));

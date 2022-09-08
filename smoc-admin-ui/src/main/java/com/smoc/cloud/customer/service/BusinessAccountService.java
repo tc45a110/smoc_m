@@ -408,6 +408,12 @@ public class BusinessAccountService {
                     interfaceMap.put("sysIp",systemParamValue.getData().getParamValue());
                 }
             }
+            if("SMPP".equals(interfaceInfo.getProtocol())){
+                ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","SYSTEM_PARAM_IP_SMPP");
+                if(!StringUtils.isEmpty(systemParamValue.getData())){
+                    interfaceMap.put("sysIp",systemParamValue.getData().getParamValue());
+                }
+            }
 
             if("WEB".equals(interfaceInfo.getProtocol())){
                 Map<String, Object> map = new HashMap<>();

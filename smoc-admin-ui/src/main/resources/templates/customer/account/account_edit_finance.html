@@ -29,6 +29,16 @@
                                 <h3 class="panel-title">业务账号财务信息 维护</h3>
                             </div>
                             <div class="panel-body">
+                                <div class="row" th:if="${accountBasicInfoValidator.carrier eq 'INTL'}">
+                                    <div class="form-group col-sm-12 pull-right" style="text-align: right">
+                                        <a sec:authorize-url="/account/finance/toImport/*"
+                                           th:href="@{/account/finance/toImport/{accountId}(accountId=${accountFinanceInfoValidator.accountId})}"
+                                           class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                            <i class="glyphicon glyphicon-share-alt" style="margin-right:5px"></i> 价格导入
+                                        </a>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="enterpriseName">企业名称</label>

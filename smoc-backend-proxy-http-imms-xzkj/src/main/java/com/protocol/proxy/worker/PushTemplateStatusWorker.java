@@ -67,22 +67,22 @@ public class PushTemplateStatusWorker extends SuperQueueWorker<String> {
     private String getTemplateStatus(String templateId) {
         //获取通道接口扩展参数
         Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-        String loginname= resultMap.get("login-name");
-        String loginpass= resultMap.get("login-pass");
-        String signaTureNonce = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI)+ MyStringUtils.getRandom(10);
+        String loginName= resultMap.get("login-name");
+        String loginPass= resultMap.get("login-pass");
+        String signatureNonce = DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI)+ MyStringUtils.getRandom(10);
         String timesTamp =DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MILLI);
         //请求的数据
         JSONObject jsonobject = new JSONObject();
-        jsonobject.put("orderNo", signaTureNonce);
-        jsonobject.put("account", loginname);
+        jsonobject.put("orderNo", signatureNonce);
+        jsonobject.put("account", loginName);
         jsonobject.put("templateId", templateId);
         jsonobject.put("timestamp", timesTamp);
 
-        String signature= MyStringUtils.getSignaTure(signaTureNonce, loginname, timesTamp, loginpass);
+        String signature= MyStringUtils.getSignature(signatureNonce, loginName, timesTamp, loginPass);
         Map<String, String> headerMap=new HashMap<>();
         headerMap.put("Content-Type", "application/json; charset=utf-8");
-        headerMap.put("signature-nonce", signaTureNonce);
-        headerMap.put("account", loginname);
+        headerMap.put("signature-nonce", signatureNonce);
+        headerMap.put("account", loginName);
         headerMap.put("signature", signature);
         String url=resultMap.get("url")+"/template/getTemplateStatus";
         return HttpClientUtil.doRequest(url,headerMap,jsonobject.toString(),TIMEOUT,RESPONSE_TIMEOUT);

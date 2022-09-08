@@ -14,6 +14,7 @@ public class ConfigChannelBasicInfo {
     private String businessType;
     private BigDecimal maxComplaintRate;
     private String accessProvince;
+    private String accessCity;
     private String channelProvder;
     private String infoType;
     private String businessAreaType;
@@ -30,6 +31,7 @@ public class ConfigChannelBasicInfo {
     private String channelRunStatus;
     private String channelStatus;
     private String isRegister;
+    private String registerEnterprise;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -260,6 +262,16 @@ public class ConfigChannelBasicInfo {
     }
 
     @Basic
+    @Column(name = "REGISTER_ENTERPRISE")
+    public String getRegisterEnterprise() {
+        return registerEnterprise;
+    }
+
+    public void setRegisterEnterprise(String registerEnterprise) {
+        this.registerEnterprise = registerEnterprise;
+    }
+
+    @Basic
     @Column(name = "CREATED_BY")
     public String getCreatedBy() {
         return createdBy;
@@ -317,6 +329,16 @@ public class ConfigChannelBasicInfo {
 
     public void setChannelRestrictContent(String channelRestrictContent) {
         this.channelRestrictContent = channelRestrictContent;
+    }
+
+    @Basic
+    @Column(name = "ACCESS_CITY")
+    public String getAccessCity() {
+        return accessCity;
+    }
+
+    public void setAccessCity(String accessCity) {
+        this.accessCity = accessCity;
     }
 
     @Basic

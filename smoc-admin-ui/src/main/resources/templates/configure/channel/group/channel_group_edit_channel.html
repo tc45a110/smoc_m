@@ -35,7 +35,7 @@
                                         <div class="col-md-12" th:each="info:${configChannelGroupList}">
                                             <div class="card-box widget-box-two widget-two-teal">
                                                 <div class="wigdet-two-content text-white">
-                                                    <p class="m-0 text-uppercase font-600 font-secondary">
+                                                    <p class="m-0 font-600 font-secondary">
                                                         [[${info.channelName}]]
                                                         <a data-toggle="modal" data-target="#confirm-delete-modal"
                                                            th:onclick="deleteChannel([[${info.id}]])"

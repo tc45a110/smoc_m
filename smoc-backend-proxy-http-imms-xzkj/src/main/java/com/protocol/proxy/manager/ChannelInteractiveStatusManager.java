@@ -7,14 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ChannellnteractiveStatusManager extends SuperConcurrentMapWorker<String, Set<String>> {
-    private static ChannellnteractiveStatusManager manager = new ChannellnteractiveStatusManager();
+public class ChannelInteractiveStatusManager extends SuperConcurrentMapWorker<String, Set<String>> {
+    private static ChannelInteractiveStatusManager manager = new ChannelInteractiveStatusManager();
 
-    public static ChannellnteractiveStatusManager getInstance(){
+    public static ChannelInteractiveStatusManager getInstance(){
         return manager;
     }
 
-    private ChannellnteractiveStatusManager(){
+    private ChannelInteractiveStatusManager(){
         this.setName("ChannelInteractiveStatusManager");
         this.start();
     }

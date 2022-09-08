@@ -11,15 +11,17 @@ public class ExportModelRowMapper implements RowMapper<ExportModel> {
     public ExportModel mapRow(ResultSet rs, int rowNum) throws SQLException {
         ExportModel qo = new ExportModel();
         qo.setId(rs.getString("ID"));
+        qo.setCertifyId(rs.getString("CERTIFY_ID"));
         qo.setRegCodeNum(rs.getString("REGISTER_CODE_NUMBER"));
         qo.setAccessProvince(rs.getString("ACCESS_PROVINCE"));
+        qo.setAccessCity(rs.getString("ACCESS_CITY"));
         qo.setNumberSegment(rs.getString("NUMBER_SEGMENT"));
         qo.setRegisterSign(rs.getString("REGISTER_SIGN"));
         qo.setRegisterCarrier(rs.getString("REGISTER_CARRIER"));
         qo.setAppName(rs.getString("APP_NAME"));
         qo.setServiceType(rs.getString("SERVICE_TYPE"));
         qo.setMainApplication(rs.getString("MAIN_APPLICATION"));
-        qo.setRegisterEnterprise(rs.getString("REGISTER_ENTERPRISE_ID"));
+        qo.setRegisterEnterprise(rs.getString("REGISTER_ENTERPRISE"));
         qo.setEnterpriseName(rs.getString("REGISTER_ENTERPRISE_NAME"));
         qo.setSocialCreditCode(rs.getString("SOCIAL_CREDIT_CODE"));
         qo.setBusinessLicense(rs.getString("BUSINESS_LICENSE"));

@@ -110,7 +110,8 @@
                                                  class="form-control"
                                                  th:value="${info.priceArea}" title="业务区域"/>
                                         <mpm:tag  th:if="${info.areaType=='1'}"  identity="carrier"
-                                                  show-type="button" key="code" th:value="${info.priceArea}" class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                                  show-type="button" key="code" th:value="${info.priceArea}"
+                                                  class="UNIC,btn btn-info btn-rounded btn-sm waves-effect waves-light;CMCC,btn btn-purple btn-rounded btn-sm waves-effect waves-light;TELC,btn btn-brown btn-rounded btn-sm waves-effect waves-light;"/>
                                         <mpm:tag th:if="${info.areaType=='2'}"  identity="internationalArea"
                                                  show-type="button" key="code" th:value="${info.priceArea}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>

@@ -23,6 +23,9 @@ public class ReconciliationCarrierRowMapper implements RowMapper<ReconciliationC
         qo.setChannelPeriodStatus(resultSet.getString("CHANNEL_PERIOD_STATUS"));
         qo.setCarrierTotalAmount(resultSet.getBigDecimal("CARRIER_TOTAL_AMOUNT"));
         qo.setCarrierTotalSendQuantity(resultSet.getLong("CARRIER_TOTAL_SEND_QUANTITY"));
+        qo.setChannelName(resultSet.getString("CHANNEL_NAME"));
+        qo.setChannelAccessAccount(resultSet.getString("CHANNEL_ACCESS_ACCOUNT"));
+        qo.setProtocol(resultSet.getString("PROTOCOL"));
 
         if(!StringUtils.isEmpty(qo.getPrice())){
             qo.setPrice(new BigDecimal(qo.getPrice().stripTrailingZeros().toPlainString()));

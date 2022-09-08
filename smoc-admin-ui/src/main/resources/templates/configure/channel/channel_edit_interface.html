@@ -49,7 +49,7 @@
                                                            th:field="*{channelAccessPassword}" data-parsley-length="[1,128]" placeholder="通道密码">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>通道服务地址<span class="text-danger">*</span><span
+                                                    <label>通道服务地址(ip:端口号)<span class="text-danger">*</span><span
                                                             class="text-danger" th:if="${#fields.hasErrors('channelServiceUrl')}"
                                                             th:errors="*{channelServiceUrl}" style="font-weight: 200;font-size: 12px"></span></label>
                                                     <input type="text" required="" class="form-control" autocomplete="off" onkeyup="value=value.replace(/^\s+|\s+$/g,'')"
@@ -103,11 +103,11 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>心跳间隔单位&nbsp;&nbsp;<span
+                                                    <label>心跳间隔单位<span class="text-danger">*</span>&nbsp;&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('heartbeatInterval')}"
                                                             th:errors="*{heartbeatInterval}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="心跳间隔单位" class="form-control"
+                                                    <input type="text" placeholder="心跳间隔单位" class="form-control" required="" id="heartbeatInterval"
                                                            th:field="*{heartbeatInterval}" data-parsley-length="[1,10]" data-parsley-type="number" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
@@ -115,7 +115,7 @@
                                                             class="text-danger" th:if="${#fields.hasErrors('protocol')}"
                                                             th:errors="*{protocol}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <mpm:tag id="channelProtocolType" identity="channelProtocolType" name="protocol" show-type="select" key="code"
+                                                    <mpm:tag id="channelProtocolType" identity="channelProtocolType" name="protocol" show-type="select" key="code" onchange="changeType(this.value)"
                                                              th:value="${channelInterfaceValidator.protocol}"class="form-control" required="true" title="通道协议类型"/>
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
@@ -160,6 +160,15 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    function changeType(value){
+        if("SMGP" == value){
+            $("#heartbeatInterval").val("15");
+        }else{
+            $("#heartbeatInterval").val("30");
+        }
+    }
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

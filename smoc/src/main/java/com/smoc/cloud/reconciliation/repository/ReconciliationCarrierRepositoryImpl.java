@@ -117,6 +117,9 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" where t.MESSAGE_DATE =? and t.CHANNEL_PROVDER =? and (a.STATUS=1 or a.STATUS is null)");*/
         sqlBuffer.append(" a.MESSAGE_DATE,");
         sqlBuffer.append(" b.SPECIFIC_PROVDER CHANNEL_PROVDER,");
+        sqlBuffer.append(" b.CHANNEL_NAME,");
+        sqlBuffer.append(" c.CHANNEL_ACCESS_ACCOUNT,");
+        sqlBuffer.append(" c.PROTOCOL,");
         sqlBuffer.append(" a.CHANNEL_ID,");
         sqlBuffer.append(" c.SRC_ID,");
         sqlBuffer.append(" IFNULL(a.CHANNEL_PRICE,0)CHANNEL_PRICE,");

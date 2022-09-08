@@ -5,11 +5,13 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.ExcelRegisterImportData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.AccountSignRegisterService;
 import com.smoc.cloud.sign.service.SignRegisterService;
+import feign.Body;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("sign/register")
-@Scope(value= WebApplicationContext.SCOPE_REQUEST)
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class AccountSignRegisterController {
 
     @Autowired
@@ -32,6 +34,7 @@ public class AccountSignRegisterController {
 
     /**
      * 查询列表
+     *
      * @param pageParams
      * @return
      */
@@ -43,6 +46,7 @@ public class AccountSignRegisterController {
 
     /**
      * 添加、修改
+     *
      * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
@@ -87,12 +91,13 @@ public class AccountSignRegisterController {
 
     /**
      * 根据业务账号，查询已占用的签名自定义扩展号
+     *
      * @param account
-     * @param id 当id 不为空时候，不查询本id的签名自定义扩展号
+     * @param id      当id 不为空时候，不查询本id的签名自定义扩展号
      * @return
      */
     @RequestMapping(value = "/findExtendDataByAccount/{account}/{id}", method = RequestMethod.GET)
-    public ResponseData<List<String>> findExtendDataByAccount(@PathVariable String account,@PathVariable String id) {
+    public ResponseData<List<String>> findExtendDataByAccount(@PathVariable String account, @PathVariable String id) {
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -101,7 +106,7 @@ public class AccountSignRegisterController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
 
-        ResponseData<List<String>> data = accountSignRegisterService.findExtendDataByAccount(account,id);
+        ResponseData<List<String>> data = accountSignRegisterService.findExtendDataByAccount(account, id);
         return data;
     }
 
@@ -123,5 +128,18 @@ public class AccountSignRegisterController {
 
         ResponseData data = accountSignRegisterService.deleteById(id);
         return data;
+    }
+
+    /**
+     * 报备数据导入
+     *
+     * @param importList
+     * @return
+     */
+    @RequestMapping(value = "/registerImport", method = RequestMethod.POST)
+    public ResponseData registerImport(@RequestBody List<ExcelRegisterImportData> importList) {
+
+        signRegisterService.importExcel(importList);
+        return ResponseDataUtil.buildSuccess();
     }
 }

@@ -1,11 +1,10 @@
 package com.protocol.proxy.server;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
-import com.protocol.proxy.manager.AccountChannelTemplatelnfoManager;
-import com.protocol.proxy.manager.ChannellnteractiveStatusManager;
+import com.protocol.proxy.manager.AccountChanelTemplateInfoManager;
+import com.protocol.proxy.manager.ChannelInteractiveStatusManager;
 import com.protocol.proxy.manager.ReportWorkerManager;
 import com.protocol.proxy.manager.SubmitPullWorkerManager;
 
@@ -38,7 +37,7 @@ public class ProxyServer {
         // 通道信息
         ChannelInfoManager.getInstance();
         // 通道模板信息
-        AccountChannelTemplatelnfoManager.getInstance();
+        AccountChanelTemplateInfoManager.getInstance();
         // 通道拉取服务
         SubmitPullWorkerManager.getInstance();
         System.out.println("服务已启动");
@@ -56,7 +55,7 @@ public class ProxyServer {
                 sleepTime = 5;
             }
             ReportWorkerManager.getInstance().exit();
-            ChannellnteractiveStatusManager.getInstance().exit();
+            ChannelInteractiveStatusManager.getInstance().exit();
             // 默认5秒之后 关闭服务 保证足够的时间处理内存中的数据
             Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME * sleepTime);
         } catch (Exception e) {

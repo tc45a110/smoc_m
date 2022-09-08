@@ -32,6 +32,9 @@ public class ChannelBasicInfoValidator {
     @Length(max = 32, message = "接入省份最大长度为{max}！")
     private String accessProvince;
 
+    @Length(max = 32, message = "接入省份最大长度为{max}！")
+    private String accessCity;
+
     @NotNull(message = "通道供应商不能为空！")
     @Length(max = 32, message = "通道供应商最大长度为{max}！")
     private String channelProvder;
@@ -75,6 +78,7 @@ public class ChannelBasicInfoValidator {
     private String channelStatus;
 
     private String isRegister;
+    private String registerEnterprise;
 
     private String createdBy;
     private String createdTime;

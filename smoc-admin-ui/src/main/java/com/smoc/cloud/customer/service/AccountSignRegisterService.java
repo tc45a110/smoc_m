@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.ExcelRegisterImportData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterValidator;
 import com.smoc.cloud.customer.remote.AccountSignRegisterFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -91,6 +92,22 @@ public class AccountSignRegisterService {
     public ResponseData<List<String>> findExtendDataByAccount(String account, String id) {
         try {
             ResponseData<List<String>> data = this.accountSignRegisterFeignClient.findExtendDataByAccount(account,id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 报备数据导入
+     *
+     * @param importList
+     * @return
+     */
+    public ResponseData registerImport(List<ExcelRegisterImportData> importList) {
+        try {
+            ResponseData data = this.accountSignRegisterFeignClient.registerImport(importList);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

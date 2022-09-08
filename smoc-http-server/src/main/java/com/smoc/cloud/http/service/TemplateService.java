@@ -183,12 +183,15 @@ public class TemplateService {
                 String filePath = resourceProperties.getResourceFileRootPath() + "/" + folder;
                 String resId = UUID.uuid32();
                 String fileName = resId +"."+ model.getFileType();
-                format.setResUrl("/"+folder +"/" + fileName);
+                format.setResUrl("");//默认空
+                //txt不需要生成文件
+                if(!"txt".equals(model.getFileType())){
+                    format.setResUrl("/"+folder +"/" + fileName);
+                    FileBASE64Utils.base64ToFile(model.getMediaFile(), filePath, fileName);
+                    model.setMediaFile(null);
+                }
 
                 multimediaFormats.add(format);
-
-                FileBASE64Utils.base64ToFile(model.getMediaFile(), filePath, fileName);
-                model.setMediaFile(null);
             }
         } catch (Exception e) {
             e.printStackTrace();

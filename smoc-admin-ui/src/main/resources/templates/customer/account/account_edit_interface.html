@@ -293,6 +293,13 @@
                 });
             }
 
+            if("CMPP" == value){
+                var srcId = $("#srcId").val();
+                if("" == srcId || null == srcId){
+                    $("#srcId").val("10690123");
+                }
+            }
+
             $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
             $('#executeCheck').prop("required","true");

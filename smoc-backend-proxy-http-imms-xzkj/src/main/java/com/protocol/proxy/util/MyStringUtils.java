@@ -1,7 +1,5 @@
 package com.protocol.proxy.util;
-
 import sun.misc.BASE64Encoder;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
@@ -117,7 +115,7 @@ public class MyStringUtils {
         return hs.toString().toLowerCase();
     }
 
-    public  static String getSignaTure(String orderNo,String username,String timestamp,String password) {
+    public  static String getSignature(String orderNo,String username,String timestamp,String password) {
         //组织签名字符串
         StringBuffer signData = new StringBuffer();
         //header中的signature-nonce
@@ -132,17 +130,5 @@ public class MyStringUtils {
         return md5_HMAC_sign(signData.toString(), password);
     }
 
-    /**
-     * 日期格式化
-     *
-     * @param date
-     * @param
-     * @return
-     */
-    public static String getDateFormat(Date date, String formatStr) {
-        if (!(null == formatStr || "".equals(formatStr))) {
-            return new SimpleDateFormat(formatStr).format(date);
-        }
-        return null;
-    }
+
 }

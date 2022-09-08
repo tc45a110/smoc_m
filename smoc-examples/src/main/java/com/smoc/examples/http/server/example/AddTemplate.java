@@ -17,20 +17,20 @@ public class AddTemplate {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/template/addTemplate";
+        String url = "http://39.97.121.96:18088/smoc-gateway/http-server/template/addTemplate";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-        header.put("account", "YQT170");
+        header.put("account", "NZW100");
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "YQT170");
+        requestDataMap.put("account", "NZW100");
         //模板类型 1 表示普通模板 2 表示变量模板
         requestDataMap.put("templateType", "1");
         //模板内容
@@ -51,7 +51,7 @@ public class AddTemplate {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "bcwcM5!jS");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "d46?d6BS");
         //System.out.println("[接口请求][签名数据]数据:" + signData);
         //System.out.println("[接口请求][签名]数据:" + sign);
 

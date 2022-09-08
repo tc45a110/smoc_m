@@ -9,10 +9,14 @@ import lombok.Setter;
 public class ExportModel {
 
     private String id;
+    //企业资质ID
+    private String certifyId;
     //报备码号
     private String regCodeNum;
     //接入省份
     private String accessProvince;
+    //接入地市
+    private String accessCity;
     //报备完整码号
     private String numberSegment;
     //报备签名

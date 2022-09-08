@@ -1,5 +1,6 @@
 package com.smoc.cloud.customer.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
@@ -7,11 +8,14 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.ExcelRegisterImportData;
+import com.smoc.cloud.common.smoc.customer.qo.ExcelRegisterListen;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseSignCertifyValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.AccountSignRegisterService;
 import com.smoc.cloud.customer.service.EnterpriseSignCertifyService;
 import com.smoc.cloud.properties.SmocProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +31,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -43,6 +49,9 @@ public class EnterpriseSignCertifyController {
 
     @Autowired
     private EnterpriseSignCertifyService enterpriseSignCertifyService;
+
+    @Autowired
+    private AccountSignRegisterService accountSignRegisterService;
 
     /**
      * 查询
@@ -114,10 +123,11 @@ public class EnterpriseSignCertifyController {
         enterpriseSignCertifyValidator.setId(UUID.uuid32());
         enterpriseSignCertifyValidator.setCertifyStatus("1");
         enterpriseSignCertifyValidator.setAuthorizeStartDate(DateTimeUtils.getDateFormat(new Date()));
-        enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 2)));
+        enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 5)));
         enterpriseSignCertifyValidator.setPersonLiableCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPersonHandledCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPosition("阿里云服务器");
+        enterpriseSignCertifyValidator.setRegisterEnterpriseId(UUID.uuid32());
 
 //        enterpriseSignCertifyValidator.setRegisterEnterpriseName("吉林省达维众成科技有限公司");
 //        enterpriseSignCertifyValidator.setSocialCreditCode("91110108769914581E");
@@ -270,9 +280,6 @@ public class EnterpriseSignCertifyController {
                 }
                 authorizeCertificateFile.transferTo(file);
                 enterpriseSignCertifyValidator.setAuthorizeCertificate(authorizeCertificateFileName);
-            } else if ("add".equals(op)) {
-                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
-                return view;
             }
 
             //授权书
@@ -372,6 +379,52 @@ public class EnterpriseSignCertifyController {
     public String generateFileName(String oldName) {
         String suffix = oldName.substring(oldName.lastIndexOf("."));
         return UUID.uuid32() + suffix;
+    }
+
+    /**
+     * 进入导入页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/toImport", method = RequestMethod.GET)
+    public ModelAndView toImport() {
+        ModelAndView view = new ModelAndView("sign/certify/sign_certify_import");
+        return view;
+    }
+
+    /**
+     * 导入报备数据
+     *
+     * @return
+     */
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public ModelAndView importFile(@RequestPart("importFile") MultipartFile importFile, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("sign/certify/sign_certify_import");
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        ExcelRegisterListen excelListen = new ExcelRegisterListen();
+        try {
+            InputStream inputStream = importFile.getInputStream();
+            String fileType = importFile.getOriginalFilename().substring(importFile.getOriginalFilename().lastIndexOf("."));
+            if (!((".xlsx".equals(fileType) || ".xls".equals(fileType)))) {
+                view.addObject("error", "文件类型错误！");
+                return view;
+            }
+
+            EasyExcel.read(inputStream, ExcelRegisterImportData.class, excelListen).sheet().doRead();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            view.addObject("error", "文件导入错误！");
+            return view;
+        }
+
+        List<ExcelRegisterImportData> importList = excelListen.result;
+
+        accountSignRegisterService.registerImport(importList);
+
+        view.setView(new RedirectView("/sign/certify/list", true, false));
+        return view;
     }
 
 }
