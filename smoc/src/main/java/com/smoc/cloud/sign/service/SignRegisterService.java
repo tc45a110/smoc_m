@@ -378,8 +378,8 @@ public class SignRegisterService {
                 stmt.addBatch(insertCertify.toString());
                 String serviceType = "账号注册,账号登录,广告促销,通知提醒,公共服务";
                 String mainApplication = "账号注册,账号登录,广告促销,通知提醒,公共服务";
-                StringBuffer insertSign = new StringBuffer("insert IGNORE into account_sign_register(ID,REGISTER_ENTERPRISE,ACCOUNT,SIGN,SIGN_EXTEND_NUMBER,EXTEND_TYPE,EXTEND_DATA,ENTERPRISE_ID,APP_NAME,SERVICE_TYPE,MAIN_APPLICATION,REGISTER_STATUS,SIGN_REGISTER_STATUS,KEY_VALUE_UPDATE_STATUS,CREATED_BY,CREATED_TIME)");
-                insertSign.append(" values('" + UUID.uuid32() + "','" + UUID.uuid32() + "','" + importData.getAccount().trim() + "','" + importData.getSign().trim() + "','" + signExtendNumber + "','1','01','" + importData.getSocialCreditCode().trim() + "','" + importData.getSign().trim() + "','" + serviceType + "','" + mainApplication + "','1','0','0','系统导入',now())");
+                StringBuffer insertSign = new StringBuffer("insert IGNORE into account_sign_register(ID,ACCOUNT,SIGN,SIGN_EXTEND_NUMBER,EXTEND_TYPE,EXTEND_DATA,ENTERPRISE_ID,APP_NAME,SERVICE_TYPE,MAIN_APPLICATION,REGISTER_STATUS,SIGN_REGISTER_STATUS,KEY_VALUE_UPDATE_STATUS,CREATED_BY,CREATED_TIME)");
+                insertSign.append(" values('" + UUID.uuid32() + "','" + importData.getAccount().trim() + "','" + importData.getSign().trim() + "','" + signExtendNumber + "','1','01','" + importData.getSocialCreditCode().trim() + "','" + importData.getSign().trim() + "','" + serviceType + "','" + mainApplication + "','1','0','0','系统导入',now())");
                 //log.info("insertSign:{}",insertSign);
                 stmt.addBatch(insertSign.toString());
             }
