@@ -11,23 +11,23 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 
 @Slf4j
-/*@EnableCaching
-@Configuration*/
-public class RedisThreeConfiguration extends RedisConfiguration {
+@EnableCaching
+@Configuration
+public class RedisFourConfiguration extends RedisConfiguration {
 
-    @Value("${spring.redis3.host}")
+    @Value("${spring.redis4.host}")
     private String host;
 
-    @Value("${spring.redis3.port}")
+    @Value("${spring.redis4.port}")
     private int port;
 
-    @Value("${spring.redis3.timeout}")
+    @Value("${spring.redis4.timeout}")
     private int timeout;
 
-    @Value("${spring.redis3.password}")
+    @Value("${spring.redis4.password}")
     private String password;
 
-    @Value("${spring.redis3.database}")
+    @Value("${spring.redis4.database}")
     private int database;
 
     /**
@@ -35,9 +35,8 @@ public class RedisThreeConfiguration extends RedisConfiguration {
      *
      * @Primary 默认会注入@Primary配置的组件
      */
-    @Primary
     @Bean
-    public RedisConnectionFactory cacheRedisConnectionFactory() {
+    public RedisConnectionFactory cacheRedisConnectionFactory2() {
         int database = this.database;
         int port = this.port;
         String host = this.host;
@@ -51,10 +50,10 @@ public class RedisThreeConfiguration extends RedisConfiguration {
      * 配置redisTemplate
      * 注入方式使用@Resource(name="")  名称注入
      */
-    @Bean(name = "redisTemplate3")
+    @Bean(name = "redisTemplate4")
     public RedisTemplate redisTemplate3() {
         RedisTemplate template = new RedisTemplate();
-        template.setConnectionFactory(cacheRedisConnectionFactory());
+        template.setConnectionFactory(cacheRedisConnectionFactory2());
         setSerializer(template);
 
         /**
