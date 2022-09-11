@@ -44,8 +44,8 @@ public class AccountInterfaceService {
     @Resource
     private BusinessAccountRepository businessAccountRepository;
 
-    @Resource(name = "redisTemplate2")
-    private RedisTemplate redisTemplate2;
+    @Resource(name = "redisTemplate4")
+    private RedisTemplate<String, RedisModel> redisTemplate4;
 
     /**
      * 根据id获取信息
@@ -146,10 +146,10 @@ public class AccountInterfaceService {
             redisModel.setNoCheck(entity.getExecuteCheck());
 
             //把数据放到redis里
-            redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+            redisTemplate4.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
 
         } else {
-            redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
+            redisTemplate4.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }
 
         return ResponseDataUtil.buildSuccess();

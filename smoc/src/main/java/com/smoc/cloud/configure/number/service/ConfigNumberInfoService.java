@@ -51,8 +51,6 @@ public class ConfigNumberInfoService {
     @Resource(name="jedisPool1")
     private JedisPool jedisPool;
 
-    private RedisTemplate redisTemplate;
-
     /**
      * 查询列表
      * @param pageParams
