@@ -109,6 +109,8 @@ public class AccountAlarm {
 			int delayNumber = 0;
 			// 获取账号的延迟警告值
 			int timeElapsed = 0;
+			//获取账号提交阈值
+			int mtThreshold=0;
 
 			// 获取所有监控账号该时间段的提交信息和状态报告返回信息
 			if(accountIDs!=null) {
@@ -138,7 +140,7 @@ public class AccountAlarm {
 						// 获取账号延迟率警告值
 						int delayRatesAlarm = ResourceManager.getInstance().getIntValue(accountID + ".delayRates");
 						//获取账号提交阈值
-						int mtThreshold = ResourceManager.getInstance().getIntValue(accountID + ".mtThreshold");
+					   // mtThreshold = ResourceManager.getInstance().getIntValue(accountID + ".mtThreshold");
 
 						// 得到账号报告率
 						int reportRates = Integer.valueOf(accuracys(mrNumber, mtNumber));
@@ -156,7 +158,7 @@ public class AccountAlarm {
 								successRates, FixedConstant.LOG_SEPARATOR, delayRates);
 						//10分钟内提交条数大于提交阈值
 						CategoryLog.accessLogger.info("提交条数:"+mtNumber+",阈值:"+mtThreshold);
-							if (mtNumber>mtThreshold && successRates < successRatesAlarm) {
+							if (successRates < successRatesAlarm) {
 
 								AlarmUtil
 										.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
@@ -164,7 +166,7 @@ public class AccountAlarm {
 														.append("%").toString()));
 							}
 
-							if (mtNumber>mtThreshold && delayRates > delayRatesAlarm) {
+							if (delayRates > delayRatesAlarm) {
 
 								timeElapsed = ResourceManager.getInstance().getIntValue(accountID + ".timeElapsed");
 								AlarmUtil
@@ -179,13 +181,13 @@ public class AccountAlarm {
 							&& mrAccountMessageMap.get(accountID) == null) {
 						mtNumber = mtAccountMessageMap.get(accountID).getMtNumber();
 						//获取账号提交阈值
-						int mtThreshold = ResourceManager.getInstance().getIntValue(accountID + ".mtThreshold");
-						if(mtNumber>mtThreshold) {
+						//mtThreshold = ResourceManager.getInstance().getIntValue(accountID + ".mtThreshold");
+
 							AlarmUtil
 									.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
 											new StringBuilder(accountID).append(lineTime).append("提交条数为：").append(mtNumber)
 													.append("该时间段无状态报告返回").toString()));
-						}
+
 					}
 				}
 				
