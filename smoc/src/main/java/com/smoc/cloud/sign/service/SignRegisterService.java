@@ -25,6 +25,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 签名报备
@@ -376,6 +378,11 @@ public class SignRegisterService {
             //Set<String> signs = new HashSet<>();
             List<AccountTemplateInfo> list = new ArrayList<>();
             for (ExcelRegisterImportData importData : importList) {
+
+                if(StringUtils.isEmpty(importData.getAccount())){
+                    continue;
+                }
+
                 //签名扩展号
                 String signExtendNumber = sequenceRepository.findSequence(importData.getAccount()) + "";
                 if (StringUtils.isEmpty(signExtendNumber)) {
@@ -470,6 +477,13 @@ public class SignRegisterService {
             //如果存在，则修改签名模板内容
             AccountTemplateInfo accountTemplateInfo = templateInfos.get(0);
             String templateContent = accountTemplateInfo.getTemplateContent();
+            Pattern pattern = Pattern.compile(templateContent);
+            String message =  "【" + sign + "】";
+            Matcher isMatch = pattern.matcher(message);
+            if (isMatch.find()) {
+                return;
+            }
+
             templateContent = templateContent + "|" + "【" + sign + "】";
 
             accountTemplateInfo.setTemplateContent(templateContent);
