@@ -34,8 +34,8 @@ public class IdentificationAccountInfoService {
     @Resource
     private IdentificationAccountInfoRepository identificationAccountInfoRepository;
 
-    @Resource(name = "redisTemplate2")
-    private RedisTemplate<String, Object> redisTemplate2;
+    @Resource(name = "redisTemplate4")
+    private RedisTemplate<String, Object> redisTemplate4;
 
 
     /**
@@ -131,10 +131,10 @@ public class IdentificationAccountInfoService {
             redisModel.setSubmitRate(entity.getSubmitLimiter());
             redisModel.setIps(identificationAccountInfoValidator.getIdentifyIp());
             //把数据放到redis里
-            redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount(), redisModel);
+            redisTemplate4.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount(), redisModel);
         }else{
             //注销
-            redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount());
+            redisTemplate4.delete(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount());
         }
         return ResponseDataUtil.buildSuccess();
     }
@@ -148,7 +148,7 @@ public class IdentificationAccountInfoService {
     @Transactional
     public ResponseData logoutAccount(String id) {
         //把数据放到redis里
-        redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + id);
+        redisTemplate4.delete(RedisConstant.HTTP_SERVER_KEY + id);
         identificationAccountInfoRepository.logoutAccount(id, "004");
         return ResponseDataUtil.buildSuccess();
     }

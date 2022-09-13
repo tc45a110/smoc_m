@@ -37,7 +37,6 @@ public class ResponseWorker extends SuperQueueWorker<BusinessRouteValue>{
 
 		businessRouteValue.setChannelTotal(1);
 		businessRouteValue.setChannelIndex(1);
-
 		businessRouteValue.setChannelSRCID(ChannelInfoManager.getInstance().getChannelSRCID(channelID));
 		CacheBaseService.saveResponseToMiddlewareCache(businessRouteValue);
 

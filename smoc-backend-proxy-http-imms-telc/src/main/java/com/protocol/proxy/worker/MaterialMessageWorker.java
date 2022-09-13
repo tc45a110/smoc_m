@@ -1,10 +1,8 @@
 package com.protocol.proxy.worker;
-
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.AccountInfoManager;
-import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ResourceManager;
 import com.base.common.worker.SuperQueueWorker;
 import com.protocol.proxy.manager.ChannelInteractiveStatusManager;
@@ -25,7 +23,6 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -42,7 +39,6 @@ public class MaterialMessageWorker extends SuperQueueWorker<String> {
     public MaterialMessageWorker(String channelID) {
         this.channelID = channelID;
     }
-
     /**
      *
      */
@@ -124,7 +120,6 @@ public class MaterialMessageWorker extends SuperQueueWorker<String> {
         try {
             //获取通道接口参数
             Map<String, String> resultMap = ChannelInterfaceUtil.getArgMap(channelID);
-
             String urls = resultMap.get("url") + "/sapi/material";
 
             httpclient = HttpClients.createDefault();
@@ -137,17 +132,19 @@ public class MaterialMessageWorker extends SuperQueueWorker<String> {
 
             MultipartEntityBuilder builder = MultipartEntityBuilder.create()
                     .addPart("Data", stringBody).setCharset(Charset.forName("UTF-8"));
-
+            logger.info("上传的附件为:"+urlList.toString());
             for (String url : urlList) {
+
                 File uploadFile1 = new File(MMS_PATH + url);
                 if (!uploadFile1.exists()) {
                     logger.error("文件不存在：" + uploadFile1.getPath());
                     continue;
                 }
+
                 FileBody uploadFileBody1 = new FileBody(uploadFile1);
+
                 builder.addPart(uploadFile1.getName(), uploadFileBody1);
             }
-
             // 生成 HTTP POST 实体
             HttpEntity reqEntity = builder.build();
             httppost.setEntity(reqEntity);
@@ -158,7 +155,12 @@ public class MaterialMessageWorker extends SuperQueueWorker<String> {
                 result = EntityUtils.toString(resEntity);
             }
             EntityUtils.consume(resEntity);
-
+            logger.info(new StringBuilder().append("请求报文")
+                                           .append("{}jsonReqElements={}")
+                                           .append("{}urls={}").toString(),
+                                           FixedConstant.SPLICER,jsonReqElements,
+                                           FixedConstant.SPLICER, urls
+            );
         } catch (Exception e) {
             logger.error("提交多媒体素材异常：" + e.getMessage(), e);
         } finally {

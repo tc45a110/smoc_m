@@ -1,6 +1,7 @@
 package com.smoc.cloud.message.service;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -12,7 +13,9 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.message.entity.MessageWebTaskInfo;
+import com.smoc.cloud.message.model.RequestFullParams;
 import com.smoc.cloud.message.properties.MessageProperties;
+import com.smoc.cloud.message.remote.FilterServiceFeignClient;
 import com.smoc.cloud.message.repository.MessageWebTaskInfoRepository;
 import com.smoc.cloud.template.entity.AccountTemplateInfo;
 import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
@@ -20,6 +23,7 @@ import com.smoc.cloud.utils.IdGeneratorFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -51,6 +55,12 @@ public class MessageSendWebTaskInfoService {
 
     @Resource
     private IdGeneratorFactory idGeneratorFactory;
+
+    @Resource
+    private FilterServiceFeignClient filterServiceFeignClient;
+
+    @Resource(name = "defaultRedisTemplate")
+    private RedisTemplate redisTemplate;
 
     /**
      * 发送短信
@@ -202,6 +212,35 @@ public class MessageSendWebTaskInfoService {
             messageFormat.setCreateTime(new Date());
 
             messages.add(messageFormat);
+
+
+            //调用过滤服务
+
+            if("TEXT_SMS".equals(optional.get().getTemplateType()) || "MULTI_SMS".equals(optional.get().getTemplateType())){
+                RequestFullParams model = new RequestFullParams();
+                model.setAccount(messageFormat.getAccountId());
+                model.setPhone(messageFormat.getPhoneNumber());
+                model.setMessage(messageFormat.getMessageContent());
+                if("MULTI_SMS".equals(optional.get().getTemplateType())){
+                    //多媒体默认内容
+                    model.setMessage("abcdefg");
+                }
+                /**
+                 * 根据手机号获取运营商
+                 */
+                Object segmentCarrier = redisTemplate.opsForHash().get(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, model.getPhone().substring(0, 3));
+                if (null == segmentCarrier) {
+                    segmentCarrier = redisTemplate.opsForHash().get(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, model.getPhone().substring(0, 4));
+                }
+                if(!StringUtils.isEmpty(segmentCarrier)){
+                    model.setCarrier(segmentCarrier.toString().split("-")[0]);
+                }
+                ResponseData responseData = filterServiceFeignClient.messageFilter(model);
+                if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+                    return responseData;
+                }
+            }
+
         }
 
         MessageWebTaskInfo entity = new MessageWebTaskInfo();

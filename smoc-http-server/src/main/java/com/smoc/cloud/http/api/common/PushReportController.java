@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -28,6 +31,8 @@ public class PushReportController {
     public String pushReport(@RequestBody PushReportParams params) {
 
         //log.info("[推送过来的状态报告]：{}", new Gson().toJson(params));
-        return "0000";
+        Map<String,String> map = new HashMap<>();
+        map.put("code","0000");
+        return new Gson().toJson(map);
     }
 }

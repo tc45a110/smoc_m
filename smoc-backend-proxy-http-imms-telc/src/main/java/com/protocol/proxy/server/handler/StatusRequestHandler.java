@@ -32,7 +32,7 @@ public class StatusRequestHandler implements HttpHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 
 		String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
-		Map<String, String> resultMap = new HashMap<String, String>();
+		JSONObject resultject = new JSONObject();
 
 		logger.info("{},{},ip={}", exchange.getRequestMethod(), exchange.getRequestURI(), ip);
 		OutputStream responseBody = exchange.getResponseBody();
@@ -60,15 +60,15 @@ public class StatusRequestHandler implements HttpHandler {
 			}
 
 			process(request);
-			resultMap.put("ResCode:", "1000");
-			resultMap.put("ResMsg", "成功");
+			resultject.put("ResCode:", "1000");
+			resultject.put("ResMsg", "成功");
 			// 将响应结果map转成json数据返回
-			responseBody.write(resultMap.toString().getBytes());
+			responseBody.write(resultject.toString().getBytes());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			resultMap.put("ResCode:", "1000");
-			resultMap.put("ResMsg", "成功");
-			responseBody.write(resultMap.toString().getBytes());
+			resultject.put("ResCode:", "1000");
+			resultject.put("ResMsg", "成功");
+			responseBody.write(resultject.toString().getBytes());
 		} finally {
 			if (responseBody != null) {
 				responseBody.close();

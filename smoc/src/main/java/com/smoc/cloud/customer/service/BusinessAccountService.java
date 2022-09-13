@@ -94,9 +94,8 @@ public class BusinessAccountService {
     @Resource(name = "defaultRedisTemplate")
     private RedisTemplate<String, String> stringRedisTemplate;
 
-
-    @Resource(name = "redisTemplate2")
-    private RedisTemplate<String, RedisModel> redisTemplate2;
+    @Resource(name = "redisTemplate4")
+    private RedisTemplate<String, RedisModel> redisTemplate4;
 
 
     /**
@@ -342,9 +341,9 @@ public class BusinessAccountService {
                 redisModel.setIps(terface.getIdentifyIp());
                 redisModel.setNoCheck(terface.getExecuteCheck());
                 //把数据放到redis里
-                redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+                redisTemplate4.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
             } else {
-                redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
+                redisTemplate4.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
             }
             //记录日志
             log.info("[EC业务账号复制][业务账号接口信息][{}]数据:{}", "add", JSON.toJSONString(terface));
@@ -457,7 +456,7 @@ public class BusinessAccountService {
                 redisModel.setSendRate(accountInterfaceInfo.getMaxSendSecond());
                 redisModel.setIps(accountInterfaceInfo.getIdentifyIp());
                 //把数据放到redis里
-                redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+                redisTemplate4.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
             }
 
 
@@ -467,7 +466,7 @@ public class BusinessAccountService {
         } else {
             status = "0";
             //注销
-            redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
+            redisTemplate4.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }
 
         businessAccountRepository.updateAccountStatusById(id, status);

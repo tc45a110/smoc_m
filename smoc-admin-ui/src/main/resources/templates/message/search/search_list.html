@@ -125,6 +125,30 @@
                                               data-placement="left" title="" data-original-title="查看发送明细"><i
                                                    style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                         </td>
+
+                                        <tr th:each="enterprise:${info.enterprises}">
+                                            <td>
+                                                <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
+                                                [[${enterprise.enterpriseName}]]
+                                            </td>
+                                            <td>[[${enterprise.enterpriseFlag}]]</td>
+                                            <td>
+                                            <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${enterprise.enterpriseType}"
+                                                     class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                        </td>
+                                        <td> <mpm:tag identity="corporation" show-type="label" key="code"
+                                                      th:value="${enterprise.accessCorporation}"/>
+                                        </td>
+                                        <td> [[${enterprise.createdTime}]]</td>
+                                        <td>
+                                           <a sec:authorize-url="/message/detail/list/*"
+                                              th:href="@{/message/detail/list/{enterpriseId}(enterpriseId=${enterprise.enterpriseId})}"
+                                              style="padding-left: 5px;color: #4BD396;" data-toggle="tooltip"
+                                              data-placement="left" title="" data-original-title="查看发送明细"><i
+                                                   style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                        </td>
+                                        </tr>
+
                                     </tr>
                                 </span>
 

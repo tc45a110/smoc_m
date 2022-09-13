@@ -1,9 +1,7 @@
 package com.protocol.proxy.manager;
-
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.worker.SuperMapWorker;
 import com.protocol.proxy.manager.AccountChanelTemplateInfoManager.AccountChanelTemplateInfo;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -219,6 +217,4 @@ public class AccountChanelTemplateInfoManager extends SuperMapWorker<String, Acc
 		}
 
 	}
-
-
 }

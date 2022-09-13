@@ -2,7 +2,6 @@
  * @desc 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
  */
 package com.protocol.proxy.worker;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.cache.CacheBaseService;
@@ -20,7 +19,6 @@ import com.protocol.proxy.manager.ChannelInteractiveStatusManager;
 import com.protocol.proxy.util.ChannelInterfaceUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +47,13 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
         try {
             if (businessRouteValue != null) {
                 // 发送多媒体信息,获取响应信息
-                // 获取通道接口参数
+                // 获取平台模板id
                 String accountTemplateID = businessRouteValue.getAccountTemplateID();
                 // 获取通道模板id
                 String channelTemplateID = AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(accountTemplateID);
                 if (channelTemplateID == null) {
-                    return;
+                    logger.error("获取通道模板失败");
+                     return;
                 }
                 Map<String, String> argMap = ChannelInterfaceUtil.getArgMap(channelID);
 
@@ -67,9 +66,10 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                     url = argMap.get("url") + "/sapi/option";
                 }
                 String requestBody = requestBody(businessRouteValue,argMap,channelTemplateID);
+                Map<String,String>  headerMap=new HashMap<>();
+                headerMap.put("Content-Type","application/json");
 
-                String response = HttpClientUtil.doRequest(url, requestBody, TIMEOUT,
-                        RESPONSE_TIMEOUT);
+                String response = HttpClientUtil.doRequest(url,headerMap,requestBody, TIMEOUT, RESPONSE_TIMEOUT);
 
                 //维护通道运行状态
                 ChannelInteractiveStatusManager.getInstance().process(channelID, response);
@@ -98,13 +98,19 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                                 .append("{}messageContent={}")
                                 .append("{}channelID={}")
                                 .append("{}accountTemplateID={}")
-                                .append("{}requestBody={}").toString(),
+                                .append("{}requestBody={}")
+                                .append("{}url={}").toString(),
                         FixedConstant.SPLICER, businessRouteValue.getAccountID(),
                         FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
                         FixedConstant.SPLICER, businessRouteValue.getMessageContent(),
                         FixedConstant.SPLICER, businessRouteValue.getChannelID(),
                         FixedConstant.SPLICER, businessRouteValue.getAccountTemplateID(),
-                        FixedConstant.SPLICER, requestBody);
+                        FixedConstant.SPLICER, requestBody,
+                        FixedConstant.SPLICER, url);
+
+                logger.info(new StringBuilder().append("返回结果")
+                        .append("{}response={}").toString(),
+                        FixedConstant.SPLICER, response);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

@@ -1,5 +1,4 @@
 package com.business.statistics.message.alarm;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.LogPathConstant;
 import com.base.common.log.CategoryLog;
@@ -11,7 +10,6 @@ import com.business.statistics.util.AlarmUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.math.RoundingMode;
@@ -111,6 +109,8 @@ public class AccountAlarm {
 			int delayNumber = 0;
 			// 获取账号的延迟警告值
 			int timeElapsed = 0;
+			//获取账号提交阈值
+			int mtThreshold=0;
 
 			// 获取所有监控账号该时间段的提交信息和状态报告返回信息
 			if(accountIDs!=null) {
@@ -139,6 +139,8 @@ public class AccountAlarm {
 						int successRatesAlarm = ResourceManager.getInstance().getIntValue(accountID + ".successRates");
 						// 获取账号延迟率警告值
 						int delayRatesAlarm = ResourceManager.getInstance().getIntValue(accountID + ".delayRates");
+						//获取账号提交阈值
+					   // mtThreshold = ResourceManager.getInstance().getIntValue(accountID + ".mtThreshold");
 
 						// 得到账号报告率
 						int reportRates = Integer.valueOf(accuracys(mrNumber, mtNumber));
@@ -154,32 +156,38 @@ public class AccountAlarm {
 										.append("{}successRates={}%").append("{}delayRates={}%").toString(),
 								accountID, FixedConstant.LOG_SEPARATOR, reportRates, FixedConstant.LOG_SEPARATOR,
 								successRates, FixedConstant.LOG_SEPARATOR, delayRates);
+						//10分钟内提交条数大于提交阈值
+						CategoryLog.accessLogger.info("提交条数:"+mtNumber+",阈值:"+mtThreshold);
+							if (successRates < successRatesAlarm) {
 
-						if (successRates < successRatesAlarm) {
+								AlarmUtil
+										.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
+												new StringBuilder(accountID).append("的成功率为").append(successRates)
+														.append("%").toString()));
+							}
 
-							AlarmUtil
-									.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
-											new StringBuilder(accountID).append("的成功率为").append(successRates)
-													.append("%").toString()));
-						}
+							if (delayRates > delayRatesAlarm) {
 
-						if (delayRates > delayRatesAlarm) {
+								timeElapsed = ResourceManager.getInstance().getIntValue(accountID + ".timeElapsed");
+								AlarmUtil
+										.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountDelayRate,
+												new StringBuilder(accountID).append("延迟超过").append(timeElapsed)
+														.append("秒的比列为").append(delayRates).append("%").toString()));
+							}
 
-							timeElapsed = ResourceManager.getInstance().getIntValue(accountID + ".timeElapsed");
-							AlarmUtil
-									.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountDelayRate,
-											new StringBuilder(accountID).append("延迟超过").append(timeElapsed)
-													.append("秒的比列为").append(delayRates).append("%").toString()));
-						}
 
 					//监控账号该时间段有提交信息,无状态报告信息	
 					} else if (mtAccountMessageMap.get(accountID) != null
 							&& mrAccountMessageMap.get(accountID) == null) {
 						mtNumber = mtAccountMessageMap.get(accountID).getMtNumber();
-						AlarmUtil
-								.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
-										new StringBuilder(accountID).append(lineTime).append("提交条数为：").append(mtNumber)
-												.append("该时间段无状态报告返回").toString()));
+						//获取账号提交阈值
+						//mtThreshold = ResourceManager.getInstance().getIntValue(accountID + ".mtThreshold");
+
+							AlarmUtil
+									.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate,
+											new StringBuilder(accountID).append(lineTime).append("提交条数为：").append(mtNumber)
+													.append("该时间段无状态报告返回").toString()));
+
 					}
 				}
 				

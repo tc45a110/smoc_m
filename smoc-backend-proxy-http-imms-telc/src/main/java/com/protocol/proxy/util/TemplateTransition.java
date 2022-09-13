@@ -1,12 +1,10 @@
 package com.protocol.proxy.util;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.util.DateUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +51,7 @@ public class TemplateTransition {
 				
 				String str = array.get(i) + "";
 				JSONObject object = JSONObject.parseObject(str);
-								
+
 				String frameTxt = object.getString("frameTxt");			
 				if (StringUtils.isNotEmpty(frameTxt)) {
 					JSONObject textJsonObject = new JSONObject();
@@ -84,16 +82,16 @@ public class TemplateTransition {
 					contentList.add(textJsonObject);	
 					s++;	
 				}
-				
+
 				String resUrl = object.getString("resUrl");
 				if(StringUtils.isNotEmpty(resUrl)) {
 					urlList.add(resUrl);
-				JSONObject frameJsonObject = new JSONObject();
-				frameJsonObject.put("Frame",tindex+"-"+s);
-				frameJsonObject.put("FileName",resUrl.substring(resUrl.lastIndexOf("/")+1));
-				contentList.add(frameJsonObject);
-				s++;	
-				}	
+					JSONObject frameJsonObject = new JSONObject();
+					frameJsonObject.put("Frame",tindex+"-"+s);
+					frameJsonObject.put("FileName",resUrl.substring(resUrl.lastIndexOf("/")+1));
+					contentList.add(frameJsonObject);
+
+				}
 			}
 			
 			jsonobject.put("SiID", loginname);
@@ -102,7 +100,7 @@ public class TemplateTransition {
 			jsonobject.put("Method","material");
 			jsonobject.put("ExtNum", extend);
 			jsonobject.put("Subject", TemplateTitle);
-			jsonobject.put("Content",contentList.toString());
+			jsonobject.put("Content",contentList);
 			
 			map.put("mmdl", jsonobject.toString());
 			map.put("options", list.toString());
