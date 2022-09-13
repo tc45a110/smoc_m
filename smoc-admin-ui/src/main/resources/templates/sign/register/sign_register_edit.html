@@ -102,7 +102,7 @@
                                                 </label>
                                                 <input id="signExtendNumber" type="text" class="form-control"
                                                        th:field="*{signExtendNumber}"
-                                                       data-parsley-length="[4,4]" required="" autocomplete="off"
+                                                       data-parsley-length="[2,4]" required="" autocomplete="off"
                                                        placeholder="签名扩展号"
                                                        th:attr="readonly=${op == 'edit'?'true':'false'}">
                                             </div>
@@ -121,7 +121,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="serviceType">服务类型<span class="text-danger">*</span>
+                                                <label for="serviceType">具体用途<span class="text-danger">*</span>
                                                     <span class="text-danger"
                                                           th:if="${#fields.hasErrors('serviceType')}"
                                                           th:errors="*{serviceType}"

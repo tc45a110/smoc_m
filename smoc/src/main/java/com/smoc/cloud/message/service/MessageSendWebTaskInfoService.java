@@ -215,7 +215,6 @@ public class MessageSendWebTaskInfoService {
 
 
             //调用过滤服务
-
             if("TEXT_SMS".equals(optional.get().getTemplateType()) || "MULTI_SMS".equals(optional.get().getTemplateType())){
                 RequestFullParams model = new RequestFullParams();
                 model.setAccount(messageFormat.getAccountId());

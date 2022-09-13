@@ -207,22 +207,43 @@ public class AccountSignRegisterForFileController {
                 for (int i = 0; i < size; i++) {
 
                     ExportModel exportModel = exportPage.getData().getList().get(i);
-                    //复制营业执照/组织机构代码证
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getBusinessLicense());
 
-                    //复制责任人（含法人）证件
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getLiableCertUrl());
+                    //相同：说明用的是导入功能，图片在import下
+                    if(exportModel.getCertifyId().equals(exportModel.getSocialCreditCode())){
+                        //复制营业执照/组织机构代码证
+                        files.add(certifyFileRootPath + "import/" + exportModel.getBusinessLicense());
 
-                    //复制经办人证件
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getHandledCertUrl());
+                        //复制责任人（含法人）证件
+                        files.add(certifyFileRootPath + "import/" + exportModel.getLiableCertUrl());
 
-                    //复制授权书
-                    if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
-                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getAuthorizeCert());
+                        //复制经办人证件
+                        files.add(certifyFileRootPath + "import/" + exportModel.getHandledCertUrl());
+
+                        //复制授权书
+                        if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
+                            files.add(certifyFileRootPath + "import/" + exportModel.getAuthorizeCert());
+                        }
+
+                        //复制授权书
+                        files.add(certifyFileRootPath + "import/" + exportModel.getOfficePhotos());
+                    }else{
+                        //复制营业执照/组织机构代码证
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getBusinessLicense());
+
+                        //复制责任人（含法人）证件
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getLiableCertUrl());
+
+                        //复制经办人证件
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getHandledCertUrl());
+
+                        //复制授权书
+                        if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
+                            files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getAuthorizeCert());
+                        }
+
+                        //复制授权书
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getOfficePhotos());
                     }
-
-                    //复制授权书
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getOfficePhotos());
 
 
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
@@ -537,25 +558,45 @@ public class AccountSignRegisterForFileController {
 
                     ExportModel exportModel = exportPage.getData().getList().get(i);
                     ids.add(exportModel.getId());
-                    //复制营业执照/组织机构代码证
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getBusinessLicense());
+                    //相同：说明用的是导入功能
+                    if(exportModel.getCertifyId().equals(exportModel.getSocialCreditCode())){
+                        //复制营业执照/组织机构代码证
+                        files.add(certifyFileRootPath + "import/" + exportModel.getBusinessLicense());
 
-                    //复制责任人（含法人）证件
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getLiableCertUrl());
+                        //复制责任人（含法人）证件
+                        files.add(certifyFileRootPath + "import/" + exportModel.getLiableCertUrl());
 
-                    //复制经办人证件
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getHandledCertUrl());
+                        //复制经办人证件
+                        files.add(certifyFileRootPath + "import/" + exportModel.getHandledCertUrl());
 
-                    //复制授权书
-                    if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
-                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getAuthorizeCert());
+                        //复制授权书
+                        if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
+                            files.add(certifyFileRootPath + "import/" + exportModel.getAuthorizeCert());
+                        }
+
+                        //复制授权书
+                        files.add(certifyFileRootPath + "import/" + exportModel.getOfficePhotos());
+                    }else{
+                        //复制营业执照/组织机构代码证
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getBusinessLicense());
+
+                        //复制责任人（含法人）证件
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getLiableCertUrl());
+
+                        //复制经办人证件
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getHandledCertUrl());
+
+                        //复制授权书
+                        if(!StringUtils.isEmpty(exportModel.getAuthorizeCert())){
+                            files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getAuthorizeCert());
+                        }
+
+                        //复制授权书
+                        files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getOfficePhotos());
                     }
 
-                    //复制授权书
-                    files.add(certifyFileRootPath + exportModel.getCertifyId() + "/" + exportModel.getOfficePhotos());
-
-
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
+                    exportModel.setMainApplication(exportModel.getServiceType());
                     exportModel.setOperate("新增");
                     exportModel.setServiceType("账号注册,账号登录,广告促销,通知提醒,公共服务");
                     exportModel.setPosition("阿里云服务器");

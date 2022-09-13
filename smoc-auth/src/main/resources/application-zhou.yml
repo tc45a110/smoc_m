@@ -65,7 +65,7 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: 172.22.171.219
+    host: 172.22.171.254
     port: 6379
     password: J15mDngG
     database: 2

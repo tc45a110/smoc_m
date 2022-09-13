@@ -31,7 +31,7 @@ spring:
         time-between-eviction-runs: 1000
   redis2: #redis配置
     host: 172.22.171.219
-    port: 6380
+    port: 6379
     password: J15mDngG
     database: 1
     timeout: 3000

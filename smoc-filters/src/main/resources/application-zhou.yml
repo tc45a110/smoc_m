@@ -30,7 +30,7 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
   redis2: #redis配置
-    host: 172.22.171.254
+    host: 172.22.171.219
     port: 6379
     password: J15mDngG
     database: 1

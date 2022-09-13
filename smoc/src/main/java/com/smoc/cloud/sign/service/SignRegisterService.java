@@ -10,6 +10,9 @@ import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.sequence.repository.SequenceRepository;
 import com.smoc.cloud.sign.mode.SignChannel;
 import com.smoc.cloud.sign.mode.SignRegister;
+import com.smoc.cloud.template.entity.AccountTemplateInfo;
+import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
+import com.smoc.cloud.template.service.AccountTemplateInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -44,6 +47,12 @@ public class SignRegisterService {
 
     @Resource
     private SequenceRepository sequenceRepository;
+
+    @Resource
+    private AccountTemplateInfoService accountTemplateInfoService;
+
+    @Resource
+    private AccountTemplateInfoRepository accountTemplateInfoRepository;
 
     @Async
     public void generateSignRegisterByRegisterId(String signRegisterId) {
@@ -232,8 +241,8 @@ public class SignRegisterService {
             stmt.execute();
             StringBuffer sql = new StringBuffer();
             sql.append("insert IGNORE into account_sign_register_for_file ");
-            sql.append("(ID,REGISTER_SIGN_ID,ACCOUNT,CHANNEL_ID,CHANNEL_NAME,ACCESS_PROVINCE,REGISTER_CARRIER,REGISTER_CODE_NUMBER,REGISTER_EXTEND_NUMBER,REGISTER_SIGN,NUMBER_SEGMENT,REGISTER_STATUS,CREATED_TIME,REGISTER_TYPE) ");
-            sql.append("values(?,?,?,?,?,?,?,?,?,?,?,?,now(),?)");
+            sql.append("(ID,REGISTER_SIGN_ID,ACCOUNT,CHANNEL_ID,CHANNEL_NAME,ACCESS_PROVINCE,ACCESS_CITY,REGISTER_ENTERPRISE,REGISTER_CARRIER,REGISTER_CODE_NUMBER,REGISTER_EXTEND_NUMBER,REGISTER_SIGN,NUMBER_SEGMENT,REGISTER_STATUS,CREATED_TIME,REGISTER_TYPE) ");
+            sql.append("values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?)");
             stmt = conn.prepareStatement(sql.toString());
 
             for (SignRegister signRegister : signRegisters) {
@@ -253,13 +262,15 @@ public class SignRegisterService {
                         stmt.setString(4, signChannel.getChannelId());
                         stmt.setString(5, signChannel.getChannelName());
                         stmt.setString(6, signChannel.getAccessProvince());
-                        stmt.setString(7, signChannel.getCarrier());
-                        stmt.setString(8, signChannel.getSrcId());
-                        stmt.setString(9, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                        stmt.setString(10, signRegister.getSign());
-                        stmt.setString(11, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                        stmt.setString(12, "1");
-                        stmt.setString(13, "1");
+                        stmt.setString(7, signChannel.getAccessCity());
+                        stmt.setString(8, signChannel.getRegisterEnterprise());
+                        stmt.setString(9, signChannel.getCarrier());
+                        stmt.setString(10, signChannel.getSrcId());
+                        stmt.setString(11, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                        stmt.setString(12, signRegister.getSign());
+                        stmt.setString(13, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                        stmt.setString(14, "1");
+                        stmt.setString(15, "1");
                         stmt.addBatch();
                     }
 
@@ -275,13 +286,15 @@ public class SignRegisterService {
                             stmt.setString(4, signChannel.getChannelId());
                             stmt.setString(5, signChannel.getChannelName());
                             stmt.setString(6, signChannel.getAccessProvince());
-                            stmt.setString(7, signChannel.getCarrier());
-                            stmt.setString(8, signChannel.getSrcId());
-                            stmt.setString(9, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                            stmt.setString(10, signRegister.getSign());
-                            stmt.setString(11, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                            stmt.setString(12, "1");
-                            stmt.setString(13, "2");
+                            stmt.setString(7, signChannel.getAccessCity());
+                            stmt.setString(8, signChannel.getRegisterEnterprise());
+                            stmt.setString(9, signChannel.getCarrier());
+                            stmt.setString(10, signChannel.getSrcId());
+                            stmt.setString(11, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                            stmt.setString(12, signRegister.getSign());
+                            stmt.setString(13, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                            stmt.setString(14, "1");
+                            stmt.setString(15, "1");
                             stmt.addBatch();
                         }
                     }
@@ -298,13 +311,15 @@ public class SignRegisterService {
                             stmt.setString(4, signChannel.getChannelId());
                             stmt.setString(5, signChannel.getChannelName());
                             stmt.setString(6, signChannel.getAccessProvince());
-                            stmt.setString(7, signChannel.getCarrier());
-                            stmt.setString(8, signChannel.getSrcId());
-                            stmt.setString(9, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                            stmt.setString(10, signRegister.getSign());
-                            stmt.setString(11, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
-                            stmt.setString(12, "1");
-                            stmt.setString(13, "3");
+                            stmt.setString(7, signChannel.getAccessCity());
+                            stmt.setString(8, signChannel.getRegisterEnterprise());
+                            stmt.setString(9, signChannel.getCarrier());
+                            stmt.setString(10, signChannel.getSrcId());
+                            stmt.setString(11, accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                            stmt.setString(12, signRegister.getSign());
+                            stmt.setString(13, signChannel.getSrcId() + accountBasicInfo.getExtendNumber() + signExtendNumber + extend);
+                            stmt.setString(14, "1");
+                            stmt.setString(15, "1");
                             stmt.addBatch();
                         }
                     }
@@ -357,7 +372,9 @@ public class SignRegisterService {
             conn = dataSource.getConnection();
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
-            Set<String> accounts = new HashSet<>();
+            //Set<String> accounts = new HashSet<>();
+            //Set<String> signs = new HashSet<>();
+            List<AccountTemplateInfo> list = new ArrayList<>();
             for (ExcelRegisterImportData importData : importList) {
                 //签名扩展号
                 String signExtendNumber = sequenceRepository.findSequence(importData.getAccount()) + "";
@@ -365,7 +382,12 @@ public class SignRegisterService {
                     continue;
                 }
 
-                accounts.add(importData.getAccount().trim());
+                //accounts.add(importData.getAccount().trim());
+                //signs.add(importData.getSign().trim());
+                AccountTemplateInfo info = new AccountTemplateInfo();
+                info.setBusinessAccount(importData.getAccount().trim());
+                info.setSignName(importData.getSign().trim());
+                list.add(info);
                 //String deleteSql = "delete from enterprise_sign_certify where SOCIAL_CREDIT_CODE='" + importData.getSocialCreditCode() + "' ";
                 //stmt.addBatch(deleteSql);
 
@@ -376,7 +398,7 @@ public class SignRegisterService {
                 insertCertify.append(" values('" + importData.getSocialCreditCode().trim() + "','" + UUID.uuid32() + "','" + importData.getRegisterEnterpriseName().trim() + "','" + importData.getSocialCreditCode().trim() + "','" + rootPath + importData.getBusinessLicense().trim() + "','" + importData.getPersonLiableName().trim() + "','居民身份证','" + importData.getPersonLiableCertificateNumber().trim() + "','" + rootPath + importData.getPersonLiableCertificateUrl().trim() + "','" + importData.getPersonHandledName().trim() + "','居民身份证','" + importData.getPersonHandledCertificateNumber().trim() + "','" + rootPath + importData.getPersonHandledCertificateUrl().trim() + "','" + authStartDate + "','" + authEndDate + "','" + rootPath + importData.getOfficePhotos().trim() + "','1','系统导入',now())");
                 //log.info("insertCertify:{}",insertCertify);
                 stmt.addBatch(insertCertify.toString());
-                String serviceType = "账号注册,账号登录,广告促销,通知提醒,公共服务";
+                String serviceType = "通知提醒";
                 String mainApplication = "账号注册,账号登录,广告促销,通知提醒,公共服务";
                 StringBuffer insertSign = new StringBuffer("insert IGNORE into account_sign_register(ID,ACCOUNT,SIGN,SIGN_EXTEND_NUMBER,EXTEND_TYPE,EXTEND_DATA,ENTERPRISE_ID,APP_NAME,SERVICE_TYPE,MAIN_APPLICATION,REGISTER_STATUS,SIGN_REGISTER_STATUS,KEY_VALUE_UPDATE_STATUS,CREATED_BY,CREATED_TIME)");
                 insertSign.append(" values('" + UUID.uuid32() + "','" + importData.getAccount().trim() + "','" + importData.getSign().trim() + "','" + signExtendNumber + "','1','01','" + importData.getSocialCreditCode().trim() + "','" + importData.getSign().trim() + "','" + serviceType + "','" + mainApplication + "','1','0','0','系统导入',now())");
@@ -386,7 +408,8 @@ public class SignRegisterService {
             stmt.executeBatch();
             conn.commit();
 
-            batchGenerateSignRegisterByAccount(accounts);
+            batchGenerateSignRegisterByAccount(list);
+
         } catch (Exception e) {
             try {
                 conn.rollback();
@@ -412,13 +435,46 @@ public class SignRegisterService {
     /**
      * 根据账号批量生成报备数据
      *
-     * @param accounts
+     * @param list
      */
-    public void batchGenerateSignRegisterByAccount(Set<String> accounts) {
+    public void batchGenerateSignRegisterByAccount(List<AccountTemplateInfo> list) {
 
-        for (String account : accounts) {
+        /*for (String account : accounts) {
             this.generateSignRegisterByAccount(account);
-        }
 
+            //CMPP签名模版，重新加载模板放到reids
+            this.accountTemplateInfoService.loadCMPPSignTemplate(account);
+
+        }
+*/
+        for(AccountTemplateInfo info :list){
+            this.generateSignRegisterByAccount(info.getBusinessAccount());
+
+            this.addAccountTemplateInfo(info.getBusinessAccount(),info.getSignName());
+
+            //CMPP签名模版，重新加载模板放到reids
+            this.accountTemplateInfoService.loadCMPPSignTemplate(info.getBusinessAccount());
+        }
     }
+
+    /**
+     * 根据账号，处理签名模板
+     */
+    private void addAccountTemplateInfo(String account,String sign) {
+
+        List<AccountTemplateInfo> templateInfos = this.accountTemplateInfoRepository.findByBusinessAccountAndTemplateClassify(account, "3");
+        //如果不存在，则创建签名模板
+        if (null == templateInfos || templateInfos.size() < 1) {
+            accountTemplateInfoRepository.createTemplate(account, "【" + sign + "】");
+        } else {
+            //如果存在，则修改签名模板内容
+            AccountTemplateInfo accountTemplateInfo = templateInfos.get(0);
+            String templateContent = accountTemplateInfo.getTemplateContent();
+            templateContent = templateContent + "|" + "【" + sign + "】";
+
+            accountTemplateInfo.setTemplateContent(templateContent);
+            accountTemplateInfoRepository.saveAndFlush(accountTemplateInfo);
+        }
+    }
+
 }

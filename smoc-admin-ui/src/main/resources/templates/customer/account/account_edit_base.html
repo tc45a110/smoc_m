@@ -89,8 +89,8 @@
                                                               th:errors="*{extendNumber}">*</span></label>
                                                     <input id="extendNumber" type="text" class="form-control"
                                                            th:field="*{extendNumber}"
-                                                           data-parsley-length="[0,6]" data-parsley-type="number"
-                                                           autocomplete="off"
+                                                           data-parsley-length="[2,6]" data-parsley-type="number"
+                                                           autocomplete="off" th:attr="readonly=${op == 'edit'?'true':'false'}"
                                                            placeholder="输入账号扩展码">
                                                 </div>
 

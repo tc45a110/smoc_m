@@ -66,9 +66,9 @@ spring:
   #**********************************************************
   redis: #redis配置
     host: 172.22.171.219
-    port: 6379
+    port: 6380
     password: J15mDngG
-    database: 1
+    database: 2
     timeout: 3000
     jedis:
       pool:
