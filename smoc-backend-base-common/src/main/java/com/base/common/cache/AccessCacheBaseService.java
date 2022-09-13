@@ -20,8 +20,7 @@ class AccessCacheBaseService {
 	
 	/**
 	 * 保存状态报告到中间件缓存：保留到接入层 (access)
-	 * @param channelID
-	 * @param businessRouteValue
+	 * @param businessRouteValue 业务消息对象
 	 */
 	public static void saveBusinessReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
 		try {
@@ -34,8 +33,7 @@ class AccessCacheBaseService {
 	
 	/**
 	 * 接入业务层从中间件缓存中获取状态报告：接入业务层使用
-	 * @param accountID
-	 * @return
+	 * @return 业务消息对象
 	 */
 	public static BusinessRouteValue getBusinessReportFromMiddlewareCache(){
 		try {

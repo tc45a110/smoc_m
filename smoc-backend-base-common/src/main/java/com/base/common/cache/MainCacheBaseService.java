@@ -24,10 +24,10 @@ class MainCacheBaseService {
 	
 	/**
 	 * 判断账号是否超过速率
-	 * @param accountID
+	 * @param accountID 账号ID
 	 * @param messageNumber 本次信息条数，长短信算多条
 	 * @param speed 账号速率/秒
-	 * @return
+	 * @return boolean
 	 */
 	public static boolean isOverAccountSpeed(String accountID,int messageNumber,int speed){
 		try {
@@ -40,8 +40,8 @@ class MainCacheBaseService {
 	
 	/**
 	 * 获取通道当天的成功条数，长短信算多条
-	 * @param channelID
-	 * @return
+	 * @param channelID 通道ID
+	 * @return 当天成功数
 	 */
 	public static long getChannelTodaySuccessNumberFromMiddlewareCache(String channelID){
 		try {
@@ -60,8 +60,8 @@ class MainCacheBaseService {
 	
 	/**
 	 * 获取通道当月的成功条数，长短信算多条
-	 * @param channelID
-	 * @return
+	 * @param channelID 通道ID
+	 * @return 当月成功数
 	 */
 	public static long getChannelMonthSuccessNumberFromMiddlewareCache(String channelID){
 		try {
@@ -81,9 +81,8 @@ class MainCacheBaseService {
 	
 	/**
 	 * 维护通道的成功条数：当天和当月
-	 * @param channelID
-	 * @param successNumber
-	 * @return
+	 * @param channelID 通道ID
+	 * @param successNumber 成功数量
 	 */
 	public static void saveChannelSuccessNumberToMiddlewareCache(String channelID,int successNumber){
 		
@@ -102,10 +101,9 @@ class MainCacheBaseService {
 	
 	/**
 	 * 维护账号运营商日提交/成功量
-	 * @param accountID
-	 * @param carrier
-	 * @param number
-	 * @return
+	 * @param accountID 账号ID
+	 * @param carrier 运营商
+	 * @param number 数量
 	 */
 	public static void saveAccountCarrierDailyToMiddlewareCache(String accountID,String carrier,int number){
 		try {
@@ -119,9 +117,9 @@ class MainCacheBaseService {
 	
 	/**
 	 * 保存账号价格到中间件缓存
-	 * @param accountID
+	 * @param accountID 账号ID
 	 * @param dimension 价格维度:国际账号为国家编码，国内账号为运营商
-	 * @param price
+	 * @param price 账号价格
 	 */
 	public static void saveAccountPriceToMiddlewareCache(String accountID,String dimension,String price){	
 		try {
@@ -139,7 +137,7 @@ class MainCacheBaseService {
 	 * 从中间件缓存获取账号价格
 	 * @param accountID
 	 * @param dimension 价格维度:国际账号为国家编码，国内账号为运营商
-	 * @return
+	 * @return 账号价格
 	 */
 	public static String getAccountPriceFromMiddlewareCache(String accountID,String dimension){	
 		try {
@@ -155,9 +153,9 @@ class MainCacheBaseService {
 	
 	/**
 	 * 保存通道价格到中间件缓存
-	 * @param channelID
+	 * @param channelID 通道ID
 	 * @param areaCode 业务区域;值为ALL表示全国
-	 * @param price
+	 * @param price 价格
 	 */
 	public static void saveChannelPriceToMiddlewareCache(String channelID,String areaCode,String price){	
 		try {
@@ -173,9 +171,9 @@ class MainCacheBaseService {
 	
 	/**
 	 * 从中间件缓存获取通道价格
-	 * @param channelID
+	 * @param channelID 通道ID
 	 * @param areaCode 业务区域;值为ALL表示全国
-	 * @return
+	 * @return 通道价格
 	 */
 	public static String getChannelPriceFromMiddlewareCache(String channelID,String areaCode){	
 		try {
@@ -192,7 +190,7 @@ class MainCacheBaseService {
 	
 	/**
 	 *	保存提交消息到代理业务层缓存中 用于匹配状态报告
-	 * @param businessRouteValue
+	 * @param businessRouteValue 业务消息对象
 	 */
 	public static void saveBusinessRouteValueToMiddlewareCache(BusinessRouteValue businessRouteValue) {
 		try {
@@ -208,8 +206,8 @@ class MainCacheBaseService {
 
 	/**
 	 * 	从代理业务层缓存中获取提交信息 返回状态报告
-	 * @param businessRouteValue
-	 * @return
+	 * @param businessRouteValue 业务消息对象
+	 * @return 业务消息对象
 	 */
 	public static BusinessRouteValue getBusinessRouteValueFromMiddlewareCache(BusinessRouteValue businessRouteValue) {
 		try {
@@ -223,8 +221,7 @@ class MainCacheBaseService {
 	
 	/**
 	 * 从代理业务层缓存中删除提交信息
-	 * @param businessRouteValue
-	 * @return
+	 * @param businessRouteValue 业务消息对象
 	 */
 	public static void deleteBusinessRouteValueFromMiddlewareCache(BusinessRouteValue businessRouteValue) {
 		try {
@@ -237,9 +234,9 @@ class MainCacheBaseService {
 	
 	/**
 	 * 加锁
-	 * @param key
-	 * @param requestId
-	 * @param timeout
+	 * @param key 键
+	 * @param requestId 标识
+	 * @param timeout 过期时间
 	 */
 	public static boolean lock(String key, String requestId, int timeout) {
 		try {
@@ -252,8 +249,8 @@ class MainCacheBaseService {
 	
 	/**
 	 * 解锁
-	 * @param key
-	 * @param requestId
+	 * @param key 键
+	 * @param requestId 标识
 	 */
 	public static boolean unlock(String key, String requestId) {
 		try {
@@ -266,7 +263,7 @@ class MainCacheBaseService {
 
 	/**
 	 * 保存账号余额告警信息
-	 * @param balanceAlarm
+	 * @param balanceAlarm 账号余额告警对象
 	 */
 	public static void saveBalanceAlarmToMiddlewareCache(BalanceAlarm balanceAlarm){
 		cacheBaseService.putObject(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(balanceAlarm.getAccountID()),balanceAlarm,REDIS_NAME);
@@ -274,8 +271,8 @@ class MainCacheBaseService {
 
 	/**
 	 * 获取账号余额告警对象
-	 * @param accountID
-	 * @return
+	 * @param accountID 账号ID
+	 * @return 账号余额告警对象
 	 */
 	public static BalanceAlarm getBalanceAlarmToMiddlewareCache(String accountID){
 		return cacheBaseService.getObject(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(accountID) , BalanceAlarm.class, REDIS_NAME);
@@ -283,8 +280,7 @@ class MainCacheBaseService {
 
 	/**
 	 * 删除账号余额告警对象
-	 * @param accountID
-	 * @return
+	 * @param accountID 账号ID
 	 */
 	public static void deleteBalanceAlarmToMiddlewareCache(String accountID){
 		cacheBaseService.delObject(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(accountID) , REDIS_NAME);
@@ -292,8 +288,8 @@ class MainCacheBaseService {
 
 	/**
 	 * 获取需要余额告警的账号
-	 * @param key
-	 * @return
+	 * @param key 键
+	 * @return 值
 	 */
 	public static String getAccountBalanceAlarmToMiddlewareCache(String key){
 		return cacheBaseService.getString(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(key), REDIS_NAME);
@@ -301,8 +297,7 @@ class MainCacheBaseService {
 
 	/**
 	 * 保存需要余额告警的账号
-	 * @param key
-	 * @return
+	 * @param key 键
 	 */
 	public static void saveAccountBalanceAlarmToMiddlewareCache(String key,String value){
 		cacheBaseService.putString(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(key),60*60, value, REDIS_NAME);

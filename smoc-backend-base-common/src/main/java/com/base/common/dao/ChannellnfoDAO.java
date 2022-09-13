@@ -11,7 +11,7 @@ import com.base.common.log.CategoryLog;
 public class ChannellnfoDAO {	
 	/**
 	 * 加载通道价格 数据库异常时返回null
-	 * @return
+	 * @return 通道价格
 	 */
 	public static Map<String, Map<String, Double>> loadChannelPrice(){
 		StringBuffer sql = new StringBuffer();
@@ -48,7 +48,7 @@ public class ChannellnfoDAO {
 	
 	/**
 	 * 通过通道id和业务区域获取价格   数据库异常时返回null
-	 * @return
+	 * @return 通道价格
 	 */
 	public static String loadChannelPrice(String channelId, String areaCode) {
 		StringBuffer sql = new StringBuffer();

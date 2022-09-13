@@ -17,7 +17,7 @@ public class AccountInfoDAO {
 	
 	/**
 	 * 加载账号财务：余额及共享账号 数据库异常时返回null
-	 * @return
+	 * @return 账号财务参数
 	 */
 	public static Map<String, Map<String, Object>> loadAccountFinance() {
 		Map<String, Map<String, Object>> resultMap = new HashMap<String, Map<String, Object>>();
@@ -56,9 +56,9 @@ public class AccountInfoDAO {
 	
 	/**
 	 * 兼容4.0.0和4.0.1两个版本的账号扩展码
-	 * @param extendCode
-	 * @param extendNumber
-	 * @return
+	 * @param extendCode 账号扩展码(4.0.0)
+	 * @param extendNumber 账号扩展码(4.0.1)
+	 * @return 账号扩展码
 	 */
 	private static String getExtendCode(String extendCode,String extendNumber){
 		if(StringUtils.isNotEmpty(extendNumber)){
@@ -73,7 +73,7 @@ public class AccountInfoDAO {
 	/**
 	 * 加载账号基本信息,获取account_base_info、account_finance_info、account_interface_info
 	 * 数据库异常时返回null
-	 * @return
+	 * @return 账号基本信息
 	 */
 	public static Map<String, Map<String, Object>> loadAccountBaseInfo() {
 		Map<String, Map<String, Object>> resultMap = new HashMap<String, Map<String, Object>>();
@@ -152,7 +152,7 @@ public class AccountInfoDAO {
 
 	/**
 	 * 加载账号价格 数据库异常时返回null
-	 * @return
+	 * @return 账号价格
 	 */
 	public static Map<String, Map<String, Double>> loadAccountPrice() {
 		StringBuffer sql = new StringBuffer();
@@ -189,7 +189,7 @@ public class AccountInfoDAO {
 	
 	/**
 	 * 通过账号和运营商获取价格   数据库异常时返回null
-	 * @return
+	 * @return 获取单价
 	 */
 	public static String loadAccountPrice(String accountId,String carrier) {
 		StringBuffer sql = new StringBuffer();

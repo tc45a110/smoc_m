@@ -17,8 +17,8 @@ class AccountCacheBaseService {
 	
 	/**
 	 * 保存状态报告到中间件缓存  (account)
-	 * @param accountID
-	 * @param businessRouteValue
+	 * @param accountID 账号
+	 * @param protocolRouteValue 协议层状态报告对象
 	 */
 	public static void saveReportToMiddlewareCache(String accountID,ProtocolRouteValue protocolRouteValue){
 		try {
@@ -30,8 +30,8 @@ class AccountCacheBaseService {
 	
 	/**
 	 * 从中间件缓存中获取状态报告或上行 (account)
-	 * @param accountID
-	 * @return
+	 * @param accountID 账号
+	 * @return 协议层状态报告对象
 	 */
 	public static ProtocolRouteValue getReportFromMiddlewareCache(String accountID){
 		try {
@@ -44,8 +44,8 @@ class AccountCacheBaseService {
 	
 	/**
 	 * 从缓存中获取一个账号队列中元素数量
-	 * @param channelID
-	 * @return
+	 * @param accountID 账号
+	 * @return 账号队列数量
 	 */
 	public static int getAccountReportQueueSizeFromMiddlewareCache(String accountID){
 		try {
