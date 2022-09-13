@@ -19,8 +19,8 @@ class SubmitCacheBaseService {
 		
 	/**
 	 * 保存提交记录到中间件缓存
-	 * @param channelID
-	 * @param businessRouteValue
+	 * @param channelID 通道ID
+	 * @param businessRouteValue 消息对象
 	 */
 	public static void saveSubmitToMiddlewareCache(String channelID,BusinessRouteValue businessRouteValue){
 		try {
@@ -33,8 +33,8 @@ class SubmitCacheBaseService {
 	
 	/**
 	 * 从中间件缓存中获取提交记录
-	 * @param accountID
-	 * @return
+	 * @param channelID 通道ID
+	 * @return 消息对象
 	 */
 	public static BusinessRouteValue getSubmitFromMiddlewareCache(String channelID){
 		try {
@@ -47,8 +47,8 @@ class SubmitCacheBaseService {
 	
 	/**
 	 * 从缓存中获取一个通道下发队列中元素数量
-	 * @param channelID
-	 * @return
+	 * @param channelID 通道ID
+	 * @return 通道队列数量
 	 */
 	public static int getChannelQueueSizeFromMiddlewareCache(String channelID){
 		try {

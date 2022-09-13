@@ -20,7 +20,7 @@ class ProxyCacheBaseService {
 		
 	/**
 	 * 从中间件缓存获取状态报告：代理层使用
-	 * @return
+	 * @return 业务消息对象
 	 */
 	public static BusinessRouteValue getReportFromMiddlewareCache(){
 		try {
@@ -33,8 +33,7 @@ class ProxyCacheBaseService {
 	
 	/**
 	 * 保存状态报告到中间件缓存：代理协议层使用
-	 * @param channelID
-	 * @param businessRouteValue
+	 * @param businessRouteValue 业务消息对象
 	 */
 	public static void saveReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
 		try {

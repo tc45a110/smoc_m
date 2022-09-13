@@ -22,8 +22,7 @@ class ResponseCacheBaseService {
 	
 	/**
 	 * 保存响应记录到中间件缓存
-	 * @param channelID
-	 * @param businessRouteValue
+	 * @param businessRouteValue 业务消息对象
 	 */
 	public static void saveResponseToMiddlewareCache(BusinessRouteValue businessRouteValue){
 		try {
@@ -36,7 +35,7 @@ class ResponseCacheBaseService {
 	
 	/**
 	 * 从中间件缓存获取响应信息：代理业务层使用
-	 * @return
+	 * @return  业务消息对象
 	 */
 	public static BusinessRouteValue getResponseToMiddlewareCache(){
 		try {
