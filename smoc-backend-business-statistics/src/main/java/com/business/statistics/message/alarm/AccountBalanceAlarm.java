@@ -17,9 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class AccountBalanceAlarm {
@@ -30,6 +28,7 @@ public class AccountBalanceAlarm {
         logger.info("***************账号余额告警开始***************");
         long start = System.currentTimeMillis();
         try{
+            List<AlarmMessage> alarmMessageList = new ArrayList<>();
             Map<String, BalanceAlarm> accountBalanceAlarmMap = load();
             for(String accountID : accountBalanceAlarmMap.keySet()){
                 double accountAvailableAmount = AccountInfoManager.getInstance().getAccountAvailableAmount(accountID);
@@ -44,10 +43,11 @@ public class AccountBalanceAlarm {
                     if(intervalTime % balanceAlarm.getAlarmFrequency() == 0 && balanceAlarm.getAlreadyAlarmNumber() < balanceAlarm.getAlarmNumber()){
                         String sendText = new StringBuilder("账号:").append(accountID).append(",当前可用余额为:")
                                 .append(accountAvailableAmount).append(",余额已不足,请及时充值!").toString();
-                        AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.AccountFinance, sendText));
+                        //AlarmManager.getInstance().process(new AlarmMessage(AlarmMessage.AlarmKey.AccountFinance, sendText));
+                        alarmMessageList.add(new AlarmMessage(AlarmMessage.AlarmKey.AccountFinance, sendText));
                         balanceAlarm.setAlreadyAlarmNumber(balanceAlarm.getAlreadyAlarmNumber()+1);
                         balanceAlarm.setLastAlarmDate(nowDate);
-                        logger.info("余额告警{}accountID={}{}sendText={}", FixedConstant.SPLICER,accountID,FixedConstant.SPLICER,sendText);
+                        logger.info("余额告警{}accountID={}{}sendText={}{}balanceAlarm={}", FixedConstant.SPLICER,accountID,FixedConstant.SPLICER,sendText,FixedConstant.SPLICER,balanceAlarm);
                         CacheBaseService.saveBalanceAlarmToMiddlewareCache(balanceAlarm);
                     }else{
                         logger.info("未达到余额告警要求{}accountID={}{}balanceAlarm={}", FixedConstant.SPLICER,accountID,FixedConstant.SPLICER,balanceAlarm);
@@ -55,13 +55,17 @@ public class AccountBalanceAlarm {
                 }else{
                     //没有达到告警金额
                     BalanceAlarm alarmCache = CacheBaseService.getBalanceAlarmToMiddlewareCache(accountID);
-                    //logger.info("alarmCache:{}",alarmCache);
                     if(alarmCache != null){
                         //账号已充值或者告警金额已调整，删除redis里面的告警信息
                         CacheBaseService.deleteBalanceAlarmToMiddlewareCache(accountID);
                         logger.info("账号{}已充值或者告警金额已调整",accountID);
                     }
                 }
+            }
+            if(alarmMessageList.size() > 0){
+                long saveStartTime = System.currentTimeMillis();
+                saveAlarmValue(alarmMessageList);
+                logger.info("保存账号余额告警条数:{},耗时:{}毫秒",alarmMessageList.size(),(System.currentTimeMillis() - saveStartTime));
             }
         }catch (Exception e){
             logger.error(e.getMessage(),e);
@@ -124,6 +128,44 @@ public class AccountBalanceAlarm {
         //保存本次需要告警的账号
         CacheBaseService.saveAccountBalanceAlarmToMiddlewareCache(ACCOUNT_CACHE,StringUtils.join(accountIDs,FixedConstant.SPLICER));
         return resultMap;
+    }
+
+    private static void saveAlarmValue(List<AlarmMessage> alarmMessageList) {
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO smoc_route.alarm_message_info");
+        sql.append(" (ALARM_KEY,ALARM_VALUE,CREATED_TIME) ");
+        sql.append("values(?,?,NOW())");
+
+        // 在一个事务中更新数据
+        try {
+            conn = LavenderDBSingleton.getInstance().getConnection();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql.toString());
+
+            for (AlarmMessage alarmMessage : alarmMessageList) {
+                pstmt.setString(1, alarmMessage.getAlarmKey().name());
+                pstmt.setString(2, alarmMessage.getAlarmValue());
+                pstmt.addBatch();
+            }
+
+            pstmt.executeBatch();
+            conn.commit();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            try {
+                conn.rollback();
+            } catch (Exception e1) {
+                logger.error(e.getMessage(), e1);
+            }
+        } finally {
+            LavenderDBSingleton.getInstance().closeAll(rs, pstmt, conn);
+        }
+
     }
 
 //    private static Map<String, Object> loadAccountFinanceMonitor() {
