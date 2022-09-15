@@ -9,9 +9,9 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 
-@Slf4j
-@EnableCaching
-@Configuration
+//@Slf4j
+//@EnableCaching
+//@Configuration
 public class RedisFourConfiguration extends RedisConfiguration {
 
     @Value("${spring.redis4.host}")
