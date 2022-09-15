@@ -159,7 +159,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             groupBySql = "group by t.MESSAGE_DATE,t.MESSAGE_SIGN ";
         }
         //按运营商维度
-        else if("2".equals(qo.getFlag())){
+        else if("3".equals(qo.getFlag())){
             sqlBuffer.append(" t.CARRIER,");
             sqlBuffer.append(" ''BUSINESS_ACCOUNT,");
             sqlBuffer.append(" ''PROTOCOL,");

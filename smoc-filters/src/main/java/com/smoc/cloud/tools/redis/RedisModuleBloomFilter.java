@@ -1,5 +1,6 @@
 package com.smoc.cloud.tools.redis;
 
+import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
 import io.rebloom.client.Client;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,9 @@ public class RedisModuleBloomFilter {
 
         boolean booleans = false;
         try {
-            //log.info("[名单过滤]数据：应用过滤器：{}，开始：{}", filterName, System.currentTimeMillis());
+            log.info("[名单过滤]数据：应用过滤器：{}，开始：{}", filterName, System.currentTimeMillis());
             booleans = getClient().exists(filterName, phone);
-            //log.info("[名单过滤]数据：应用过滤器：{}，结束：{}", filterName, System.currentTimeMillis());
+            log.info("[名单过滤]数据：应用过滤器：{}，结束：{}", filterName, System.currentTimeMillis());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -22,9 +22,6 @@ public class AccountRateLimiter {
     @Resource(name = "redisTemplate2")
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Resource(name = "redisTemplate4")
-    private RedisTemplate<String, RedisModel> redisTemplate4;
-
 
     /**
      * 账号限流判断
@@ -63,9 +60,9 @@ public class AccountRateLimiter {
     public RedisModel getHttpServerKey(String account) {
         //redis 查询
         String key = RedisConstant.HTTP_SERVER_KEY + account;
-        boolean hasKey = redisTemplate4.hasKey(key.trim());
+        boolean hasKey = redisTemplate.hasKey(key.trim());
         //log.info("[限流测试]account key：{},{}",hasKey,key);
-        RedisModel redisModel = (RedisModel) redisTemplate4.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
+        RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
         //log.info("[限流测试]redisModel：{}",new Gson().toJson(redisModel));
         return redisModel;
     }

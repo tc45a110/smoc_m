@@ -251,6 +251,14 @@ public class AccountSignRegisterForFileController {
                     exportModel.setOperate("新增");
                     exportModel.setServiceType("账号注册,账号登录,广告促销,通知提醒,公共服务");
                     exportModel.setPosition("阿里云服务器");
+
+                    if(!StringUtils.isEmpty(exportModel.getAuthorizeStart())){
+                        exportModel.setAuthorizeStart(DateTimeUtils.dateFormat(DateTimeUtils.getDateFormat(exportModel.getAuthorizeStart()),"yyyy/MM/dd"));
+                    }
+                    if(!StringUtils.isEmpty(exportModel.getAuthorizeEnd())){
+                        exportModel.setAuthorizeEnd(DateTimeUtils.dateFormat(DateTimeUtils.getDateFormat(exportModel.getAuthorizeEnd()),"yyyy/MM/dd"));
+                    }
+
                     models.add(exportModel);
                     if (((i + 1) % 100 == 0 || i == (size - 1))) {
 
@@ -600,6 +608,14 @@ public class AccountSignRegisterForFileController {
                     exportModel.setOperate("新增");
                     exportModel.setServiceType("账号注册,账号登录,广告促销,通知提醒,公共服务");
                     exportModel.setPosition("阿里云服务器");
+
+                    if(!StringUtils.isEmpty(exportModel.getAuthorizeStart())){
+                        exportModel.setAuthorizeStart(DateTimeUtils.dateFormat(DateTimeUtils.getDateFormat(exportModel.getAuthorizeStart()),"yyyy/MM/dd"));
+                    }
+                    if(!StringUtils.isEmpty(exportModel.getAuthorizeEnd())){
+                        exportModel.setAuthorizeEnd(DateTimeUtils.dateFormat(DateTimeUtils.getDateFormat(exportModel.getAuthorizeEnd()),"yyyy/MM/dd"));
+                    }
+
                     models.add(exportModel);
                     if (((i + 1) % 100 == 0 || i == (size - 1))) {
 

@@ -81,7 +81,7 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
-  redis2: #redis2配置 布隆过滤器、限流插件、系统黑名单
+  redis2: #redis2配置 布隆过滤器、系统黑名单
     host: 172.22.171.219
     port: 6379
     password: J15mDngG
@@ -109,7 +109,7 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
-  redis4: #redis2配置 账号信息(http请求网关验证)
+  redis4: #redis2配置 账号信息、限流插件
     host: 172.22.171.254
     port: 6379
     password: J15mDngG

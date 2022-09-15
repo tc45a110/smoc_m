@@ -140,8 +140,9 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /alidata/smoc/smoc-log/smoc-http-server-logs
   level:
     root: info
+  file:
+    path: /smoc/smoc-log/smoc-http-server-logs
 
 

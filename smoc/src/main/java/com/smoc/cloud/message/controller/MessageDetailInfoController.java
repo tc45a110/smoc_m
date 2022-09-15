@@ -86,7 +86,7 @@ public class MessageDetailInfoController {
     @RequestMapping(value = "/sendMessageList", method = RequestMethod.POST)
     public ResponseData<PageList<MessageDetailInfoValidator>> sendMessageList(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) {
 
-        return messageDetailInfoService.sendMessageList(pageParams);
+        return messageDetailInfoService.page(pageParams);
     }
 
     /**

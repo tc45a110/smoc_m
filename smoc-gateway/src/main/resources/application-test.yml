@@ -68,6 +68,6 @@ com:
             domain: 218.25.208.15
 logging:
   config: classpath:logback-spring.xml
-  path: /alidata/smoc/smoc-log/smoc-gateway-logs
+  path: /smoc/smoc-log/smoc-gateway-logs
   level:
     root: info

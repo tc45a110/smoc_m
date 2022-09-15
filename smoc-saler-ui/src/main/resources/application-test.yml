@@ -74,7 +74,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /alidata/smoc/smoc-log/smoc--saler-ui-logs
+  path: /smoc/smoc-log/smoc--saler-ui-logs
   level:
     root: info
 

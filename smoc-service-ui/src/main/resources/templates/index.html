@@ -4,7 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
-    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
 </head>
 <body>
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
@@ -46,9 +47,10 @@
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
                         <h2 class="text-white">
-                            <span data-d-group="3" data-a-sign="¥ "
-                                  style="color:#fff;width:100px;text-align:left"
-                                  readonly class="autonumber">[[${info.accountUsableSum}]]</span><small style="font-size:14px;color:#fff">(余额)</small>
+                            <span data-plugin="counterup">
+                                ¥ [[${info.accountUsableSum}]]<small style="font-size:14px;color:#fff">(余额)</small>
+                            </span>
+
                         </h2>
                         <p class="m-0">&nbsp;<!--短信余量（约）:[[${infoStat.count}]]
                             <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
@@ -63,9 +65,9 @@
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
                         <h2 class="text-white">
-                            <span data-d-group="3" data-a-sign="¥ "
-                                  style="color:#fff;width:100px;text-align:left"
-                                  readonly class="autonumber">[[${info.accountUsableSum}]]</span><small style="font-size:14px;color:#fff">(余额)</small>
+                            <span data-plugin="counterup">
+                                 ¥ [[${info.accountUsableSum}]]<small style="font-size:14px;color:#fff">(余额)</small>
+                            </span>
                         </h2>
                         <p class="m-0">
                             &nbsp;
@@ -78,9 +80,10 @@
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
                         <h2 class="text-white">
-                            <span data-d-group="3" data-a-sign="¥ "
-                                  style="color:#fff;width:100px;text-align:left"
-                                  readonly class="autonumber">[[${info.accountUsableSum}]]</span><small style="font-size:14px;color:#fff">(余额)</small>
+                            <span data-plugin="counterup">
+                                 ¥ [[${info.accountUsableSum}]]<small style="font-size:14px;color:#fff">(余额)</small>
+                            </span>
+
                         </h2>
                         <p class="m-0">&nbsp;
                         </p>
@@ -111,7 +114,7 @@
                             <div class="card-box widget-box-one">
                                 <div class="wigdet-one-content">
                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">发送总条数</p>
-                                    <h2 class="text-dark"> <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                    <h2 class="text-dark"> <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                                                  style="width:90px;text-align:left"
                                                                  class="autonumber">[[${statisticDate.successNumber}]]</span></h2>
                                 </div>
@@ -121,7 +124,7 @@
                             <div class="card-box widget-box-one">
                                 <div class="wigdet-one-content">
                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">发送成功数</p>
-                                    <h2 class="text-success"><span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                    <h2 class="text-success"><span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                                                    style="width:90px;text-align:left"
                                                                    class="autonumber">[[${statisticDate.successSendNumber}]]</span><small style="font-size:16px;color:#4bd396"></small></h2>
                                 </div>
@@ -131,7 +134,7 @@
                             <div class="card-box widget-box-one">
                                 <div class="wigdet-one-content">
                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">失败数</p>
-                                    <h2 class="text-danger"><span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                    <h2 class="text-danger"><span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                                                   style="width:90px;text-align:left"
                                                                   class="autonumber">[[${statisticDate.failureNumber}]]</span><small style="font-size:16px;color:#f5707a"></small></h2>
                                 </div>
@@ -141,7 +144,7 @@
                             <div class="card-box widget-box-one">
                                 <div class="wigdet-one-content">
                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">未知数</p>
-                                    <h2 class="text-warning"><span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                    <h2 class="text-warning"><span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                                                    style="width:90px;text-align:left"
                                                                    class="autonumber">[[${statisticDate.noReportNumber}]]</span><small style="font-size:16px;color:#f9c851"></small> </h2>
                                 </div>
@@ -158,8 +161,8 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
-<script th:src="@{/static/assets/js/jquery.min.js}"></script>
-<script th:src="@{/static/echarts/echarts.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script type="text/javascript">
      $(document).ready(function() {

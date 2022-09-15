@@ -2,7 +2,9 @@ package com.smoc.cloud.customer.rowmapper;
 
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,7 +20,12 @@ public class MessageAccountRowMapper implements RowMapper<MessageAccountValidato
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setEnterpriseId(resultSet.getString("ENTERPRISE_ID"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
-        qo.setAccountUsableSum(resultSet.getBigDecimal("ACCOUNT_USABLE_SUM"));
+        BigDecimal accountUsableSum = resultSet.getBigDecimal("ACCOUNT_USABLE_SUM");
+        if(!StringUtils.isEmpty(accountUsableSum)){
+            qo.setAccountUsableSum(new BigDecimal(accountUsableSum.stripTrailingZeros().toPlainString()));
+        }else{
+            qo.setAccountUsableSum(accountUsableSum);
+        }
         return qo;
     }
 }

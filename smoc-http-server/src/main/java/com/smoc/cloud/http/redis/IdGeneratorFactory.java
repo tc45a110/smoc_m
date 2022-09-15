@@ -21,7 +21,7 @@ public class IdGeneratorFactory {
         return taskId+id;
     }
 
-    @Resource(name = "redisTemplate4")
+    @Resource(name = "redisTemplate2")
     RedisTemplate redisTemplate;
 
     /**

@@ -53,9 +53,9 @@ public class SystemPhoneFilter {
         }
         //低(系统黑名单)
         if ("LOW".equals(isBlackListType.toString())) {
-            //log.info("[号码_mobile]:{}", phone);
+            log.info("[号码_mobile]:{}", phone);
             Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
-            //log.info("[号码_isExistBlackList]:{}", isExistBlackList);
+            log.info("[号码_isExistBlackList]:{}", isExistBlackList);
             //系统黑名单
             if (isExistBlackList) {
 
@@ -93,7 +93,9 @@ public class SystemPhoneFilter {
 
         //中(系统+本地)
         if ("MIDDLE".equals(isBlackListType.toString())) {
+            log.info("[号码_mobile]:{}", phone);
             Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
+            log.info("[号码_isExistBlackList]:{}", isExistBlackList);
             //系统黑名单
             if (isExistBlackList) {
 
