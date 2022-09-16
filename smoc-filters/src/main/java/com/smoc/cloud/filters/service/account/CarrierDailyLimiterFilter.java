@@ -55,7 +55,7 @@ public class CarrierDailyLimiterFilter {
             return result;
         }
 //        //redis 增加次数
-        Long number = filtersService.incrementAccountDailyLimit(account, carrier,times);
+//        Long number = filtersService.incrementAccountDailyLimit(account, carrier,times);
         result.put("result", "false");
         return result;
     }
