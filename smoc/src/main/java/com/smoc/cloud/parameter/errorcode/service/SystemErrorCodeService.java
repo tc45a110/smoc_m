@@ -144,9 +144,11 @@ public class SystemErrorCodeService {
         }
 
         //查询运营商错误码
-        List<SystemErrorCode> carrierList = systemErrorCodeRepository.findByCodeTypeAndErrorCode(carrier,customerStatus);
-        if(!StringUtils.isEmpty(carrierList) && carrierList.size()>0){
-            return carrierList.get(0).getErrorContent();
+        if(!StringUtils.isEmpty(carrier)){
+            List<SystemErrorCode> carrierList = systemErrorCodeRepository.findByCodeTypeAndErrorCode(carrier,customerStatus);
+            if(!StringUtils.isEmpty(carrierList) && carrierList.size()>0){
+                return carrierList.get(0).getErrorContent();
+            }
         }
 
         return "";

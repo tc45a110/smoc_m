@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">状态码占比率 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            运营数据
+                        </li>
+                        <li class="active">
+                            状态码占比率
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px"  th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <form  id="query_form" th:action="@{/message/code/page}" th:object="${messageCodeValidator}" method="post">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input id="reportrange" class="form-control" type="text"  th:field="*{startDate}" />
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="业务账号"  th:field="*{businessAccount}" autocomplete="off">
+                                </div>
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <input type="hidden" class="form-control" th:field="*{enterpriseId}" >
+                                    <button sec:authorize-url="/message/code/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  汇总统计-->
+        <div class="detail">
+            <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                <ul>
+                    <li>
+                        <h2 style="color: #fff">客户提交总数：
+                            <span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                  data-d-group="4" data-a-sign=" " data-v-min="0"
+                                  data-v-max="99999999999"
+                                  class="autonumber">[[${total}]]</span>
+                        </h2>
+                        <span></span>
+                        <div class="row">
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总成功发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${successSum}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总失败发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${errorSum}]]</span></a>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>成功率(%)：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${successRatio}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>失败率(%)：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${errorRatio}]]</span></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- end row -->
+
+
+        <!-- start row  列表数据-->
+        <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">状态码占比统计<small>&nbsp;系统默认查询当天内的数据</small></h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th>业务账号/名称</th>
+                                    <th>状态码</th>
+                                    <th>返回报告总数</th>
+                                    <th>占比</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px">
+                                        [[${info.businessAccount}]]<span th:if="${accountMap[info.businessAccount] !=null}">([[${accountMap[info.businessAccount].accountName}]])</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.codeStatus}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.codeNumber}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        [[${info.ratio}]]
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                            <hr>
+                        </div>
+
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<!-- Modal-Effect -->
+
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $('#reportrange').daterangepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        startDate: '[[${messageCodeValidator.startDate}]]',
+        endDate: '[[${messageCodeValidator.endDate}]]',
+        minDate: '2012-01-01',
+        maxDate: '2080-12-31',
+        dateLimit: {
+            days: 30
+        },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: true,
+        pickTime:true,
+        timePicker24Hour: true, //时间制
+        ranges: {
+            '今天': [moment(), moment()],
+            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '最近7天': [moment().subtract(6, 'days'), moment()],
+            '最近30天': [moment().subtract(29, 'days'), moment()],
+            '本月': [moment().startOf('month'), moment().endOf('month')],
+            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD HH:mm:ss',
+        separator: ' - ',
+        locale: {
+            applyLabel: '确认',
+            cancelLabel: '取消',
+            fromLabel: '从',
+            toLabel: '到',
+            customRangeLabel: '自定义',
+            format: "YYYY-MM-DD HH:mm:ss",
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            firstDay: 1
+        }
+    }, function (start, end, label) {
+        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
