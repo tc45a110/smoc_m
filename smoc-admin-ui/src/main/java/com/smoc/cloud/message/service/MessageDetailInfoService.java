@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.message.MessageCodeValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.message.remote.MessageDetailInfoFeignClient;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -62,4 +64,19 @@ public class MessageDetailInfoService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 消息状态码统计查询
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<MessageCodeValidator>> messageCcodeStautsList(PageParams<MessageCodeValidator> params) {
+        try {
+            ResponseData<PageList<MessageCodeValidator>> page = messageDetailInfoFeignClient.messageCcodeStautsList(params);
+            return page;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
 }

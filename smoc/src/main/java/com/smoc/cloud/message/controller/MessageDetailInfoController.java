@@ -3,6 +3,7 @@ package com.smoc.cloud.message.controller;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.message.MessageCodeValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
@@ -100,4 +101,14 @@ public class MessageDetailInfoController {
         return messageDetailInfoService.statisticEnterpriseSendMessage(messageDetailInfoValidator);
     }
 
+    /**
+     * 消息状态码统计查询
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/code/messageCcodeStautsList", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageCodeValidator>> messageCcodeStautsList(@RequestBody PageParams<MessageCodeValidator> params) {
+
+        return messageDetailInfoService.messageCcodeStautsList(params);
+    }
 }
