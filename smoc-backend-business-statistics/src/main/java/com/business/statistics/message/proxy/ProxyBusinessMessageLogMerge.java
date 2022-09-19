@@ -321,7 +321,7 @@ public class ProxyBusinessMessageLogMerge {
 	}
 	
 	/**
-	 * 	读取文件中的业务日志 然后根据channelSRCID 进行分组处理
+	 * 	读取文件中的业务日志
 	 * @param file
 	 * @param lineTime
 	 * @return
@@ -610,7 +610,7 @@ public class ProxyBusinessMessageLogMerge {
 				pstmt.setString(6, businessRouteValue.getPhoneNumber());
 				pstmt.setString(7, businessRouteValue.getBusinessMessageID());
 				pstmt.setString(8, businessRouteValue.getMessageContent());
-				pstmt.setInt(9, businessRouteValue.getMessageTotal());				
+				pstmt.setInt(9, businessRouteValue.getChannelTotal());
 				pstmt.setString(10, businessRouteValue.getBusinessCarrier());
 				
 				pstmt.setString(11, businessRouteValue.getAreaName());
