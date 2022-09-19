@@ -4,14 +4,13 @@
  */
 package com.protocol.proxy.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.manager.ChannelInfoManager;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChannelInterfaceUtil {
 	
@@ -42,7 +41,8 @@ public class ChannelInterfaceUtil {
 		
 		resultMap.put("login-name", interfaceInfoMap.get("CHANNEL_ACCESS_ACCOUNT"));
 		resultMap.put("login-pass", interfaceInfoMap.get("CHANNEL_ACCESS_PASSWORD"));
-		resultMap.put("version", interfaceInfoMap.get("VERSION"));
+		String version = StringUtils.isEmpty(interfaceInfoMap.get("VERSION"))?(ChannelInfoManager.getInstance().isCMPP20Version(channelID)?"32":"48"):interfaceInfoMap.get("VERSION");
+		resultMap.put("version", version);
 		resultMap.put("srcId", interfaceInfoMap.get("SRC_ID"));
 		resultMap.put("corpId", interfaceInfoMap.get("SP_ID"));
 		resultMap.put("serviceType", interfaceInfoMap.get("BUSINESS_CODE"));
