@@ -156,4 +156,30 @@ public class MessageDetailInfoService {
 
         return ResponseDataUtil.buildSuccess(page);
     }
+
+    /**
+     * 通道消息明细分页查询
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<MessageDetailInfoValidator>> messageChannelPage(PageParams<MessageDetailInfoValidator> params) {
+        PageList<MessageDetailInfoValidator> page = messageDetailInfoRepository.messageChannelPage(params);
+
+        return ResponseDataUtil.buildSuccess(page);
+    }
+
+    /**
+     * 统计提交给通道发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    public ResponseData<Map<String, Object>> statisticChannelSendMessage(MessageDetailInfoValidator messageDetailInfoValidator) {
+        Map<String, Object> map = new HashMap<>();
+
+        //短信成功发送总量
+        Map<String, Object>  messageSendTotal = messageDetailInfoRepository.statisticChannelSendMessage(messageDetailInfoValidator);
+        map.put("SUCCESS_SEND_SUM",messageSendTotal.get("SUCCESS_SEND_SUM"));
+
+        return ResponseDataUtil.buildSuccess(map);
+    }
 }

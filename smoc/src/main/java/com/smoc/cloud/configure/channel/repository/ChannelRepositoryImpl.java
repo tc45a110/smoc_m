@@ -7,6 +7,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelInterfaceInfoQo;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.configure.channel.rowmapper.ChannelAccountInfoRowMapper;
@@ -353,6 +354,86 @@ public class ChannelRepositoryImpl extends BasePageRepository {
 
         PageList<ChannelInterfaceInfoQo> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ChannelInterfaceInfoRowMapper());
         pageList.getPageParams().setParams(qo);
+        return pageList;
+    }
+
+    public List<ChannelBasicInfoQo> queryChannelAll(ChannelBasicInfoValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.CHANNEL_ID");
+        sqlBuffer.append(", t.CHANNEL_NAME");
+        sqlBuffer.append(", t.CHANNEL_PROVDER");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.MAX_COMPLAINT_RATE");
+        sqlBuffer.append(", ''SRC_ID");
+        sqlBuffer.append(", ''PROTOCOL");
+        sqlBuffer.append(", ''CHANNEL_ACCESS_ACCOUNT");
+        sqlBuffer.append(", t.PRICE_STYLE");
+        sqlBuffer.append(", ''CHANNEL_PRICE");
+        sqlBuffer.append(", t.BUSINESS_AREA_TYPE");
+        sqlBuffer.append(", t.MASK_PROVINCE");
+        sqlBuffer.append(", t.SUPPORT_AREA_CODES");
+        sqlBuffer.append(", t.CHANNEL_RUN_STATUS");
+        sqlBuffer.append(", t.CHANNEL_STATUS");
+        sqlBuffer.append(", ''MAX_SEND_SECOND");
+        sqlBuffer.append(", t.CHANNEL_INTRODUCE ");
+        sqlBuffer.append(", t.CHANNEL_ACCESS_SALES ");
+        sqlBuffer.append(", t.CHANNEL_RESTRICT_CONTENT ");
+        sqlBuffer.append(", t.SPECIFIC_PROVDER ");
+        sqlBuffer.append("  from config_channel_basic_info t ");
+        sqlBuffer.append("  where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and t.CHANNEL_ID like ?");
+            paramsList.add( "%"+qo.getChannelId().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getChannelName())) {
+            sqlBuffer.append(" and t.CHANNEL_NAME like ?");
+            paramsList.add( "%"+qo.getChannelName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getChannelProvder())) {
+            sqlBuffer.append(" and t.CHANNEL_PROVDER = ?");
+            paramsList.add(qo.getChannelProvder().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getAccessProvince())) {
+            sqlBuffer.append(" and t.ACCESS_PROVINCE = ?");
+            paramsList.add(qo.getAccessProvince().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getChannelRunStatus())) {
+            sqlBuffer.append(" and t.CHANNEL_RUN_STATUS = ?");
+            paramsList.add(qo.getChannelRunStatus().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE = ?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE like ?");
+            paramsList.add( "%"+qo.getInfoType().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getSpecificProvder())) {
+            sqlBuffer.append(" and t.SPECIFIC_PROVDER =?");
+            paramsList.add( qo.getSpecificProvder().trim());
+        }
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<ChannelBasicInfoQo> pageList = this.queryForObjectList(sqlBuffer.toString(), params, new ChannelBasicInfoRowMapper());
         return pageList;
     }
 }

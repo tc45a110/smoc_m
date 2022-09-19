@@ -350,7 +350,7 @@ public class BusinessAccountService {
         }
 
         //财务信息
-        AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
+        /*AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
         accountFinanceInfoValidator.setAccountId(accountCopyId);
         List<AccountFinanceInfoValidator> list = accountFinanceRepository.findByAccountId(accountFinanceInfoValidator);
         if (!StringUtils.isEmpty(list) && list.size() > 0) {
@@ -379,10 +379,10 @@ public class BusinessAccountService {
             process = process.replace(1, 2, "1");
             //记录日志
             log.info("[EC业务账号复制][业务账号财务信息][{}]数据:{}", "add", JSON.toJSONString(accountFinanceInfoValidator));
-        }
+        }*/
 
         //通道信息
-        List<AccountChannelInfo> channelList = accountChannelRepository.findByAccountId(accountCopyId);
+        /*List<AccountChannelInfo> channelList = accountChannelRepository.findByAccountId(accountCopyId);
         if (!StringUtils.isEmpty(channelList) && channelList.size() > 0) {
             AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
             accountChannelInfoValidator.setAccountId(entity.getAccountId());
@@ -391,7 +391,7 @@ public class BusinessAccountService {
             process = process.replace(3, 4, "1");
             //记录日志
             log.info("[EC业务账号复制][业务账号通道信息][{}]数据:{}-{}", "add", JSON.toJSONString(accountChannelInfoValidator), JSON.toJSONString(channelList));
-        }
+        }*/
 
         copyFiltersInfo(accountCopyId, entity);
 

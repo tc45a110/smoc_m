@@ -111,4 +111,26 @@ public class MessageDetailInfoController {
 
         return messageDetailInfoService.messageCcodeStautsList(params);
     }
+
+    /**
+     * 通道消息明细分页查询
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/channel/messageChannelPage", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageDetailInfoValidator>> messageChannelPage(@RequestBody PageParams<MessageDetailInfoValidator> params) {
+
+        return messageDetailInfoService.messageChannelPage(params);
+    }
+
+    /**
+     * 统计提交给通道发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/channel/statisticChannelSendMessage", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> statisticChannelSendMessage(@RequestBody MessageDetailInfoValidator messageDetailInfoValidator){
+
+        return messageDetailInfoService.statisticChannelSendMessage(messageDetailInfoValidator);
+    }
 }

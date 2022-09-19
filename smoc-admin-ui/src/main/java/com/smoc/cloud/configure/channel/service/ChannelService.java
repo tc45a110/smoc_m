@@ -166,4 +166,18 @@ public class ChannelService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询所有通道
+     * @return
+     */
+    public ResponseData<List<ChannelBasicInfoQo>> queryChannelAll(ChannelBasicInfoValidator channelBasicInfoValidator) {
+        try {
+            ResponseData<List<ChannelBasicInfoQo>> pageList = this.channelFeignClient.queryChannelAll(channelBasicInfoValidator);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

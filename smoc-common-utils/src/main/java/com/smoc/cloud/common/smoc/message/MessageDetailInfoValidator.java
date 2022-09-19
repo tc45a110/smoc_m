@@ -73,4 +73,7 @@ public class MessageDetailInfoValidator {
     private String timeElapsed;
 
     private String statusFlag;
+
+    private String tableName;
+
 }

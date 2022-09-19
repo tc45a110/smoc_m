@@ -163,7 +163,7 @@ public class ComplaintService {
          * 根据投诉手机号、投诉内容、投诉运营商查询业务账号、码号、下发时间、下发频次
          */
         if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
-            for(ComplaintExcelModel info:list){
+            /*for(ComplaintExcelModel info:list){
                 //查询日志表
                 Date data = DateTimeUtils.dateAddDays(new Date(),-7);
                 String sDate = DateTimeUtils.getDateFormat(data);
@@ -191,7 +191,7 @@ public class ComplaintService {
                     log.info("[投诉管理][delete]数据:{}",JSON.toJSONString(messageComplaintInfo));
                     complaintRepository.deleteById(messageComplaintInfo.getId());
                 }
-            }
+            }*/
         }
 
         complaintRepository.batchSave(messageComplaintInfoValidator);

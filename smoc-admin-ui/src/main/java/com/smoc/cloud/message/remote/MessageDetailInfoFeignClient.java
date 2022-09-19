@@ -48,4 +48,20 @@ public interface MessageDetailInfoFeignClient {
      */
     @RequestMapping(value = "/message/detail/code/messageCcodeStautsList", method = RequestMethod.POST)
     ResponseData<PageList<MessageCodeValidator>> messageCcodeStautsList(@RequestBody PageParams<MessageCodeValidator> params);
+
+    /**
+     * 通道消息明细查询
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/message/detail/channel/messageChannelPage", method = RequestMethod.POST)
+    ResponseData<PageList<MessageDetailInfoValidator>> messageChannelPage(@RequestBody PageParams<MessageDetailInfoValidator> params);
+
+    /**
+     * 统计提交给通道发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/message/detail/channel/statisticChannelSendMessage", method = RequestMethod.POST)
+    ResponseData<Map<String, Object>> statisticChannelSendMessage(@RequestBody MessageDetailInfoValidator messageDetailInfoValidator);
 }

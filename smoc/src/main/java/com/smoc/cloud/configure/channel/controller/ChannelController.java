@@ -156,4 +156,15 @@ public class ChannelController {
 
         return channelService.channelInterfacePage(pageParams);
     }
+
+    /**
+     * 查询所有通道
+     * @param channelBasicInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/queryChannelAll", method = RequestMethod.POST)
+    public ResponseData<List<ChannelBasicInfoQo>> queryChannelAll(@RequestBody ChannelBasicInfoValidator channelBasicInfoValidator){
+
+        return channelService.queryChannelAll(channelBasicInfoValidator);
+    }
 }

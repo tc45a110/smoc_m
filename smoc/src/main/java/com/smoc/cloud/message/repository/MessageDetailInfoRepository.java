@@ -87,4 +87,18 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      * @return
      */
     Map<String, Object> statisticEnterpriseTotalMessage(MessageDetailInfoValidator messageDetailInfoValidator);
+
+    /**
+     * 通道消息明细分页查询
+     * @param params
+     * @return
+     */
+    PageList<MessageDetailInfoValidator> messageChannelPage(PageParams<MessageDetailInfoValidator> params);
+
+    /**
+     * 统计提交给通道发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    Map<String, Object> statisticChannelSendMessage(MessageDetailInfoValidator messageDetailInfoValidator);
 }
