@@ -19,6 +19,12 @@ import com.smoc.cloud.complaint.repository.ComplaintRepository;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelInterface;
 import com.smoc.cloud.configure.channel.repository.ChannelInterfaceRepository;
 import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
+import com.smoc.cloud.customer.entity.AccountBasicInfo;
+import com.smoc.cloud.customer.entity.AccountSignRegisterForFile;
+import com.smoc.cloud.customer.entity.EnterpriseBasicInfo;
+import com.smoc.cloud.customer.repository.AccountSignRegisterForFileRepository;
+import com.smoc.cloud.customer.repository.BusinessAccountRepository;
+import com.smoc.cloud.customer.repository.EnterpriseRepository;
 import com.smoc.cloud.filter.entity.FilterGroupList;
 import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.GroupRepository;
@@ -52,7 +58,7 @@ public class ComplaintService {
     private ComplaintRepository complaintRepository;
 
     @Resource
-    private MessageDetailInfoRepository messageDetailInfoRepository;
+    private BusinessAccountRepository businessAccountRepository;
 
     @Resource
     private BlackRepository blackRepository;
@@ -67,7 +73,13 @@ public class ComplaintService {
     private BlackService blackService;
 
     @Resource
-    private TableStoreMessageDetailInfoRepository tableStoreMessageDetailInfoRepository;
+    private AccountSignRegisterForFileRepository accountSignRegisterForFileRepository;
+
+    @Resource
+    private EnterpriseRepository enterpriseRepository;
+
+    @Resource
+    private MessageDetailInfoRepository messageDetailInfoRepository;
 
     /**
      * 查询列表
@@ -163,12 +175,18 @@ public class ComplaintService {
          * 根据投诉手机号、投诉内容、投诉运营商查询业务账号、码号、下发时间、下发频次
          */
         if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
-            /*for(ComplaintExcelModel info:list){
-                //查询日志表
-                Date data = DateTimeUtils.dateAddDays(new Date(),-7);
-                String sDate = DateTimeUtils.getDateFormat(data);
-                String endDate = DateTimeUtils.getDateFormat(new Date());
-                TableStoreMessageDetailInfoValidator message =  tableStoreMessageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent(),sDate,endDate);
+            for(ComplaintExcelModel info:list){
+
+                //根据被举报号码在签名报备库里找业务账号
+                List<AccountSignRegisterForFile> fileList = accountSignRegisterForFileRepository.findByNumberSegmentAndRegisterStatus(info.getReportNumber(),"3");
+                if(!StringUtils.isEmpty(fileList) && fileList.size()>0){
+                    AccountSignRegisterForFile accountSignRegisterForFile = fileList.get(0);
+                    info.setBusinessAccount(accountSignRegisterForFile.getAccount());
+                    info.setChannelId(accountSignRegisterForFile.getChannelId());
+
+                }
+
+                /*TableStoreMessageDetailInfoValidator message =  tableStoreMessageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent(),sDate,endDate);
                 if(!StringUtils.isEmpty(message)){
                     info.setBusinessAccount(message.getBusinessAccount());
                     info.setSendDate(message.getUserSubmitTime());
@@ -183,7 +201,7 @@ public class ComplaintService {
                     validator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
                     int number = tableStoreMessageDetailInfoRepository.statisticMessageNumberByMobile(validator);
                     info.setSendRate(""+number);
-                }
+                }*/
                 //查询
                 MessageComplaintInfo messageComplaintInfo = complaintRepository.findByCarrierSourceAndReportNumberAndReportContentAndReportDate(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent(),info.getReportDate());
                 if(!StringUtils.isEmpty(messageComplaintInfo)){
@@ -191,7 +209,7 @@ public class ComplaintService {
                     log.info("[投诉管理][delete]数据:{}",JSON.toJSONString(messageComplaintInfo));
                     complaintRepository.deleteById(messageComplaintInfo.getId());
                 }
-            }*/
+            }
         }
 
         complaintRepository.batchSave(messageComplaintInfoValidator);
@@ -279,6 +297,16 @@ public class ComplaintService {
      */
     public ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(MessageChannelComplaintValidator messageChannelComplaintValidator) {
         List<MessageChannelComplaintValidator> list = complaintRepository.channelComplaintRanking(messageChannelComplaintValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 根据投诉手机号查询10天内的下发记录
+     * @param detail
+     * @return
+     */
+    public ResponseData<List<MessageDetailInfoValidator>> sendMessageList(MessageDetailInfoValidator detail) {
+        List<MessageDetailInfoValidator> list = complaintRepository.sendMessageList(detail);
         return ResponseDataUtil.buildSuccess(list);
     }
 }

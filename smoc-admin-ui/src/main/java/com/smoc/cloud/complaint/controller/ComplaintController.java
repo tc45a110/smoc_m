@@ -8,17 +8,21 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.complaint.service.ComplaintService;
 import com.smoc.cloud.customer.service.BusinessAccountService;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -46,6 +50,9 @@ public class ComplaintController {
 
     @Autowired
     private BusinessAccountService businessAccountService;
+
+    @Autowired
+    private EnterpriseService enterpriseService;
 
     /**
      * 投诉列表查询
@@ -253,6 +260,26 @@ public class ComplaintController {
                 if(StringUtils.isEmpty(messageComplaintInfoValidator.getBusinessType())){
                     messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
                 }
+
+                //根据投诉手机号查询10天内的下发记录
+                ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(info.getData().getEnterpriseId());
+                if (ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())){
+                    MessageDetailInfoValidator detail = new MessageDetailInfoValidator();
+                    detail.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag());
+                    detail.setPhoneNumber(data.getData().getReportNumber());
+                    detail.setMessageContent(data.getData().getReportContent());
+                    detail.setBusinessAccount(info.getData().getAccountId());
+                    Date startDate = DateTimeUtils.dateAddDays(new Date(),-10);
+                    detail.setStartDate(DateTimeUtils.getDateFormat(startDate));
+                    detail.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+                    ResponseData<List<MessageDetailInfoValidator>> list = complaintService.sendMessageList(detail);
+                    if (!ResponseCode.SUCCESS.getCode().equals(list.getCode())) {
+                        view.addObject("error", list.getCode() + ":" + list.getMessage());
+                        return view;
+                    }
+                    view.addObject("list", list.getData());
+                }
+
             }
         }
 

@@ -76,7 +76,11 @@
                                     <input type="text" class="form-control" th:field="*{registerSign}"
                                            placeholder="签名" autocomplete="off">
                                 </div>
-                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{numberSegment}"
+                                           placeholder="报备完整号段" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/sign/register/file/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询

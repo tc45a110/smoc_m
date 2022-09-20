@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseContractInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.complaint.service.ComplaintService;
@@ -129,6 +130,17 @@ public class ComplaintController {
     public ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(@RequestBody MessageChannelComplaintValidator messageChannelComplaintValidator) {
 
         return complaintService.channelComplaintRanking(messageChannelComplaintValidator);
+    }
+
+    /**
+     * 根据投诉手机号查询10天内的下发记录
+     * @param detail
+     * @return
+     */
+    @RequestMapping(value = "/sendMessageList", method = RequestMethod.POST)
+    public ResponseData<List<MessageDetailInfoValidator>> sendMessageList(@RequestBody MessageDetailInfoValidator detail) {
+
+        return complaintService.sendMessageList(detail);
     }
 
 }

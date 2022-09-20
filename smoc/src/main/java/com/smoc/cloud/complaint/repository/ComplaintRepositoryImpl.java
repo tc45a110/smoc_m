@@ -6,11 +6,13 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.smoc.utils.ChannelUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.complaint.rowmapper.MessageChannelComplaintRowMapper;
 import com.smoc.cloud.complaint.rowmapper.MessageComplaintInfoRowMapper;
+import com.smoc.cloud.message.rowmapper.MessageDetailInfoRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -219,14 +221,13 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  a.CARRIER");
-        sqlBuffer.append(", a.CHANNEL_ID");
+        sqlBuffer.append("  a.CHANNEL_ID");
         sqlBuffer.append(", b.CHANNEL_NAME");
         sqlBuffer.append(", a.COMPLAINT_NUM");
         sqlBuffer.append(", c.MESSAGE_SUCCESS_NUM");
-        sqlBuffer.append(", truncate(a.COMPLAINT_NUM/c.MESSAGE_SUCCESS_NUM*1000000,2)COMPLAINT_RATE");
+        sqlBuffer.append(", truncate(a.COMPLAINT_NUM/c.MESSAGE_SUCCESS_NUM*1000000/100,2)COMPLAINT_RATE");
         sqlBuffer.append(", b.MAX_COMPLAINT_RATE");
-        sqlBuffer.append("  from (select t.CHANNEL_ID,count(t.id)COMPLAINT_NUM,t.CARRIER from message_complaint_info t where t.COMPLAINT_SOURCE='day' and DATE_FORMAT(t.REPORT_DATE,'%Y-%m')=? and ifnull(t.CHANNEL_ID,'') <> '' group by t.CHANNEL_ID,t.CARRIER,DATE_FORMAT(t.REPORT_DATE,'%Y-%m'))a");
+        sqlBuffer.append("  from (select t.CHANNEL_ID,count(t.id)COMPLAINT_NUM from message_complaint_info t where t.COMPLAINT_SOURCE='day' and DATE_FORMAT(t.REPORT_DATE,'%Y-%m')=? and ifnull(t.CHANNEL_ID,'') <> '' group by t.CHANNEL_ID,DATE_FORMAT(t.REPORT_DATE,'%Y-%m'))a");
         sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_NAME,t.MAX_COMPLAINT_RATE from config_channel_basic_info t )b on a.CHANNEL_ID = b.CHANNEL_ID ");
         sqlBuffer.append(" left join (select t.CHANNEL_ID,sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM from message_daily_statistics t group by t.CHANNEL_ID)c on b.CHANNEL_ID = c.CHANNEL_ID ");
         sqlBuffer.append("  where 1=1  ");
@@ -242,5 +243,77 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
 
         List<MessageChannelComplaintValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new MessageChannelComplaintRowMapper());
         return list;
+    }
+
+    public List<MessageDetailInfoValidator> sendMessageList(MessageDetailInfoValidator qo) {
+
+
+        //查询sql
+        StringBuilder sql = new StringBuilder("select ");
+        sql.append(" count(*) messageTotal ");
+        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag().toLowerCase()+"' ");
+        Long messageTotal = jdbcTemplate.queryForObject(sql.toString(), Long.class);
+
+        if(messageTotal>=1){
+            //查询sql
+            StringBuilder sqlBuffer = new StringBuilder("select ");
+            sqlBuffer.append(" t.ID,");
+            sqlBuffer.append(" t.ACCOUNT_ID,");
+            sqlBuffer.append(" t.PHONE_NUMBER,");
+            sqlBuffer.append(" t.CARRIER,");
+            sqlBuffer.append(" t.AREA_NAME,");
+            sqlBuffer.append(" t.REPORT_TIME,");
+            sqlBuffer.append(" t.SUBMIT_TIME,");
+            sqlBuffer.append(" t.STATUS_CODE,");
+            sqlBuffer.append(" t.MESSAGE_CONTENT,");
+            sqlBuffer.append(" t.MESSAGE_TOTAL,");
+            sqlBuffer.append(" t.SIGN,");
+            sqlBuffer.append(" t.SUBMIT_STYLE");
+            sqlBuffer.append(" ,t.TIME_ELAPSED");
+            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag().toLowerCase()+" t ");
+            sqlBuffer.append(" where (1=1) ");
+
+            List<Object> paramsList = new ArrayList<Object>();
+
+            //手机号
+            if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
+                sqlBuffer.append(" and t.PHONE_NUMBER =?");
+                paramsList.add(qo.getPhoneNumber().trim());
+            }
+
+            //业务账号
+            if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+                sqlBuffer.append(" and t.ACCOUNT_ID =?");
+                paramsList.add(qo.getBusinessAccount().trim());
+            }
+
+            //内容
+            if (!StringUtils.isEmpty(qo.getMessageContent())) {
+                sqlBuffer.append(" and t.MESSAGE_CONTENT =?");
+                paramsList.add(qo.getMessageContent().trim());
+            }
+
+            //时间起
+            if (!StringUtils.isEmpty(qo.getStartDate())) {
+                sqlBuffer.append(" and DATE_FORMAT(t.SUBMIT_TIME') >=? ");
+                paramsList.add(qo.getStartDate().trim());
+            }
+            //时间止
+            if (!StringUtils.isEmpty(qo.getEndDate())) {
+                sqlBuffer.append(" and DATE_FORMAT(t.SUBMIT_TIME') <=? ");
+                paramsList.add(qo.getEndDate().trim());
+            }
+
+            sqlBuffer.append(" order by t.SUBMIT_TIME desc");
+            //log.info("[SQL]:{}",sqlBuffer);
+            //根据参数个数，组织参数值
+            Object[] params = new Object[paramsList.size()];
+            paramsList.toArray(params);
+            //log.info("[SQL1]:{}",sqlBuffer);
+            List<MessageDetailInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new MessageDetailInfoRowMapper());
+            return list;
+        }
+
+        return null;
     }
 }

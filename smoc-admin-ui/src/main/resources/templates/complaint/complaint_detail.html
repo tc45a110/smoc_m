@@ -37,6 +37,74 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  列表数据-->
+        <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">下发明细列表<small>&nbsp;根据投诉账号、手机号、内容去匹配10天内的下发记录</small></h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th>业务账号/手机号</th>
+                                    <th>运营商</th>
+                                    <th>状态码</th>
+                                    <th>提交时间/状态报告时间</th>
+                                    <th>短信内容</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px">
+                                        [[${info.businessAccount}]]<br>[[${info.phoneNumber}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="businessType" show-type="button" th:if="${accountMap[info.businessAccount] !=null}"
+                                                 key="code" th:value="${accountMap[info.businessAccount].businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/>&nbsp;
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                         <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                               th:data-original-title="${info.customerStatus}">[[${info.customerStatus}]]</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        [[${info.submitTime}]]
+                                        <br>
+                                        [[${info.reportTime}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
+                                    </td>
+
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                            <hr>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- end row -->
+
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-6">
@@ -137,6 +205,10 @@
             </div> <!-- end col -->
         </div>
         <!-- end row -->
+
+
+
+
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
