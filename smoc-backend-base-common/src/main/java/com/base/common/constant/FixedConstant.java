@@ -166,7 +166,7 @@ public class FixedConstant {
 	 */
 	public static enum MiddlewareCacheName {
 		//提交，响应，代理层状态报告，接入层状态报告,携号转网,消息ID，上行锁,状态锁，审核锁
-		SUBMIT,RESPONSE,PROXY_REPORT,ACCESS_REPORT,MNP,MESSAGE_ID,LOCK_MO,LOCK_REPORT,LOCK_AUDIT
+		SUBMIT,RESPONSE,PROXY_REPORT,ACCESS_REPORT,MNP,MESSAGE_ID,LOCK_MO,LOCK_REPORT,LOCK_AUDIT,ALARM
 	}
 	
 	/**

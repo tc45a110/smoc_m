@@ -4,6 +4,10 @@
 package com.base.common.vo;
 
 public class AlarmMessage {
+
+	// 恢复正常告警次数
+	public static final String NORMAL = "NormalNumber";
+
 	/**
 	 * 告警点
 	 */
@@ -24,7 +28,7 @@ public class AlarmMessage {
 		ChannelSuccessRate,//通道成功率
 		ChannelDelayRate,//通道延迟率
 		ChannelUnknownRate,//通道未知率
-		AccountFinance,//账号余额告警
+		AccountBalance,//账号余额告警
 	}
 	
 	/**
