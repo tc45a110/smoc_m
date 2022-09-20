@@ -51,6 +51,7 @@ public class MaterialMessageWorker extends SuperQueueWorker<String> {
                         Map<String, String> resultMap = TemplateTransition.getTemplate(
                                 accountTemplateInfo.getMmAttchnent(), channelID,
                                 accountTemplateInfo.getTemplateTitle(),signatureNonce,timesTamp,accountTemplateInfo.getTemplateFlag());
+
                         String response = submitTemplate(resultMap.get("mmdl"),signatureNonce,timesTamp, channelID);
                         logger.info("提交模板响应消息={}",response);
                         ChannelInteractiveStatusManager.getInstance().process(channelID,response);

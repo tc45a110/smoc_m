@@ -42,18 +42,14 @@ public class TemplateTransition {
                 if (StringUtils.isNotEmpty(frameTxt)) {
                     param.put("frameTxt", frameTxt);
                 } else {
-                    param.put("frameTxt", "");
+                    param.put("frameTxt","");
                 }
 
                 String resUrl = object.getString("resUrl");
                 if(StringUtils.isNotEmpty(resUrl)) {
                     String path = MMS_PATH + resUrl;
                     File  file=new File(path);
-                   if(file.exists()&&file.length()>0) {
-                       param.put("mediaFile", MyStringUtils.getFileToBase64(file));
-                   }else{
-                       param.put("mediaFile", "");
-                   }
+                        param.put("mediaFile", MyStringUtils.getFileToBase64(file));
                         param.put("mediaType", object.getString("resType"));
                         param.put("fileType", object.getString("resPostfix"));
                         param.put("stayTimes", object.getString("stayTimes"));

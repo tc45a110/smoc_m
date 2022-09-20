@@ -58,7 +58,6 @@ public class ReportRequestHandler implements HttpHandler {
 
             response.put("code", "0000");
             response.put("message", "接受成功");
-
             responseBody.write(response.toString().getBytes());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

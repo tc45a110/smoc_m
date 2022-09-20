@@ -56,6 +56,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 // 获取通道模板id
                 String channelTemplateID= AccountChanelTemplateInfoManager.getInstance().getChannelTemplateID(templateId);
                 if(channelTemplateID==null){
+                    logger.error("获取通道模板失败");
                     return;
                 }
 
@@ -67,9 +68,9 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 //业务账号
                 jsonobject.put("account", loginName);
                 //时间戳
-                jsonobject.put("timestamp", timesTamp );
+                jsonobject.put("timestamp", timesTamp);
                 String  extNumber="";
-                if(StringUtils.isNotEmpty(businessRouteValue.getAccountExtendCode())) {
+                if(StringUtils.isNotEmpty(businessRouteValue.getAccountExtendCode())&&businessRouteValue.getAccountExtendCode().length()>=4) {
                     extNumber= businessRouteValue.getAccountExtendCode().substring(0, 4);
                     jsonobject.put("extNumber",extNumber);
                 }
@@ -97,6 +98,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 //维护通道运行状态
                 ChannelInteractiveStatusManager.getInstance().process(channelID, response);
                 BusinessRouteValue newBusinessRouteValue = businessRouteValue.clone();
+
                 newBusinessRouteValue.setChannelSubmitSRCID(extNumber);
                 newBusinessRouteValue.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
 
@@ -108,8 +110,6 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 } else {
                     newBusinessRouteValue.setNextNodeErrorCode(InsideStatusCodeConstant.FAIL_CODE);
                 }
-
-
                 // 添加响应消息到队列
                 responseWorker.add(newBusinessRouteValue);
                 logger.info(new StringBuilder().append("提交信息")
@@ -118,13 +118,18 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                                 .append("{}messageContent={}")
                                 .append("{}channelID={}")
                                 .append("{}accountTemplateID={}")
+                                .append("{}url={}")
                                 .append("{}jsonobject={}").toString(),
                         FixedConstant.SPLICER, businessRouteValue.getAccountID(),
                         FixedConstant.SPLICER, businessRouteValue.getPhoneNumber(),
                         FixedConstant.SPLICER, businessRouteValue.getMessageContent(),
                         FixedConstant.SPLICER, businessRouteValue.getChannelID(),
                         FixedConstant.SPLICER, businessRouteValue.getAccountTemplateID(),
+                        FixedConstant.SPLICER, url,
                         FixedConstant.SPLICER, jsonobject.toString());
+                logger.info(new StringBuilder().append("返回结果")
+                                .append("{}response={}").toString(),
+                        FixedConstant.SPLICER, response);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
