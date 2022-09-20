@@ -78,6 +78,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
                 String extendCode = AccountChanelTemplateInfoManager.getInstance().getAccountExtendCode(accountTemplateID);
                 //获取通道接入码
                 String channelSRCID = ChannelInfoManager.getInstance().getChannelSRCID(channelID);
+
                 newBusinessRouteValue.setAccountExtendCode(extendCode);
                 newBusinessRouteValue.setChannelSubmitSRCID(channelSRCID + extendCode);
                 newBusinessRouteValue.setChannelSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
@@ -137,7 +138,7 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue> {
         bodyJsonObject.put("Date", data);
         bodyJsonObject.put("Authenticator", authenticator);
 
-        //获取通道模板标识,1表示普通模板,2 表示变量模板
+        //获取通道模板标识,1表示普通模板,2表示变量模板
         if (String.valueOf(FixedConstant.TemplateFlag.COMMON_TEMPLATE.ordinal()).equals(
                 AccountChanelTemplateInfoManager.getInstance().getTemplateFlag(accountTemplateID))) {
             bodyJsonObject.put("Method", "send");
