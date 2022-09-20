@@ -19,7 +19,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.util.*;
@@ -173,6 +172,7 @@ public class AccountBusinessAlarm {
                         String normalNumber = CacheBaseService.getAccountNormalAlarmNumberFromMiddlewareCache(accountID, AlarmMessage.AlarmKey.AccountDelayRate.name());
                         if (StringUtils.isNotEmpty(normalNumber)) {
                             // 正常次数重置为0
+                            CategoryLog.alarmLogger.info("账号:{}延迟率达到阈值,重新统计恢复正常次数", accountID);
                             CacheBaseService.saveAccountNormalAlarmNumberToMiddlewareCache(accountID, AlarmMessage.AlarmKey.AccountDelayRate.name(), "0");
                             continue;
                         }
@@ -187,7 +187,7 @@ public class AccountBusinessAlarm {
                             CacheBaseService.saveAccountNormalAlarmNumberToMiddlewareCache(accountID, AlarmMessage.AlarmKey.AccountDelayRate.name(), "0");
                         } else {
                             // 存入缓存
-                            CategoryLog.alarmLogger.info("账号:{},当前评测延迟率低于阈值,已评测次数:{},剩余评测次数:{}", accountID, configuration.getAlreadyEvaluateNumber(), configuration.getEvaluateNumber());
+                            CategoryLog.alarmLogger.info("账号:{},当前评测延迟率低于阈值,已评测次数:{},剩余评测次数:{}", accountID, configuration.getAlreadyEvaluateNumber(), configuration.getEvaluateNumber()-configuration.getAlreadyEvaluateNumber());
                             CacheBaseService.saveAccountDelayRateAlarmConfigurationToMiddlewareCache(configuration);
                             continue;
                         }
@@ -263,7 +263,7 @@ public class AccountBusinessAlarm {
                         } else {
                             // 存入缓存
                             CacheBaseService.saveAccountSuccessRateAlarmConfigurationToMiddlewareCache(configuration);
-                            CategoryLog.alarmLogger.info("账号:{},当前评测成功率低于阈值,已评测次数:{},剩余评测次数:{}", accountID, configuration.getAlreadyEvaluateNumber(), configuration.getEvaluateNumber());
+                            CategoryLog.alarmLogger.info("账号:{},当前评测成功率低于阈值,已评测次数:{},剩余评测次数:{}", accountID, configuration.getAlreadyEvaluateNumber(), configuration.getEvaluateNumber()-configuration.getAlreadyEvaluateNumber());
                         }
                         continue;
                     } else {
@@ -316,7 +316,7 @@ public class AccountBusinessAlarm {
     private static void sendSuccessRateAlarm(AccountSuccessRateAlarmConfiguration configuration) {
         StringBuilder logContent = new StringBuilder("账号:").append(configuration.getAccountID());
         logContent.append(",连续").append(configuration.getAlreadyEvaluateNumber()).append("次评测成功率低于")
-                .append(String.format("%.2f", configuration.getSuccessRateThreshold() * 100d));
+                .append(String.format("%.2f", configuration.getSuccessRateThreshold() * 100d)).append("%");
         logContent.append(",统计的结果分别为:");
         StringBuilder sendContent = new StringBuilder().append(logContent.toString());
         List<SuccessRateMessageStatistics> statisticsList = configuration.getStatisticsList();
@@ -332,13 +332,13 @@ public class AccountBusinessAlarm {
             logContent.append("成功率=").append(String.format("%.2f", statistics.getSuccessRate() * 100d)).append("%");
         }
         CategoryLog.alarmLogger.info("告警内容:{}", logContent.toString());
-        AlarmUtil.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate, logContent.toString()));
+        AlarmUtil.process(new AlarmMessage(AlarmMessage.AlarmKey.AccountSuccessRate, sendContent.toString()));
     }
 
     private static void sendDelayRateAlarm(AccountDelayRateAlarmConfiguration configuration) {
         StringBuilder logContent = new StringBuilder("账号:").append(configuration.getAccountID());
         logContent.append(",连续").append(configuration.getAlreadyEvaluateNumber())
-                .append("次评测延迟率低于").append(String.format("%.2f", configuration.getDelayRateThreshold() * 100d));
+                .append("次评测延迟率高于").append(String.format("%.2f", configuration.getDelayRateThreshold() * 100d)).append("%");
         logContent.append(",统计的结果分别为:");
         StringBuilder sendContent = new StringBuilder().append(logContent.toString());
         List<DelayRateMessageStatistics> statisticsList = configuration.getStatisticsList();
