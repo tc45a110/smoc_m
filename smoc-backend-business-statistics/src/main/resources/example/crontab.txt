@@ -25,3 +25,9 @@
 
 #账号成功率、延迟率统计
 2,12,22,32,42,52 * * * * /smoc/apps/business-statistics/account.alarm.message.sh
+
+#每天凌晨1点清理临时表中超过保存时间的数据
+0 1 * * * /smoc/apps/business-statistics/table.data.clear.sh
+
+#账号成功率、延迟率告警
+*/1 * * * * /smoc/apps/business-statistics/account.business.alarm.sh

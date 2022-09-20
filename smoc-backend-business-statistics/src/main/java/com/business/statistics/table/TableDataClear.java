@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * 根据配置清理数据，执行频率一天一次
  */

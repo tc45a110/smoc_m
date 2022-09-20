@@ -523,7 +523,6 @@ public class AccountAlarm {
 
 	public static File[] findFile(String filePath, final String filename, final String enterpriseFlag) {
 		FileFilter ff = new FileFilter() {
-
 			@Override
 			public boolean accept(File pathname) {
 				String s = pathname.getName();
