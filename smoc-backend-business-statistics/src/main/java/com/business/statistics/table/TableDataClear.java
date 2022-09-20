@@ -35,8 +35,8 @@ public class TableDataClear {
         System.exit(0);
     }
     private static void tableDataClear(String table,String days){
-        int day=(~(Integer.parseInt(days)-1));
-        String previousTmie= DateUtil.getAfterDayDateTime(day,DateUtil.DATE_FORMAT_COMPACT_STANDARD_SECONDE);
+        int day=(-(Integer.parseInt(days)));
+        String previousTime= DateUtil.getAfterDayDateTime(day,DateUtil.DATE_FORMAT_COMPACT_STANDARD_SECONDE);
         StringBuffer sql = new StringBuffer();
         Connection conn = null;
         PreparedStatement pstmt =null;
@@ -46,7 +46,7 @@ public class TableDataClear {
             sql.append("DELETE FROM smoc_route.").append(table).append(" where CREATED_TIME < ? ");
             pstmt = conn.prepareStatement(sql.toString());
 
-            pstmt.setString(1,previousTmie);
+            pstmt.setString(1,previousTime);
             rows=pstmt.executeUpdate();
 
             CategoryLog.accessLogger.info("表:{},清理数据:{}条",table,rows);
