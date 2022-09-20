@@ -88,10 +88,12 @@ public class AlarmUtil  {
 			conn.commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			try {
-				conn.rollback();
-			} catch (Exception e1) {
-				logger.error(e.getMessage(), e1);
+			if(conn != null){
+				try {
+					conn.rollback();
+				} catch (Exception e1) {
+					logger.error(e.getMessage(), e1);
+				}
 			}
 		} finally {
 			LavenderDBSingleton.getInstance().closeAll(rs, pstmt, conn);
