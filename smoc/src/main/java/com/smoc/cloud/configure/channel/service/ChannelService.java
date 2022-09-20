@@ -298,4 +298,14 @@ public class ChannelService {
         PageList<ChannelInterfaceInfoQo> list = channelRepository.channelInterfacePage(pageParams);
         return ResponseDataUtil.buildSuccess(list);
     }
+
+    /**
+     * 查询所有通道
+     * @param channelBasicInfoValidator
+     * @return
+     */
+    public ResponseData<List<ChannelBasicInfoQo>> queryChannelAll(ChannelBasicInfoValidator channelBasicInfoValidator) {
+        List<ChannelBasicInfoQo> list = channelRepository.queryChannelAll(channelBasicInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

@@ -24,19 +24,7 @@ spring:
     nacos:
       discovery:
         server-addr: 172.22.171.248:8848
-  redis: #redis配置
-    host: 172.22.171.219
-    port: 6379
-    password: J15mDngG
-    database: 2
-    timeout: 3000
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: 2000
-        max-idle: 8
-        min-idle: 0
-        time-between-eviction-runs: 1000
+
 
 #**********************************************************
 # manpuman oauth2 token参数设置

@@ -401,7 +401,7 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
                 ps.setString(4, qo.getCarrier());
                 ps.setString(5, qo.getChannelGroupId());
                 ps.setString(6, entity.getChannelId());
-                ps.setString(7, "1");
+                ps.setString(7, "NORMAL");
                 ps.setInt(8, entity.getChannelWeight());
                 ps.setString(9, "CHANNEL_GROUP");
                 ps.setString(10, "1");

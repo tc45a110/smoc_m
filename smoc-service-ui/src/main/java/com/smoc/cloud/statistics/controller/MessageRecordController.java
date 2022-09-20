@@ -64,21 +64,20 @@ public class MessageRecordController {
         messageDetailInfoValidator.setEnterpriseId(user.getOrganization());
         messageDetailInfoValidator.setBusinessType(businessType);
         messageDetailInfoValidator.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
-        Date startDate = DateTimeUtils.dateAddDays(new Date(),-7);
-        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
-        messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(new Date())+" 00:00:00");
+        messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateTimeFormat(new Date()));
         params.setParams(messageDetailInfoValidator);
 
         //查询
-        /*ResponseData<PageList<MessageDetailInfoValidator>> data = statisticsMessageService.sendMessageList(params);
+        ResponseData<PageList<MessageDetailInfoValidator>> data = statisticsMessageService.sendMessageList(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
-        }*/
+        }
 
         view.addObject("messageDetailInfoValidator", messageDetailInfoValidator);
-        view.addObject("list", null);
-        view.addObject("pageParams",params);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams",data.getData().getPageParams());
         view.addObject("businessType", businessType);
         return view;
     }

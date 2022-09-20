@@ -926,7 +926,7 @@ public class InitializeFiltersDataService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             provinceList.forEach((value) -> {
-                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER), RedisSerializer.string().serialize(new Gson().toJson(value.getSegment())), RedisSerializer.string().serialize(new Gson().toJson(value.getProvinceCode()+"-"+value.getProvinceName())));
+                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER), RedisSerializer.string().serialize(value.getSegment()), RedisSerializer.string().serialize(new Gson().toJson(value.getProvinceCode()+"-"+value.getProvinceName())));
             });
             connection.close();
             return null;
@@ -937,7 +937,7 @@ public class InitializeFiltersDataService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             provinceList.forEach((value) -> {
-                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER), RedisSerializer.string().serialize(new Gson().toJson(value.getNumberCode())), RedisSerializer.string().serialize(new Gson().toJson(value.getCarrier()+"-"+value.getCarrierName())));
+                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER), RedisSerializer.string().serialize(value.getNumberCode()), RedisSerializer.string().serialize(new Gson().toJson(value.getCarrier()+"-"+value.getCarrierName())));
             });
             connection.close();
             return null;

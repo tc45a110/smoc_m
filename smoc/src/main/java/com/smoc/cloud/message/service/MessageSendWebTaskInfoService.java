@@ -213,33 +213,6 @@ public class MessageSendWebTaskInfoService {
 
             messages.add(messageFormat);
 
-
-            //调用过滤服务
-            if("TEXT_SMS".equals(optional.get().getTemplateType()) || "MULTI_SMS".equals(optional.get().getTemplateType())){
-                RequestFullParams model = new RequestFullParams();
-                model.setAccount(messageFormat.getAccountId());
-                model.setPhone(messageFormat.getPhoneNumber());
-                model.setMessage(messageFormat.getMessageContent());
-                if("MULTI_SMS".equals(optional.get().getTemplateType())){
-                    //多媒体默认内容
-                    model.setMessage("abcdefg");
-                }
-                /**
-                 * 根据手机号获取运营商
-                 */
-                Object segmentCarrier = redisTemplate.opsForHash().get(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, model.getPhone().substring(0, 3));
-                if (null == segmentCarrier) {
-                    segmentCarrier = redisTemplate.opsForHash().get(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, model.getPhone().substring(0, 4));
-                }
-                if(!StringUtils.isEmpty(segmentCarrier)){
-                    model.setCarrier(segmentCarrier.toString().split("-")[0]);
-                }
-                ResponseData responseData = filterServiceFeignClient.messageFilter(model);
-                if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
-                    return responseData;
-                }
-            }
-
         }
 
         MessageWebTaskInfo entity = new MessageWebTaskInfo();

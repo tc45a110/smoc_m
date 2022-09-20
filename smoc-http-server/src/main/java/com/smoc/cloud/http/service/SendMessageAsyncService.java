@@ -2,15 +2,12 @@ package com.smoc.cloud.http.service;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.SendMessageByTemplateRequestParams;
-import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
 import com.smoc.cloud.http.entity.MessageFormat;
 import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
-import com.smoc.cloud.http.filters.filter.full_filter.FullFilterParamsFilter;
-import com.smoc.cloud.http.filters.request.model.RequestFullParams;
 import com.smoc.cloud.http.redis.IdGeneratorFactory;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.repository.MessageRepository;
@@ -42,10 +39,6 @@ public class SendMessageAsyncService {
 
     @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
-
-    @Autowired
-    private FullFilterParamsFilter fullFilterParamsFilter;
-
 
     /**
      * 修改为异步，把处理过程、发送过程单独拉出来
@@ -116,17 +109,6 @@ public class SendMessageAsyncService {
 
             messages.add(messageFormat);
 
-            /**
-             * 过滤服务
-             */
-            RequestFullParams fullParams = new RequestFullParams();
-            fullParams.setAccount(messageFormat.getAccountId());
-            fullParams.setPhone(messageFormat.getPhoneNumber());
-            fullParams.setMessage(messageFormat.getMessageContent());
-            ResponseData responseData = fullFilterParamsFilter.filter(fullParams);
-            if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
-                return responseData;
-            }
             log.info("[http短信日志]：{}", new Gson().toJson(messages));
         }
         //异步 批量保存短消息
@@ -201,18 +183,6 @@ public class SendMessageAsyncService {
             messageFormat.setReportFlag(1);
             messageFormat.setCreateTime(new Date());
             messages.add(messageFormat);
-
-            /**
-             * 过滤服务
-             */
-            RequestFullParams fullParams = new RequestFullParams();
-            fullParams.setAccount(messageFormat.getAccountId());
-            fullParams.setPhone(messageFormat.getPhoneNumber());
-            fullParams.setMessage("abcdefg");
-            ResponseData responseData = fullFilterParamsFilter.filter(fullParams);
-            if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
-                return responseData;
-            }
 
             log.info("[http多媒体短信日志]：{}", new Gson().toJson(messages));
         }

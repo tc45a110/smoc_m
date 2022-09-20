@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">单条发送记录<small style="color: red">&nbsp;请根据手机号进行查询</small></h4>
+                    <h4 class="page-title">单条发送记录</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             数据统计
@@ -49,8 +49,25 @@
                                     <input id="dateQueryStr" class="form-control" th:field="*{startDate}" type="text"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{phoneNumber}" required
-                                           placeholder="手机号" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="业务账号"  th:field="*{businessAccount}" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="手机号" th:field="*{phoneNumber}" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="签名" th:field="*{sign}" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
+                                             class="form-control" name="carrier" th:value="${messageDetailInfoValidator.carrier}" title="运营商"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <select name="statusFlag" data-style="btn-default"
+                                            class="selectpicker  form-control" tabindex="-98">
+                                        <option data-icon="mdi mdi-account" value="">--请选择下发状态--</option>
+                                        <option data-icon="mdi mdi-account" th:selected="${messageDetailInfoValidator.statusFlag eq 'success'}" th:value="success">成功</option>
+                                        <option data-icon="mdi mdi-account" th:selected="${messageDetailInfoValidator.statusFlag eq 'error'}" th:value="error">失败</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -76,58 +93,62 @@
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            单条发送记录<small>&nbsp;实时更新，请根据手机号进行查询，系统默认保留30天内的数据。</small></h3>
+                            单条发送记录<small>&nbsp;实时更新，系统默认保留30天内的数据。</small></h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th style="width:80px">账号</th>
-                                    <th style="width:80px">发送方式</th>
-                                    <th style="width:120px">批次号</th>
-                                    <th style="width:200px">发送内容</th>
-                                    <th style="width:100px">手机号</th>
-                                    <th style="width:120px">运营商/属地</th>
-                                    <th style="width:100px">接收状态</th>
-                                    <th style="width:150px">发送时间</th>
-                                    <th style="width:150px">到达时间</th>
+                                    <th>业务账号</th>
+                                    <th>计费条数/手机号</th>
+                                    <th>运营商/省份</th>
+                                    <th>接口类型/签名</th>
+                                    <th>状态码</th>
+                                    <th>提交时间/状态报告时间</th>
+                                    <th>耗时时长(秒)/短信内容</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr th:each="info:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.protocol}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span class="text-overflow"
-                                              data-toggle="tooltip" data-placement="bottom"
-                                              th:data-original-title="${info.taskId}">[[${info.taskId}]]</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span class="text-overflow"
-                                              data-toggle="tooltip" data-placement="bottom"
-                                              th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:100px">
-                                        [[${info.phoneNumber}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:100px">
-                                        <mpm:tag identity="carrier" show-type="label" key="code"
-                                                 th:value="${info.carrier}"/>&nbsp;[[${info.area}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:80px">
-                                        <span class="text-overflow"
-                                              data-toggle="tooltip" data-placement="bottom"
-                                              th:data-original-title="${info.customerStatus}">[[${info.customerStatus}]]</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:160px">[[${info.submitTime}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:160px">[[${info.sendTime}]]
-                                    </td>
-                                </tr>
-                                </tbody>
+                            <tr th:each="info:${list}">
+                                <td style="line-height: 26px">
+                                    [[${info.businessAccount}]]
+                                </td>
+                                <td style="vertical-align: middle;line-height: 26px;">
+                                    [[${info.messageNumber}]]
+                                    <br>
+                                    [[${info.phoneNumber}]]
+                                </td>
+
+                                <td style="vertical-align: middle;line-height: 26px">
+                                    <mpm:tag identity="carrier" show-type="label" key="code"
+                                             th:value="${info.carrier}"/>&nbsp;
+                                    [[${info.area}]]
+                                </td>
+                                <td style="vertical-align: middle;line-height: 26px;">
+                                    <mpm:tag identity="accountInterfaceType" show-type="label" key="code" th:value="${info.submitStyle}"/>
+                                    <br>[[${info.sign}]]
+                                </td>
+                                <td style="vertical-align: middle;line-height: 26px">
+                                         <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                               th:data-original-title="${info.customerStatus}">[[${info.customerStatus}]]</span>
+                                </td>
+                                <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                    [[${info.submitTime}]]
+                                    <br>
+                                    [[${info.reportTime}]]
+                                </td>
+                                <td style="vertical-align: middle;line-height: 26px">
+                                    [[${info.timeElapsed}]]
+                                    <br>
+                                    <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                          th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
+                                </td>
+
+
+                            </tr>
+
+                            </tbody>
                             </table>
                             <hr>
                         </div>
@@ -161,13 +182,13 @@
          minDate: '2019-01-01',
          maxDate: '2080-12-31',
          dateLimit: {
-             days: 7
+             days: 30
          },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
+         showDropdowns: true,
+         showWeekNumbers: true,
+         timePicker: true,
+         pickTime:true,
+         timePicker24Hour: true, //时间制
         ranges: {
             '今天': [moment(), moment()],
             '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -180,7 +201,7 @@
         buttonClasses: ['btn btn-default'],
         applyClass: 'btn-small btn-primary',
         cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
+        format: 'YYYY-MM-DD HH:mm:ss',
         separator: ' - ',
         locale: {
             applyLabel: '确认',
@@ -188,7 +209,7 @@
             fromLabel: '从',
             toLabel: '到',
             customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
+            format: "YYYY-MM-DD HH:mm:ss",
             daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
             monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
             firstDay: 1

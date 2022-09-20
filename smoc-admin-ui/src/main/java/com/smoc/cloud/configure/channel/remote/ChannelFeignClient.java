@@ -86,4 +86,11 @@ public interface ChannelFeignClient {
      */
     @RequestMapping(value = "/configure/channel/channelInterfacePage", method = RequestMethod.POST)
     ResponseData<PageList<ChannelInterfaceInfoQo>> channelInterfacePage(@RequestBody PageParams<ChannelInterfaceInfoQo> params);
+
+    /**
+     * 查询所有通道
+     * @return
+     */
+    @RequestMapping(value = "/configure/channel/queryChannelAll", method = RequestMethod.POST)
+    ResponseData<List<ChannelBasicInfoQo>> queryChannelAll(@RequestBody ChannelBasicInfoValidator channelBasicInfoValidator);
 }

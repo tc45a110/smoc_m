@@ -3,6 +3,7 @@ package com.smoc.cloud.message.controller;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.message.MessageCodeValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
@@ -86,7 +87,7 @@ public class MessageDetailInfoController {
     @RequestMapping(value = "/sendMessageList", method = RequestMethod.POST)
     public ResponseData<PageList<MessageDetailInfoValidator>> sendMessageList(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) {
 
-        return messageDetailInfoService.sendMessageList(pageParams);
+        return messageDetailInfoService.page(pageParams);
     }
 
     /**
@@ -100,4 +101,36 @@ public class MessageDetailInfoController {
         return messageDetailInfoService.statisticEnterpriseSendMessage(messageDetailInfoValidator);
     }
 
+    /**
+     * 消息状态码统计查询
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/code/messageCcodeStautsList", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageCodeValidator>> messageCcodeStautsList(@RequestBody PageParams<MessageCodeValidator> params) {
+
+        return messageDetailInfoService.messageCcodeStautsList(params);
+    }
+
+    /**
+     * 通道消息明细分页查询
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/channel/messageChannelPage", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageDetailInfoValidator>> messageChannelPage(@RequestBody PageParams<MessageDetailInfoValidator> params) {
+
+        return messageDetailInfoService.messageChannelPage(params);
+    }
+
+    /**
+     * 统计提交给通道发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/channel/statisticChannelSendMessage", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> statisticChannelSendMessage(@RequestBody MessageDetailInfoValidator messageDetailInfoValidator){
+
+        return messageDetailInfoService.statisticChannelSendMessage(messageDetailInfoValidator);
+    }
 }

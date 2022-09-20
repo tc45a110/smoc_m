@@ -53,4 +53,11 @@ public interface ChannelRepository extends CrudRepository<ConfigChannelBasicInfo
      * @return
      */
     PageList<ChannelInterfaceInfoQo> channelInterfacePage(PageParams<ChannelInterfaceInfoQo> pageParams);
+
+    /**
+     * 查询所有通道
+     * @param channelBasicInfoValidator
+     * @return
+     */
+    List<ChannelBasicInfoQo> queryChannelAll(ChannelBasicInfoValidator channelBasicInfoValidator);
 }

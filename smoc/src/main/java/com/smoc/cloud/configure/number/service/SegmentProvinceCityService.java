@@ -121,8 +121,7 @@ public class SegmentProvinceCityService {
 
         segmentProvinceCityRepository.saveAndFlush(entity);
 
-        redisTemplate.opsForHash().put(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER , new Gson().toJson(entity.getSegment()), entity.getProvinceCode()+"-"+entity.getProvinceName());
-
+        redisTemplate.opsForHash().put(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER , entity.getSegment(), entity.getProvinceCode()+"-"+entity.getProvinceName());
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -134,7 +133,7 @@ public class SegmentProvinceCityService {
         log.info("[省号码配置][delete]数据:{}", JSON.toJSONString(data));
         segmentProvinceCityRepository.deleteById(id);
 
-        redisTemplate.opsForHash().delete(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, new Gson().toJson(data.getSegment()));
+        redisTemplate.opsForHash().delete(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, data.getSegment());
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -163,7 +162,7 @@ public class SegmentProvinceCityService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             provinceList.forEach((value) -> {
-                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER), RedisSerializer.string().serialize(new Gson().toJson(value.getColumn1())), RedisSerializer.string().serialize(new Gson().toJson(systemSegmentProvinceCityValidator.getProvinceCode()+"-"+systemSegmentProvinceCityValidator.getProvinceName())));
+                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER), RedisSerializer.string().serialize(value.getColumn1()), RedisSerializer.string().serialize(new Gson().toJson(systemSegmentProvinceCityValidator.getProvinceCode()+"-"+systemSegmentProvinceCityValidator.getProvinceName())));
             });
             connection.close();
             return null;

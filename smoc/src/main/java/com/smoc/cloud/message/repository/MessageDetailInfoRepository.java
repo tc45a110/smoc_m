@@ -2,6 +2,7 @@ package com.smoc.cloud.message.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.message.MessageCodeValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.message.entity.MessageDetailInfo;
@@ -72,4 +73,32 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      * @return
      */
     Map<String, Object> statisticEnterpriseSendMessage(MessageDetailInfoValidator messageDetailInfoValidator);
+
+    /**
+     * 消息状态码统计查询
+     * @param params
+     * @return
+     */
+    PageList<MessageCodeValidator> messageCcodeStautsList(PageParams<MessageCodeValidator> params);
+
+    /**
+     * 短信发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    Map<String, Object> statisticEnterpriseTotalMessage(MessageDetailInfoValidator messageDetailInfoValidator);
+
+    /**
+     * 通道消息明细分页查询
+     * @param params
+     * @return
+     */
+    PageList<MessageDetailInfoValidator> messageChannelPage(PageParams<MessageDetailInfoValidator> params);
+
+    /**
+     * 统计提交给通道发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    Map<String, Object> statisticChannelSendMessage(MessageDetailInfoValidator messageDetailInfoValidator);
 }
