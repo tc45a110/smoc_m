@@ -28,3 +28,9 @@
 
 #账号余额监控
 */1 * * * * /smoc/apps/business-statistics/account.balance.alarm.sh
+
+#账号成功率、延迟率告警
+*/1 * * * * /smoc/apps/business-statistics/account.business.alarm.sh
+
+#每天凌晨1点清理临时表中超过保存时间的数据
+0 1 * * * /smoc/apps/business-statistics/table.data.clear.sh
