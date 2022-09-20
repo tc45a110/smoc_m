@@ -1,8 +1,8 @@
 package com.base.common.cache;
 
-import com.base.common.vo.BalanceAlarm;
-import com.base.common.vo.BusinessRouteValue;
-import com.base.common.vo.ProtocolRouteValue;
+import com.base.common.util.CacheNameGeneratorUtil;
+import com.base.common.vo.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 对外部提供带有业务含义的服务
@@ -104,6 +104,15 @@ public class CacheBaseService {
 	 */
 	public static long getChannelMonthSuccessNumberFromMiddlewareCache(String channelID){
 		return MainCacheBaseService.getChannelMonthSuccessNumberFromMiddlewareCache(channelID);
+	}
+
+	/**
+	 * 获取账号当天的成功条数，长短信算多条
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static long getAccountIDTodaySuccessNumberFromMiddlewareCache(String accountID,String carrier){
+		return MainCacheBaseService.getAccountIDTodaySuccessNumberFromMiddlewareCache(accountID,carrier);
 	}
 
 	/**
@@ -283,6 +292,78 @@ public class CacheBaseService {
 	 */
 	public static String getAccountBalanceAlarmToMiddlewareCache(String key){
 		return MainCacheBaseService.getAccountBalanceAlarmToMiddlewareCache(key);
+	}
+
+	/**
+	 * 保存账号成功率告警信息
+	 * @param configuration
+	 */
+	public static void saveAccountSuccessRateAlarmConfigurationToMiddlewareCache(AccountSuccessRateAlarmConfiguration configuration){
+		MainCacheBaseService.saveAccountSuccessRateAlarmConfigurationToMiddlewareCache(configuration);
+	}
+
+	/**
+	 * 获取账号成功率告警信息
+	 * @param accountID 账号ID
+	 * @return 账号成功率告警信息
+	 */
+	public static AccountSuccessRateAlarmConfiguration getAccountSuccessRateAlarmConfigurationToMiddlewareCache(String accountID){
+		return MainCacheBaseService.getAccountSuccessRateAlarmConfigurationToMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 删除账号成功率告警信息
+	 * @param accountID 账号ID
+	 */
+	public static void deleteAccountSuccessRateAlarmConfigurationToMiddlewareCache(String accountID){
+		MainCacheBaseService.deleteAccountSuccessRateAlarmConfigurationToMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 保存账号延迟率告警信息
+	 * @param configuration
+	 */
+	public static void saveAccountDelayRateAlarmConfigurationToMiddlewareCache(AccountDelayRateAlarmConfiguration configuration){
+		MainCacheBaseService.saveAccountDelayRateAlarmConfigurationToMiddlewareCache(configuration);
+	}
+
+	/**
+	 * 获取账号延迟率告警信息
+	 * @param accountID 账号ID
+	 * @return 账号延迟率告警信息
+	 */
+	public static AccountDelayRateAlarmConfiguration getAccountDelayRateAlarmConfigurationToMiddlewareCache(String accountID){
+		return MainCacheBaseService.getAccountDelayRateAlarmConfigurationToMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 删除账号延迟率告警信息
+	 * @param accountID 账号ID
+	 */
+	public static void deleteAccountDelayRateAlarmConfigurationToMiddlewareCache(String accountID){
+		MainCacheBaseService.deleteAccountDelayRateAlarmConfigurationToMiddlewareCache(accountID);
+	}
+
+	/**
+	 * 获取账号业务告警已需要恢复正常的次数
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static String getAccountNormalAlarmNumberFromMiddlewareCache(String accountID,String alarmType){
+		return MainCacheBaseService.getAccountNormalAlarmNumberFromMiddlewareCache(accountID,alarmType);
+	}
+
+	/**
+	 * 保存账号业务告警已需要恢复正常的次数
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static void saveAccountNormalAlarmNumberToMiddlewareCache(String accountID,String alarmType,String normalNumber){
+		MainCacheBaseService.saveAccountNormalAlarmNumberToMiddlewareCache(accountID,alarmType,normalNumber);
+	}
+
+	public static void deleteAccountNormalAlarmNumberFromMiddlewareCache(String accountID, String alarmType) {
+		MainCacheBaseService.deleteAccountNormalAlarmNumberFromMiddlewareCache(accountID,alarmType);
 	}
 }
 

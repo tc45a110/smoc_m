@@ -2,6 +2,7 @@ package com.base.common.util;
 
 import com.base.common.constant.RedisHashKeyConstant;
 import com.base.common.constant.FixedConstant;
+import com.base.common.vo.AlarmMessage;
 
 public class CacheNameGeneratorUtil {
 	
@@ -75,7 +76,6 @@ public class CacheNameGeneratorUtil {
 	
 	/**
 	 * 生成响应队列名称
-	 * @param key
 	 * @return
 	 */
 	public static final String generateResponseCacheName() {
@@ -115,8 +115,6 @@ public class CacheNameGeneratorUtil {
 	
 	/**
 	 * 获取账号运营商日限量key
-	 * @param accountID
-	 * @param carrier
 	 * @return
 	 */
 	public static final String generateAccountCarrierDailyLimitCacheName(){
@@ -139,7 +137,6 @@ public class CacheNameGeneratorUtil {
 	
 	/**
 	 * 获取通道日限量key
-	 * @param channelID
 	 * @return
 	 */
 	public static final String generateChannelDailyLimitCacheName(){
@@ -151,7 +148,6 @@ public class CacheNameGeneratorUtil {
 	
 	/**
 	 * 获取通道月限量key
-	 * @param channelID
 	 * @return
 	 */
 	public static final String generateChannelMonthlyLimitCacheName(){
@@ -190,9 +186,57 @@ public class CacheNameGeneratorUtil {
 
 	public static final String generateAlarmAccountBalanceCacheName(String accountID){
 		return new StringBuilder()
-				.append(RedisHashKeyConstant.ALARM_ACCOUNT_BALANCE_PREFIX)
+				.append(FixedConstant.MiddlewareCacheName.ALARM.name())
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(AlarmMessage.AlarmKey.AccountBalance.name())
+				.append(FixedConstant.REIDS_SPLICER)
 				.append(accountID)
 				.toString();
 	}
 
+	/**
+	 *  账号成功率key名
+	 * @param accountID
+	 * @return
+	 */
+	public static String generateAlarmAccountSuccessRateCacheName(String accountID){
+		return new StringBuilder()
+				.append(FixedConstant.MiddlewareCacheName.ALARM.name())
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(AlarmMessage.AlarmKey.AccountSuccessRate.name())
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(accountID)
+				.toString();
+	}
+
+	/**
+	 *  账号延迟率key名
+	 * @param accountID
+	 * @return
+	 */
+	public static String generateAlarmAccountDelayRateCacheName(String accountID){
+		return new StringBuilder()
+				.append(FixedConstant.MiddlewareCacheName.ALARM.name())
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(AlarmMessage.AlarmKey.AccountDelayRate.name())
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(accountID)
+				.toString();
+	}
+
+	/**
+	 *  账号业务告警回复正常次数key名
+	 * @param accountID
+	 * @param alarmType
+	 * @return
+	 */
+	public static String generateAccountNormalAlarmNumberRateCacheName(String accountID,String alarmType){
+		return new StringBuilder()
+				.append(FixedConstant.MiddlewareCacheName.ALARM.name())
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(AlarmMessage.NORMAL)
+				.append(FixedConstant.REIDS_SPLICER)
+				.append(alarmType).append("_").append(accountID)
+				.toString();
+	}
 }

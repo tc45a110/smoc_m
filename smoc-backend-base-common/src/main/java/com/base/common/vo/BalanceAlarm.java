@@ -5,11 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BalanceAlarm implements Serializable {
-//    private static final long serialVersionUID = 2l;
-//
-//    public static long getSerialVersionUID() {
-//        return serialVersionUID;
-//    }
+    private static final long serialVersionUID = 2l;
 
     private String accountID;
     private Double alarmAmount;

@@ -298,6 +298,16 @@ public class JedisService implements CacheServiceInter{
 			AlarmManager.getInstance().process(new AlarmMessage(AlarmKey.Redis, redisName+":"+e.getMessage()));
 		}
 	}
+
+	@Override
+	public void delHashString(String key, String field,String redisName) {
+		try {
+			jedisClient.hdel(key, field);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			AlarmManager.getInstance().process(new AlarmMessage(AlarmKey.Redis, redisName+":"+e.getMessage()));
+		}
+	}
 	
 	public String getPoolString(String redisName){
 		try {

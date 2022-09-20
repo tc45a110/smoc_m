@@ -161,6 +161,14 @@ public interface CacheServiceInter {
 	  * @return
 	  */
 	 public String getHashValue(String key, String field,String redisName);
+
+	/**
+	 * 从一个hash删除属性值
+	 * @param key
+	 * @param field
+	 * @return
+	 */
+	 public void delHashString(String key, String field,String redisName);
 	 
 	 /**
 	  * 获取连接池重要信息

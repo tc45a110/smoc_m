@@ -15,6 +15,7 @@ public class CategoryLog{
 	public static final Logger proxyLogger = LoggerFactory.getLogger("proxy");
 	public static final Logger accessLogger = LoggerFactory.getLogger("access");
 	public static final Logger taskLogger = LoggerFactory.getLogger("task");
+	public static final Logger alarmLogger = LoggerFactory.getLogger("alarm");
 }
 
 

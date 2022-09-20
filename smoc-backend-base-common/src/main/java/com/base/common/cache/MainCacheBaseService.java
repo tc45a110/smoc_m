@@ -1,6 +1,9 @@
 package com.base.common.cache;
 
+import com.base.common.constant.FixedConstant;
 import com.base.common.constant.RedisHashKeyConstant;
+import com.base.common.vo.AccountDelayRateAlarmConfiguration;
+import com.base.common.vo.AccountSuccessRateAlarmConfiguration;
 import com.base.common.vo.BalanceAlarm;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -57,6 +60,57 @@ class MainCacheBaseService {
 		}
 		return 0;
 	}
+
+	/**
+	 * 获取账号当天的成功条数，长短信算多条
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static long getAccountIDTodaySuccessNumberFromMiddlewareCache(String accountID){
+		try {
+			String cmccResult = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
+					new StringBuilder().append(accountID).append("_").append(FixedConstant.Carrier.CMCC.name()).toString(), REDIS_NAME
+			);
+			String unicResult = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
+					new StringBuilder().append(accountID).append("_").append(FixedConstant.Carrier.UNIC.name()).toString(), REDIS_NAME
+			);
+			String telcResult = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
+					new StringBuilder().append(accountID).append("_").append(FixedConstant.Carrier.TELC.name()).toString(), REDIS_NAME
+			);
+			String intlResult = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
+					new StringBuilder().append(accountID).append("_").append(FixedConstant.Carrier.INTL.name()).toString(), REDIS_NAME
+			);
+			return (StringUtils.isNotEmpty(cmccResult) ? Long.parseLong(cmccResult) : 0) +
+					(StringUtils.isNotEmpty(unicResult) ? Long.parseLong(cmccResult) : 0) +
+					(StringUtils.isNotEmpty(telcResult) ? Long.parseLong(cmccResult) : 0) +
+					(StringUtils.isNotEmpty(intlResult) ? Long.parseLong(cmccResult) : 0);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return 0;
+	}
+
+	/**
+	 * 获取账号当天的成功条数，长短信算多条
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static long getAccountIDTodaySuccessNumberFromMiddlewareCache(String accountID,String carrier){
+		try {
+			String result = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
+					new StringBuilder().append(accountID).append("_").append(carrier).toString(), REDIS_NAME
+			);
+			return (StringUtils.isNotEmpty(result) ? Long.parseLong(result) : 0);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return 0;
+	}
 	
 	/**
 	 * 获取通道当月的成功条数，长短信算多条
@@ -78,6 +132,8 @@ class MainCacheBaseService {
 		}
 		return 0;
 	}
+
+
 	
 	/**
 	 * 维护通道的成功条数：当天和当月
@@ -300,7 +356,95 @@ class MainCacheBaseService {
 	 * @param key 键
 	 */
 	public static void saveAccountBalanceAlarmToMiddlewareCache(String key,String value){
-		cacheBaseService.putString(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(key),60*60, value, REDIS_NAME);
+		cacheBaseService.putString(CacheNameGeneratorUtil.generateAlarmAccountBalanceCacheName(key),12*60*60, value, REDIS_NAME);
+	}
+
+	/**
+	 * 保存账号成功率告警信息
+	 * @param configuration
+	 */
+	public static void saveAccountSuccessRateAlarmConfigurationToMiddlewareCache(AccountSuccessRateAlarmConfiguration configuration){
+		int timeout = configuration.getEvaluateIntervalTime() * configuration.getEvaluateNumber() * 2 * 60;
+		cacheBaseService.putObject(CacheNameGeneratorUtil.generateAlarmAccountSuccessRateCacheName(configuration.getAccountID()), timeout, configuration, REDIS_NAME);
+	}
+
+	/**
+	 * 获取账号成功率告警信息
+	 * @param accountID 账号ID
+	 * @return 账号成功率告警信息
+	 */
+	public static AccountSuccessRateAlarmConfiguration getAccountSuccessRateAlarmConfigurationToMiddlewareCache(String accountID){
+		return cacheBaseService.getObject(CacheNameGeneratorUtil.generateAlarmAccountSuccessRateCacheName(accountID) , AccountSuccessRateAlarmConfiguration.class, REDIS_NAME);
+	}
+
+	/**
+	 * 删除账号成功率告警信息
+	 * @param accountID 账号ID
+	 */
+	public static void deleteAccountSuccessRateAlarmConfigurationToMiddlewareCache(String accountID){
+		cacheBaseService.delObject(CacheNameGeneratorUtil.generateAlarmAccountSuccessRateCacheName(accountID) , REDIS_NAME);
+	}
+
+	/**
+	 * 保存账号延迟率告警信息
+	 * @param configuration
+	 */
+	public static void saveAccountDelayRateAlarmConfigurationToMiddlewareCache(AccountDelayRateAlarmConfiguration configuration){
+		int timeout = configuration.getEvaluateIntervalTime() * configuration.getEvaluateNumber() * 2 * 60;
+		cacheBaseService.putObject(CacheNameGeneratorUtil.generateAlarmAccountDelayRateCacheName(configuration.getAccountID()), timeout, configuration, REDIS_NAME);
+	}
+
+	/**
+	 * 获取账号延迟率告警信息
+	 * @param accountID 账号ID
+	 * @return 账号延迟率告警信息
+	 */
+	public static AccountDelayRateAlarmConfiguration getAccountDelayRateAlarmConfigurationToMiddlewareCache(String accountID){
+		return cacheBaseService.getObject(CacheNameGeneratorUtil.generateAlarmAccountDelayRateCacheName(accountID) , AccountDelayRateAlarmConfiguration.class, REDIS_NAME);
+	}
+
+	/**
+	 * 删除账号延迟率告警信息
+	 * @param accountID 账号ID
+	 */
+	public static void deleteAccountDelayRateAlarmConfigurationToMiddlewareCache(String accountID){
+		cacheBaseService.delObject(CacheNameGeneratorUtil.generateAlarmAccountDelayRateCacheName(accountID) , REDIS_NAME);
+	}
+
+	/**
+	 * 获取账号业务告警已需要恢复正常的次数
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static String getAccountNormalAlarmNumberFromMiddlewareCache(String accountID,String alarmType){
+		try {
+			return cacheBaseService.getString(
+					CacheNameGeneratorUtil.generateAccountNormalAlarmNumberRateCacheName(accountID, alarmType), REDIS_NAME
+			);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
+	}
+
+	/**
+	 * 保存账号业务告警已需要恢复正常的次数
+	 * @param accountID 账号ID
+	 * @return 当天成功数
+	 */
+	public static void saveAccountNormalAlarmNumberToMiddlewareCache(String accountID,String alarmType,String normalNumber){
+		try {
+			cacheBaseService.putString(
+					CacheNameGeneratorUtil.generateAccountNormalAlarmNumberRateCacheName(accountID, alarmType),
+					60 * 5,
+					normalNumber,REDIS_NAME);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+
+	public static void deleteAccountNormalAlarmNumberFromMiddlewareCache(String accountID, String alarmType) {
+		cacheBaseService.delString(CacheNameGeneratorUtil.generateAccountNormalAlarmNumberRateCacheName(accountID, alarmType),REDIS_NAME);
 	}
 }
 
