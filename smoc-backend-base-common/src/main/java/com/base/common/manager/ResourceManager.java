@@ -1,5 +1,7 @@
 package com.base.common.manager;
 
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
@@ -93,7 +95,7 @@ public class ResourceManager extends SuperMapWorker<String, String>{
 		
 		try {
 			properties = new Properties();
-			properties.load(is);
+			properties.load(new InputStreamReader(is, StandardCharsets.UTF_8));
 			prop = properties;
 			is.close();
 		} catch (Exception e) {

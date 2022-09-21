@@ -1,7 +1,10 @@
 package com.base.common.util;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import com.base.common.manager.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -20,13 +23,15 @@ public class InternationalPhoneNumberUtil {
 	 * @return
 	 */
 	public static String getInternationalAreaName(String mobile){
-		if(!StringUtils.equals("+", mobile.substring(0,1))) {
-			mobile = new StringBuffer("+").append(mobile).toString();
+		if(!mobile.startsWith("0") && !mobile.startsWith("+")) {
+			mobile = "+" + mobile;
 		}
 	    Phonenumber.PhoneNumber swissNumberProto = null;
+		String internationalAreaName = null;
 		try {
 			swissNumberProto = phoneNumberUtil.parse(mobile, "CH");
-			return geocoder.getDescriptionForNumber(swissNumberProto, Locale.CHINESE);
+			internationalAreaName = geocoder.getDescriptionForNumber(swissNumberProto, Locale.CHINESE);
+			return getInternationalCodeConversionByCode(internationalAreaName, mobile);
 		} catch (NumberParseException e) {
 			e.printStackTrace();
 		}
@@ -39,8 +44,8 @@ public class InternationalPhoneNumberUtil {
 	 * @return
 	 */
 	public static Integer getCountryCode(String mobile) {
-		if(!StringUtils.equals("+", mobile.substring(0,1))) {
-			mobile = new StringBuffer("+").append(mobile).toString();
+		if(!mobile.startsWith("0") && !mobile.startsWith("+")) {
+			mobile = "+" + mobile;
 		}
 		PhoneNumber swissNumberProto = null;
 		try {
@@ -52,8 +57,29 @@ public class InternationalPhoneNumberUtil {
 		}
 		return -1;
 	}
-	
+
+	public static String getInternationalCodeConversionByCode(String areaName, String mobile){
+		mobile = mobile.replace("+","");
+		mobile = mobile.replaceFirst("^(0+)","");
+		if(StringUtils.isNotEmpty(areaName)){
+			String internationalCodeConversionParams = ResourceManager.getInstance().getValue("international_code_conversion");
+			if(StringUtils.isNotEmpty(internationalCodeConversionParams)){
+				String[] split = internationalCodeConversionParams.split(";");
+				for (String s : split) {
+					String [] internationalCodeConversionArr = s.split("-");
+					if(areaName.equals(internationalCodeConversionArr[0]) && mobile.startsWith(internationalCodeConversionArr[1])){
+						return internationalCodeConversionArr[2];
+					}
+				}
+			}
+		}
+		// 没匹配上
+		return areaName;
+	}
+
 	public static void main(String[] args) {
-		System.out.println(getInternationalAreaName("55913853424"));
+		//System.out.println("18084517786".replaceFirst("^(0+)",""));
+		System.out.println(getInternationalAreaName("+0018084517786"));
+		//System.out.println(getCountryCode("0018084517786"));
 	}
 }
