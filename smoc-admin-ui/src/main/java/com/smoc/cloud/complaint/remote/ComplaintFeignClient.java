@@ -4,11 +4,14 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -53,4 +56,12 @@ public interface ComplaintFeignClient {
      */
     @RequestMapping(value = "/complaint/batchSave", method = RequestMethod.POST)
     ResponseData batchSave(@RequestBody MessageComplaintInfoValidator messageComplaintInfoValidator) throws Exception;
+
+    /**
+     * 根据投诉手机号查询10天内的下发记录
+     * @param detail
+     * @return
+     */
+    @RequestMapping(value = "/complaint/sendMessageList", method = RequestMethod.POST)
+    ResponseData<List<MessageDetailInfoValidator>> sendMessageList(@RequestBody MessageDetailInfoValidator detail);
 }

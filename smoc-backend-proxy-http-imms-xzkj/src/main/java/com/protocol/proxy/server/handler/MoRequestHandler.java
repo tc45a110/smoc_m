@@ -2,7 +2,7 @@ package com.protocol.proxy.server.handler;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.manager.ChannelInfoManager;
-import com.base.common.manager.LongSMSMOManager;
+import com.base.common.manager.ChannelMOManager;
 import com.base.common.util.ChannelMOUtil;
 import com.base.common.vo.ChannelMO;
 import com.google.gson.Gson;
@@ -76,15 +76,13 @@ public class MoRequestHandler implements HttpHandler {
 			JSONArray array = JSONObject.parseArray(request.getString("data"));
 			for (int i = 0; i < array.size(); i++) {
 				JSONObject object = array.getJSONObject(i);
-				String account = object.getString("account");
 				String phoneNumber = object.getString("mobile");
 				String content = object.getString("content");
 				String extNumber = object.getString("extNumber");
-
 				String channelSRCID = ChannelInfoManager.getInstance().getChannelSRCID(channelID);
 				ChannelMO channelMO = ChannelMOUtil.getMO(phoneNumber,extNumber,content,channelID,channelSRCID);
-				LongSMSMOManager.getInstance().add(channelMO);
 
+				ChannelMOManager.getInstance().put(channelMO.getBusinessMessageID(), channelMO);
 			}
 
 		}

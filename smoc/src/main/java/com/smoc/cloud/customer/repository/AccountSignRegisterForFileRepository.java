@@ -57,4 +57,6 @@ public interface AccountSignRegisterForFileRepository extends JpaRepository<Acco
      * @return
      */
     PageList<ExportModel> query(PageParams pageParams, String registerOrderNo);
+
+    List<AccountSignRegisterForFile> findByNumberSegmentAndRegisterStatus(String reportNumber, String s);
 }

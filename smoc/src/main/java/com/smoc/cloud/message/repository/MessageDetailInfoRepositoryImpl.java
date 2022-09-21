@@ -621,7 +621,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sql = new StringBuilder("select ");
         sql.append(" count(*) messageTotal ");
-        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag()+"' ");
+        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag().toLowerCase()+"' ");
         Long messageTotal = jdbcTemplate.queryForObject(sql.toString(), Long.class);
 
         if(messageTotal>=1){
@@ -630,7 +630,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" t.ACCOUNT_ID,");
             sqlBuffer.append(" t.STATUS_CODE,");
             sqlBuffer.append(" count(*)CODE_NUM ");
-            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
+            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag().toLowerCase()+" t ");
             sqlBuffer.append(" where (1=1) ");
 
             List<Object> paramsList = new ArrayList<Object>();
@@ -703,14 +703,14 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sql = new StringBuilder("select ");
         sql.append(" count(*) messageTotal ");
-        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag()+"' ");
+        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag().toLowerCase()+"' ");
         Long messageTotal = jdbcTemplate.queryForObject(sql.toString(), Long.class);
 
         if(messageTotal>=1){
             //查询sql
             StringBuilder sqlBuffer = new StringBuilder("select ");
             sqlBuffer.append(" count(*) SUCCESS_SEND_SUM ");
-            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
+            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag().toLowerCase()+" t ");
             sqlBuffer.append(" where 1=1 ");
 
             List<Object> paramsList = new ArrayList<Object>();

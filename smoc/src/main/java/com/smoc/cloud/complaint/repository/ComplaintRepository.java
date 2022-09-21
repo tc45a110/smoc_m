@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.complaint.entity.MessageComplaintInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
@@ -47,4 +48,11 @@ public interface ComplaintRepository extends CrudRepository<MessageComplaintInfo
      * @return
      */
     List<MessageChannelComplaintValidator> channelComplaintRanking(MessageChannelComplaintValidator messageChannelComplaintValidator);
+
+    /**
+     * 根据投诉手机号查询10天内的下发记录
+     * @param detail
+     * @return
+     */
+    List<MessageDetailInfoValidator> sendMessageList(MessageDetailInfoValidator detail);
 }

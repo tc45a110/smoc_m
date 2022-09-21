@@ -88,8 +88,8 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         }
 
         if (!StringUtils.isEmpty(qo.getNumberSegment())) {
-            sqlBuffer.append(" and t.NUMBER_SEGMENT = ?");
-            paramsList.add(qo.getNumberSegment().trim());
+            sqlBuffer.append(" and t.NUMBER_SEGMENT like ?");
+            paramsList.add("%" + qo.getNumberSegment().trim() + "%");
         }
 
         if (!StringUtils.isEmpty(qo.getRegisterExtendNumber())) {

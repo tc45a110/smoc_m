@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.complaint.remote.ComplaintFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 投诉管理服务
@@ -93,6 +96,21 @@ public class ComplaintService {
     public ResponseData batchSave(MessageComplaintInfoValidator messageComplaintInfoValidator) {
         try {
             ResponseData data = this.complaintFeignClient.batchSave(messageComplaintInfoValidator);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据投诉手机号查询10天内的下发记录
+     * @param detail
+     * @return
+     */
+    public ResponseData<List<MessageDetailInfoValidator>> sendMessageList(MessageDetailInfoValidator detail) {
+        try {
+            ResponseData<List<MessageDetailInfoValidator>> data = this.complaintFeignClient.sendMessageList(detail);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

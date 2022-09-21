@@ -20,7 +20,6 @@ public class MessageChannelComplaintRowMapper implements RowMapper<MessageChanne
 
         MessageChannelComplaintValidator qo = new MessageChannelComplaintValidator();
 
-        qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setChannelId(resultSet.getString("CHANNEL_ID"));
         qo.setChannelName(resultSet.getString("CHANNEL_NAME"));
         qo.setComplaintNum(resultSet.getString("COMPLAINT_NUM"));

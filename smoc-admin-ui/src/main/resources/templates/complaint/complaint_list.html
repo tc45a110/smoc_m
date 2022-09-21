@@ -114,7 +114,6 @@
                                     <th style="width:170px">举报时间/业务类型</th>
                                     <th style="width:170px">码号/被举报号码</th>
                                     <th style="width:190px">业务账号/业务账号名称</th>
-                                    <th style="width:170px">下发频次/下发时间</th>
                                     <th style="width:200px">举报号码/举报内容</th>
                                     <th style="width:170px">创建人/创建日期</th>
                                     <th style="width:110px">操作</th>
@@ -138,9 +137,6 @@
                                     <td  style="line-height: 26px">
                                         <span th:if="${not #strings.isEmpty(info.businessAccount)}">[[${info.businessAccount}]]<br>[[${info.accountName}]]</span>
                                         <span th:if="${#strings.isEmpty(info.businessAccount)}" style="color: red">未匹配到业务账号</span>
-                                    </td>
-                                    <td  style="line-height: 26px">
-                                        <span th:if="${not #strings.isEmpty(info.sendRate)}">30天[[${info.sendRate}]]次</span><br>[[${info.sendDate}]]
                                     </td>
                                     <td  style="line-height: 26px">[[${info.reportNumber}]]<br>
                                         <span class="text-overflow"
